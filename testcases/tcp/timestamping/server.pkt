@@ -2,7 +2,7 @@
 // Copyright 2018 Google Inc. All Rights Reserved.
 // Source: https://github.com/google/packetdrill
 // Test tx timestamping for server-side (IPv4).
-`../scripts/defaults.sh
+`scripts/defaults.sh
 `
 
 // Initialize connection

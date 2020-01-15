@@ -4,7 +4,7 @@
 // Test what happens when client does not provide MD5 on SYN,
 // but then does on the ACK that completes the three-way handshake.
 
-`../scripts/defaults.sh`
+`scripts/defaults.sh`
 
 // Establish a connection.
     0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3

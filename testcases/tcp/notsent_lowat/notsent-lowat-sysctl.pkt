@@ -5,7 +5,7 @@
 // below net.ipv4.tcp_notsent_lowat sysctl.
 
 // Then ask for POLLOUT when unsent data falls below 4000.
-`../scripts/defaults.sh
+`scripts/defaults.sh
 sysctl -q net.ipv4.tcp_notsent_lowat=4000`
 
 // Initialize connection

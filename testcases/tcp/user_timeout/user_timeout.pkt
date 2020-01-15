@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-only
 // Copyright 2018 Google Inc. All Rights Reserved.
 // Source: https://github.com/google/packetdrill
-`../scripts/defaults.sh`
+`scripts/defaults.sh`
 
 // Initialize connection
     0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3

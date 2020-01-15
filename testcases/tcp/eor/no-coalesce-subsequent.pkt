@@ -4,7 +4,7 @@
 // Test TCP does not append any data from consequent writes to the tail
 // skb created for the chunk even though we have 10 back-to-back small
 // writes.
-`../scripts/defaults.sh
+`scripts/defaults.sh
 `
 
 // Initialize connection

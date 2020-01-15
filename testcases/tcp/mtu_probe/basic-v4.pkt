@@ -15,7 +15,7 @@
 // configure a small initial mtu
 // increase cwnd to the minimum tcp_mtu_probe needs
 `scripts/defaults.sh
- ../common/set_sysctls.py \
+ scripts/set_sysctls.py \
 	/proc/sys/net/ipv4/tcp_mtu_probing=2 \
 	/proc/sys/net/ipv4/tcp_base_mss=512
  ip route change 192.168.1.1 via 192.168.0.2 dev tun0 advmss 600 mtu lock 640 initcwnd 11

@@ -2,7 +2,7 @@
 // Copyright 2018 Google Inc. All Rights Reserved.
 // Source: https://github.com/google/packetdrill
 // Test send-buffer-limited time in tcp_info for client side.
-`../scripts/defaults.sh`
+`scripts/defaults.sh`
 
 // Create a socket and set it to non-blocking.
     0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3

@@ -10,7 +10,7 @@
 // one will have no data in the initial send. On return 0 the
 // zerocopy notification counter is not incremented. Verify this too.
 
-`../scripts/defaults.sh`
+`scripts/defaults.sh`
 
 // Send a FastOpen request, no cookie yet so no data in SYN
     0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3

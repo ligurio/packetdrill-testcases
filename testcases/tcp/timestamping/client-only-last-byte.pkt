@@ -3,7 +3,7 @@
 // Source: https://github.com/google/packetdrill
 // Test that tx timestamping sends timestamps only for
 // the last byte of each sendmsg.
-`../scripts/defaults.sh
+`scripts/defaults.sh
 `
 
 // Create a socket and set it to non-blocking.

@@ -3,8 +3,8 @@
 // Source: https://github.com/google/packetdrill
 // Test baseline POLLOUT behavior with no TCP_NOTSENT_LOWAT.
 
-`../scripts/defaults.sh
-../common/set_sysctls.py /proc/sys/net/ipv4/tcp_wmem="4096 50000 4194304" \
+`scripts/defaults.sh
+scripts/set_sysctls.py /proc/sys/net/ipv4/tcp_wmem="4096 50000 4194304" \
                          /proc/sys/net/ipv4/tcp_min_tso_segs=10
 `
 

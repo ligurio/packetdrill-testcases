@@ -4,7 +4,7 @@
 // Test TCP fastopen behavior with NULL as buffer pointer, but a non-zero
 // buffer length.
 `scripts/defaults.sh
- ../common/set_sysctls.py /proc/sys/net/ipv4/tcp_timestamps=0`
+ scripts/set_sysctls.py /proc/sys/net/ipv4/tcp_timestamps=0`
 
 // Cache warmup: send a Fast Open cookie request
  0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3

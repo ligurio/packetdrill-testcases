@@ -4,7 +4,7 @@
 // Test TCP does not append any data from consequent writes to the tail
 // skb created for the chunk. The large chunk itself should be packetized as
 // usual.
-`../scripts/defaults.sh
+`scripts/defaults.sh
 `
 
 // Initialize connection

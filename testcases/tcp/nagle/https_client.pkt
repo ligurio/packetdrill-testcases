@@ -7,7 +7,7 @@
 //
 `scripts/defaults.sh
 ethtool -K tun0 tso off gso off
-../common/set_sysctls.py /proc/sys/net/ipv4/tcp_timestamps=0`
+scripts/set_sysctls.py /proc/sys/net/ipv4/tcp_timestamps=0`
 
     0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 4
    +0 fcntl(4, F_SETFL, O_RDWR|O_NONBLOCK) = 0

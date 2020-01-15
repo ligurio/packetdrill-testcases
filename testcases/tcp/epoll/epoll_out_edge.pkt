@@ -5,8 +5,8 @@
 //
 // When sendbuffer is cleared, epoll_wait returns EPOLLOUT after a partial
 // write, regardless of whether the user received EAGAIN or not.
-`../scripts/defaults.sh
-../common/set_sysctls.py /proc/sys/net/ipv4/tcp_wmem="4096 50000 4194304"
+`scripts/defaults.sh
+scripts/set_sysctls.py /proc/sys/net/ipv4/tcp_wmem="4096 50000 4194304"
 `
     0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
    +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0

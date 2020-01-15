@@ -5,7 +5,7 @@
 --tolerance_usecs=10000
 
 `scripts/defaults.sh
- ../common/set_sysctls.py /proc/sys/net/ipv4/tcp_min_tso_segs=10
+ scripts/set_sysctls.py /proc/sys/net/ipv4/tcp_min_tso_segs=10
 `
 
 // Establish a connection.

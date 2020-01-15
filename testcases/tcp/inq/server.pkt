@@ -2,7 +2,7 @@
 // Copyright 2018 Google Inc. All Rights Reserved.
 // Source: https://github.com/google/packetdrill
 // Test TCP_INQ and TCP_CM_INQ on the server side.
-`../scripts/defaults.sh
+`scripts/defaults.sh
 `
 
 // Initialize connection

@@ -4,7 +4,7 @@
 // Test TCP does not append any data from consequent writes to the tail
 // skb created for the chunk. Also, when packets are retransmitted, they
 // will not be coalesce into the same skb.
-`../scripts/defaults.sh
+`scripts/defaults.sh
 `
 
 // Initialize connection

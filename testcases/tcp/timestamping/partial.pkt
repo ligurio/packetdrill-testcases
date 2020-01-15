@@ -2,7 +2,7 @@
 // Copyright 2018 Google Inc. All Rights Reserved.
 // Source: https://github.com/google/packetdrill
 // Test tx timestamping for partial writes (IPv4).
-`../scripts/defaults.sh
+`scripts/defaults.sh
 `
 
 // Create a socket and set it to non-blocking.

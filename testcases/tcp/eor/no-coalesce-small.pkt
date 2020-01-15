@@ -3,7 +3,7 @@
 // Source: https://github.com/google/packetdrill
 // Test TCP does not append any data from consequent writes to the tail
 // skb created for the chunk.
-`../scripts/defaults.sh
+`scripts/defaults.sh
 `
 
 // Initialize connection

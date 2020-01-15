@@ -4,7 +4,7 @@
 // Test that poll reports POLLOUT only if number of unsent bytes is
 // below TCP_NOTSENT_LOWAT socket option.
 
-`../scripts/defaults.sh`
+`scripts/defaults.sh`
 
 // Initialize connection
     0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3

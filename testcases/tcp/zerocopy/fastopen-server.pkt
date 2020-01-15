@@ -6,8 +6,8 @@
 // send data with MSG_FASTOPEN | MSG_ZEROCOPY and verify that the
 // kernel returns the notification ID.
 
-`../scripts/defaults.sh
- ../common/set_sysctls.py /proc/sys/net/ipv4/tcp_fastopen=0x207`
+`scripts/defaults.sh
+ scripts/set_sysctls.py /proc/sys/net/ipv4/tcp_fastopen=0x207`
 
 // Set up a TFO server listening socket.
     0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
