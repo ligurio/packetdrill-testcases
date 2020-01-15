@@ -1,0 +1,67 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2016 Shivansh Rai
+// Source: https://github.com/freebsd-net/TCP-IP-Regression-TestSuite
+// Borrowed from https://github.com/google/packetdrill
+// Test PRR-slowstart implementation.
+// In this variant we verify that the sender uses SACK info on an ACK
+// below snd_una.
+// This variant tests behavior with Reno congestion control.
+--tolerance_usecs=100000
+
+// Establish a connection.
+0.000 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
+0.000 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
+0.000 bind(3, ..., ...) = 0
+0.000 listen(3, 1) = 0
+
+0.100 < S 0:0(0) win 32792 <mss 1000,sackOK,nop,nop,nop,wscale 7>
+0.100 > S. 0:0(0) ack 1 <...>
+0.100 < . 1:1(0) ack 1 win 320
+0.100 accept(3, ..., ...) = 4
+
+// We write 10 data segments.
+0.200 write(4, ..., 10000) = 10000
+0.200 > .     1:1001 (1000) ack 1 <...>
+0.200 > .  1001:2001 (1000) ack 1 <...>
+0.200 > .  2001:3001 (1000) ack 1 <...>
+0.200 > .  3001:4001 (1000) ack 1 <...>
+0.200 > .  4001:5001 (1000) ack 1 <...>
+0.200 > .  5001:6001 (1000) ack 1 <...>
+0.200 > .  6001:7001 (1000) ack 1 <...>
+0.200 > .  7001:8001 (1000) ack 1 <...>
+0.200 > .  8001:9001 (1000) ack 1 <...>
+0.200 > P. 9001:10001(1000) ack 1 <...>
+
+// Lost packet 1:1001, 3001:5001, 7001:8001.
+// Lots of reordering in both directions.
+0.210 < . 1:1(0) ack 1 win 320 <sack 1001:2001,nop,nop>
+0.220 < . 1:1(0) ack 1 win 320 <sack 1001:3001,nop,nop>
+0.230 < . 1:1(0) ack 1 win 320 <sack 1001:3001 8001:9001,nop,nop>
+
+// Enter fast recovery.
+0.230 > . 1:1001(1000) ack 1
+// At this point the receiver has to ACK the retransmitted segment
+// else the sender simply waits for retransmission timeout to occur
+// since the value of congestion window is currently 1 due to slowstart.
+
+// An ACK advances snd_una.
+0.240 < . 1:1(0) ack 3001 win 320 <sack 1:3001 8001:9001,nop,nop>
+
+// The congestion window is now 2, so we can send 2 segments.
+0.240 > . 3001:4001(1000) ack 1
+0.240 > . 4001:5001(1000) ack 1
+
+// The following ACK was reordered - delayed so that it arrives with
+// an ACK field below snd_una. Here we check that the newly-SACKed
+// 2MSS at 5001:7001 cause us to send out 1 more MSS.
+0.250 < . 1:1(0) ack 3001 win 320 <sack 5001:7001,nop,nop>
+0.250 > . 7001:8001(1000) ack 1
+
+// Receiver ACKs all data.
+0.260 < . 1:1(0) ack 10001 win 320
+
+// Write another 5 MSS, of which 4MSS (cwnd=ssthresh) should go out:
+// The size of congestion window now is again 1 due to multiplicative decrease.
+0.260 write(4, ..., 5000) = 5000
+0.260 > .  10001:11001(1000)  ack 1 win 1031 <...>
+// We will wait for ACK until rto.
