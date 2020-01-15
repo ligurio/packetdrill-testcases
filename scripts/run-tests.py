@@ -33,11 +33,15 @@ def run_testcase(test_path, test_timeout=DEFAULT_TEST_TIMEOUT):
                             shell=True,
                             capture_output=True,
                             universal_newlines=True)
-        execution_time = time.time() - start
     except subprocess.TimeoutExpired:
-        logging.info("Timeout is exceed ({})".format(test_timeout))
+        logging.info("Timeout is exceed ({} sec)".format(test_timeout))
+
+    execution_time = time.time() - start
+    if execution_time >= test_timeout:
+        return None, None, None, execution_time
 
     if rc.stderr:
+        logging.info("ERROR OUTPUT:")
         logging.info(rc.stderr)
 
     return rc.returncode, rc.stdout, rc.stderr, execution_time
@@ -50,7 +54,7 @@ def search_testcases(root_path):
         for f in files:
             extension = os.path.splitext(f)[1]
             if extension in SUPPORTED_FILE_EXTENSIONS:
-                test = {"name": os.path.join(root, f)}
+                test = {"path": os.path.join(root, f)}
                 tests.append(test)
 
     return tests
