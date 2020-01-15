@@ -1,0 +1,314 @@
+[
+  {
+    "path": "testcases/tcp/close/close-local-close-then-remote-fin.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/blocking/blocking-write.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/blocking/blocking-accept.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/blocking/blocking-read.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/blocking/blocking-connect.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/validate/validate-established-no-flags.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/eor/no-coalesce-retrans.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/eor/no-coalesce-small.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/eor/no-coalesce-large.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/eor/no-coalesce-subsequent.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/epoll/epoll_in_edge.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/epoll/epoll_out_edge_default_notsent_lowat.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/epoll/epoll_out_edge_notsent_lowat.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/epoll/epoll_out_edge.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/timestamping/client-only-last-byte.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/timestamping/partial.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/timestamping/server.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/notsent_lowat/notsent-lowat-setsockopt.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/notsent_lowat/notsent-lowat-default.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/notsent_lowat/notsent-lowat-sysctl.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/fast_retransmit/fr-4pkt-sack-linux.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/fast_retransmit/fr-4pkt-sack-bsd.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/tcp_info/tcp-info-rwnd-limited.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/tcp_info/tcp-info-last_data_recv.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/tcp_info/tcp-info-sndbuf-limited.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/close/close-on-syn-sent.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/close/close-local-close-then-remote-fin.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/close/close-remote-fin-then-close.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/sack/sack-route-refresh-ip-tos.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/sack/sack-shift-sacked-2-6-8-3-9-nofack.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/sack/sack-shift-sacked-7-5-6-8-9-fack.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/sack/sack-shift-sacked-7-3-4-8-9-fack.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/sendfile/sendfile-simple.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/ioctl/ioctl-siocinq-fin.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/syscall_bad_arg/syscall-invalid-buf-ptr.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/syscall_bad_arg/fastopen-invalid-buf-ptr.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/syscall_bad_arg/sendmsg-empty-iov.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/inq/client.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/inq/server.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/md5/md5-only-on-client-ack.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/cwnd_moderation/cwnd-moderation-ecn-enter-cwr-no-moderation-700.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/cwnd_moderation/cwnd-moderation-disorder-no-moderation.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/limited_transmit/limited-transmit-no-sack.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/limited_transmit/limited-transmit-sack.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/socket/socket_wrong_err.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/socket/socket_err.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/mtu_probe/basic-v6.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/mtu_probe/basic-v4.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/splice/tcp_splice_loop_test.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/user_timeout/user_timeout.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/user_timeout/user-timeout-probe.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/nagle/sockopt_cork_nodelay.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/nagle/https_client.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/nagle/sendmsg_msg_more.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/shutdown/shutdown-rd-close.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/shutdown/shutdown-wr-close.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/shutdown/shutdown-rd-wr-close.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/shutdown/shutdown-rdwr-send-queue-ack-close.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/shutdown/shutdown-rdwr-close.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/shutdown/shutdown-rdwr-write-queue-close.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/zerocopy/small.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/zerocopy/client.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/zerocopy/epoll_oneshot.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/zerocopy/epoll_edge.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/zerocopy/fastopen-client.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/zerocopy/maxfrags.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/zerocopy/fastopen-server.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/zerocopy/epoll_exclusive.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/zerocopy/closed.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/zerocopy/basic.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/zerocopy/batch.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/ts_recent/invalid_ack.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/ts_recent/fin_tsval.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/ts_recent/reset_tsval.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/mss/mss-setsockopt-tcp_maxseg-server.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/mss/mss-setsockopt-tcp_maxseg-client.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/mss/mss-getsockopt-tcp_maxseg-server.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/gro/gro-mss-option.pkt",
+    "skip_reason": ""
+  }
+]
