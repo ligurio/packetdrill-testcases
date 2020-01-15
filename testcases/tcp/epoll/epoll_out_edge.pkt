@@ -1,8 +1,11 @@
+// SPDX-License-Identifier: GPL-2.0-only
+// Copyright 2018 Google Inc. All Rights Reserved.
+// Source: https://github.com/google/packetdrill
 // Test the behavior of EPOLLET for EPOLLOUT without notsent lowat.
 //
 // When sendbuffer is cleared, epoll_wait returns EPOLLOUT after a partial
 // write, regardless of whether the user received EAGAIN or not.
-`../../common/defaults.sh
+`../scripts/defaults.sh
 ../common/set_sysctls.py /proc/sys/net/ipv4/tcp_wmem="4096 50000 4194304"
 `
     0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3

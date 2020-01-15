@@ -1,6 +1,9 @@
+// SPDX-License-Identifier: GPL-2.0-only
+// Copyright 2018 Google Inc. All Rights Reserved.
+// Source: https://github.com/google/packetdrill
 // Test ECN: verify that Linux TCP ECN sending code uses ECT0 (not ECT1).
 //
-`../common/defaults.sh
+`scripts/defaults.sh
 sysctl -q net.ipv4.tcp_ecn=1  # fully enabled
 `
 

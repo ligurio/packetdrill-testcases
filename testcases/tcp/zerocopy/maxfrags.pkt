@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: GPL-2.0-only
+// Copyright 2018 Google Inc. All Rights Reserved.
+// Source: https://github.com/google/packetdrill
 // tcp_MAX_SKB_FRAGS test
 //
 // Verify that sending an iovec of tcp_MAX_SKB_FRAGS + 1 elements will
@@ -6,7 +9,7 @@
 //    because each iovec element becomes a frag
 // 3) the PSH bit is set on an skb when it runs out of fragments
 
-`../common/defaults.sh`
+`scripts/defaults.sh`
 
     0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
    +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0

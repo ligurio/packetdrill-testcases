@@ -1,7 +1,10 @@
+// SPDX-License-Identifier: GPL-2.0-only
+// Copyright 2018 Google Inc. All Rights Reserved.
+// Source: https://github.com/google/packetdrill
 // Test that getsockopt of TCP_MAXSEG works on passive/server TCP connections.
 // In this variant we test that a simple query of segment size works.
 
-`../common/defaults.sh`
+`scripts/defaults.sh`
 
 // Set up a listening socket.
     0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3

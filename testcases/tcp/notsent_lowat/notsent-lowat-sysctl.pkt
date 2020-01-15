@@ -1,8 +1,11 @@
+// SPDX-License-Identifier: GPL-2.0-only
+// Copyright 2018 Google Inc. All Rights Reserved.
+// Source: https://github.com/google/packetdrill
 // Test that poll reports POLLOUT only if number of unsent bytes is
 // below net.ipv4.tcp_notsent_lowat sysctl.
 
 // Then ask for POLLOUT when unsent data falls below 4000.
-`../../common/defaults.sh
+`../scripts/defaults.sh
 sysctl -q net.ipv4.tcp_notsent_lowat=4000`
 
 // Initialize connection

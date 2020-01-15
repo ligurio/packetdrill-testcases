@@ -1,8 +1,11 @@
+// SPDX-License-Identifier: GPL-2.0-only
+// Copyright 2018 Google Inc. All Rights Reserved.
+// Source: https://github.com/google/packetdrill
 // Test that we send FIN packet with correct TSval
 --tcp_ts_tick_usecs=1000
 --tolerance_usecs=7000
 
-`../common/defaults.sh`
+`scripts/defaults.sh`
 
 // Create a socket.
     0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3

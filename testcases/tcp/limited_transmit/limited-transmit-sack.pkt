@@ -1,9 +1,12 @@
+// SPDX-License-Identifier: GPL-2.0-only
+// Copyright 2018 Google Inc. All Rights Reserved.
+// Source: https://github.com/google/packetdrill
 // Test RFC 3042 "Limited Transmit": "sending a new data segment in
 // response to each of the first two duplicate acknowledgments that
 // arrive at the sender".
 // This variation tests a receiver that supports SACK.
 
-`../common/defaults.sh`
+`scripts/defaults.sh`
 
 // Establish a connection.
     0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3

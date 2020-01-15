@@ -1,8 +1,11 @@
+// SPDX-License-Identifier: GPL-2.0-only
+// Copyright 2018 Google Inc. All Rights Reserved.
+// Source: https://github.com/google/packetdrill
 // Test basic connection teardown where local process closes first:
 // the local process calls close() first, so we send a FIN, and receive an ACK.
 // Then we receive a FIN and ACK it.
 
-`../common/defaults.sh`
+`scripts/defaults.sh`
 
     0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
  +.01...0.011 connect(3, ..., ...) = 0

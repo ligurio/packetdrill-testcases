@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: GPL-2.0-only
+// Copyright 2018 Google Inc. All Rights Reserved.
+// Source: https://github.com/google/packetdrill
 // Fastopen client zerocopy test:
 //
 // send data with MSG_FASTOPEN | MSG_ZEROCOPY and verify that the
@@ -7,7 +10,7 @@
 // one will have no data in the initial send. On return 0 the
 // zerocopy notification counter is not incremented. Verify this too.
 
-`../../common/defaults.sh`
+`../scripts/defaults.sh`
 
 // Send a FastOpen request, no cookie yet so no data in SYN
     0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3

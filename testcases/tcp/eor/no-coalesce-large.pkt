@@ -1,7 +1,10 @@
+// SPDX-License-Identifier: GPL-2.0-only
+// Copyright 2018 Google Inc. All Rights Reserved.
+// Source: https://github.com/google/packetdrill
 // Test TCP does not append any data from consequent writes to the tail
 // skb created for the chunk. The large chunk itself should be packetized as
 // usual.
-`../../common/defaults.sh
+`../scripts/defaults.sh
 `
 
 // Initialize connection

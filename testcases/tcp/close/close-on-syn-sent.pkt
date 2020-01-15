@@ -1,7 +1,10 @@
+// SPDX-License-Identifier: GPL-2.0-only
+// Copyright 2018 Google Inc. All Rights Reserved.
+// Source: https://github.com/google/packetdrill
 // Test to make sure no RST is being sent when close()
 // is called on a socket with SYN_SENT state.
 
-`../common/defaults.sh`
+`scripts/defaults.sh`
 
     0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
    +0 fcntl(3, F_SETFL, O_RDWR|O_NONBLOCK) = 0

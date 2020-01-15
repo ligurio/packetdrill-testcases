@@ -1,7 +1,10 @@
+// SPDX-License-Identifier: GPL-2.0-only
+// Copyright 2018 Google Inc. All Rights Reserved.
+// Source: https://github.com/google/packetdrill
 // Test for blocking read.
 --tolerance_usecs=10000
 
-`../common/defaults.sh`
+`scripts/defaults.sh`
 
 // Establish a connection.
     0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3

@@ -1,7 +1,10 @@
+// SPDX-License-Identifier: GPL-2.0-only
+// Copyright 2018 Google Inc. All Rights Reserved.
+// Source: https://github.com/google/packetdrill
 // Test for blocking write.
 --tolerance_usecs=10000
 
-`../common/defaults.sh
+`scripts/defaults.sh
  ../common/set_sysctls.py /proc/sys/net/ipv4/tcp_min_tso_segs=10
 `
 

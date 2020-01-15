@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: GPL-2.0-only
+// Copyright 2018 Google Inc. All Rights Reserved.
+// Source: https://github.com/google/packetdrill
 // epoll zerocopy test:
 //
 // EPOLLERR is known to be not edge-triggered unlike EPOLLIN and EPOLLOUT but
@@ -6,7 +9,7 @@
 // fire two sends with MSG_ZEROCOPY and receive the acks. confirm that EPOLLERR
 // is correctly fired only once, when EPOLLET is set. send another packet with
 // MSG_ZEROCOPY. confirm that EPOLLERR is correctly fired again only once.
-`../common/defaults.sh`
+`scripts/defaults.sh`
 
     0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
    +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0

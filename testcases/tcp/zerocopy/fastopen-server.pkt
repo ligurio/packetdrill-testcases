@@ -1,9 +1,12 @@
+// SPDX-License-Identifier: GPL-2.0-only
+// Copyright 2018 Google Inc. All Rights Reserved.
+// Source: https://github.com/google/packetdrill
 // Fastopen server zerocopy test:
 //
 // send data with MSG_FASTOPEN | MSG_ZEROCOPY and verify that the
 // kernel returns the notification ID.
 
-`../../common/defaults.sh
+`../scripts/defaults.sh
  ../common/set_sysctls.py /proc/sys/net/ipv4/tcp_fastopen=0x207`
 
 // Set up a TFO server listening socket.

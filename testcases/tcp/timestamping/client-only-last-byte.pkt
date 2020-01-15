@@ -1,6 +1,9 @@
+// SPDX-License-Identifier: GPL-2.0-only
+// Copyright 2018 Google Inc. All Rights Reserved.
+// Source: https://github.com/google/packetdrill
 // Test that tx timestamping sends timestamps only for
 // the last byte of each sendmsg.
-`../../common/defaults.sh
+`../scripts/defaults.sh
 `
 
 // Create a socket and set it to non-blocking.

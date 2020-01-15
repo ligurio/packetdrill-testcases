@@ -1,6 +1,9 @@
+// SPDX-License-Identifier: GPL-2.0-only
+// Copyright 2018 Google Inc. All Rights Reserved.
+// Source: https://github.com/google/packetdrill
 // Test baseline POLLOUT behavior with no TCP_NOTSENT_LOWAT.
 
-`../../common/defaults.sh
+`../scripts/defaults.sh
 ../common/set_sysctls.py /proc/sys/net/ipv4/tcp_wmem="4096 50000 4194304" \
                          /proc/sys/net/ipv4/tcp_min_tso_segs=10
 `

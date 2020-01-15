@@ -1,10 +1,13 @@
+// SPDX-License-Identifier: GPL-2.0-only
+// Copyright 2018 Google Inc. All Rights Reserved.
+// Source: https://github.com/google/packetdrill
 // Verify behavior for the sequence:
 // shutdown(SHUT_RDWR), close().
 // In this variant we verify behavior when there is still
 // data in the write queue at the time of the shutdown(),
 // and then we get an ACK before the close().
 
-`../common/defaults.sh`
+`scripts/defaults.sh`
 
 // Initialize a server socket.
     0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3

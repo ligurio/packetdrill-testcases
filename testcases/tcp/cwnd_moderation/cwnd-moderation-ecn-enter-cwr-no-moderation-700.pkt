@@ -1,6 +1,9 @@
+// SPDX-License-Identifier: GPL-2.0-only
+// Copyright 2018 Google Inc. All Rights Reserved.
+// Source: https://github.com/google/packetdrill
 // Test that if we don't moderate cwnd when ECN sees congestion and reduces cwnd.
 
-`../common/defaults.sh
+`scripts/defaults.sh
 sysctl -q net.ipv4.tcp_ecn=2    # server agrees to ECN if client proposes it
 `
 

@@ -1,7 +1,10 @@
+// SPDX-License-Identifier: GPL-2.0-only
+// Copyright 2018 Google Inc. All Rights Reserved.
+// Source: https://github.com/google/packetdrill
 // Verify behavior for the sequence:
 // shutdown(SHUT_RD), receive, send, shutdown(SHUT_WR), close().
 
-`../common/defaults.sh`
+`scripts/defaults.sh`
 
 // Initialize a server socket.
     0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3

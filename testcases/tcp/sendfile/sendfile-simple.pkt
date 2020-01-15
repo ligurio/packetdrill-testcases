@@ -1,9 +1,12 @@
+// SPDX-License-Identifier: GPL-2.0-only
+// Copyright 2018 Google Inc. All Rights Reserved.
+// Source: https://github.com/google/packetdrill
 // Simplest possible test of open() and then sendfile().
 // We write some zeroes into a file (since packetdrill expects payloads
 // to be all zeroes) and then open() the file, then use sendfile()
 // and verify that the correct number of zeroes goes out.
 
-`../../common/defaults.sh
+`../scripts/defaults.sh
 /bin/rm -f /tmp/testfile
 /bin/dd bs=1 count=5 if=/dev/zero of=/tmp/testfile status=none
 `

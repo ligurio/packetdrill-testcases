@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: GPL-2.0-only
+// Copyright 2018 Google Inc. All Rights Reserved.
+// Source: https://github.com/google/packetdrill
 // send with MSG_ZEROCOPY on a non-established socket
 //
 // verify that a send in state TCP_CLOSE correctly aborts the zerocopy
@@ -6,7 +9,7 @@
 // First send on a closed socket and wait for (absent) notification.
 // Then connect and send and verify that notification nr. is zero.
 
-`../common/defaults.sh`
+`scripts/defaults.sh`
 
     0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 4
    +0 setsockopt(4, SOL_SOCKET, SO_ZEROCOPY, [1], 4) = 0

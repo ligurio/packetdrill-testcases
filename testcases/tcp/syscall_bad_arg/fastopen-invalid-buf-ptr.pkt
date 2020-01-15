@@ -1,6 +1,9 @@
+// SPDX-License-Identifier: GPL-2.0-only
+// Copyright 2018 Google Inc. All Rights Reserved.
+// Source: https://github.com/google/packetdrill
 // Test TCP fastopen behavior with NULL as buffer pointer, but a non-zero
 // buffer length.
-`../common/defaults.sh
+`scripts/defaults.sh
  ../common/set_sysctls.py /proc/sys/net/ipv4/tcp_timestamps=0`
 
 // Cache warmup: send a Fast Open cookie request

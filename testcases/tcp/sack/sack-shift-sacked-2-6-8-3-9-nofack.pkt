@@ -1,10 +1,13 @@
+// SPDX-License-Identifier: GPL-2.0-only
+// Copyright 2018 Google Inc. All Rights Reserved.
+// Source: https://github.com/google/packetdrill
 // Test shifting of newly-SACKed ranges onto the previous already-SACKed skb.
 // This variant tests non-FACK SACK with SACKs coming in the order
 // 2 6 8 3 9, to test what happens when we get a new SACKed range
 // (for packet 3) that is on the right of an existing SACKed range
 // (for packet 2).
 
-`../common/defaults.sh`
+`scripts/defaults.sh`
 
 // Establish a connection and send 10 MSS.
     0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
