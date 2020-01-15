@@ -80,10 +80,6 @@
     "skip_reason": ""
   },
   {
-    "path": "testcases/tcp/fast_retransmit/fr-4pkt-sack-linux.pkt",
-    "skip_reason": ""
-  },
-  {
     "path": "testcases/tcp/fast_retransmit/fr-4pkt-sack-bsd.pkt",
     "skip_reason": ""
   },
@@ -173,14 +169,6 @@
   },
   {
     "path": "testcases/tcp/limited_transmit/limited-transmit-sack.pkt",
-    "skip_reason": ""
-  },
-  {
-    "path": "testcases/tcp/socket/socket_wrong_err.pkt",
-    "skip_reason": ""
-  },
-  {
-    "path": "testcases/tcp/socket/socket_err.pkt",
     "skip_reason": ""
   },
   {
@@ -469,6 +457,22 @@
   },
   {
     "path": "testcases/tcp/undo/undo-fr-acks-dropped-then-dsack.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/blocking/blocking-simple-server.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/ecn/ecn-uses-ect0.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/shutdown/shutdown-recv-after-shut-rd.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/tcp/shutdown/shutdown-double-shut-wr.pkt",
     "skip_reason": ""
   }
 ]
