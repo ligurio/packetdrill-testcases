@@ -26,9 +26,9 @@ about 1.5k testcases for packetdrill.
 python3 -m venv venv
 source venv/bin/activate
 pip install -r scripts/requirements.txt
-python3 scripts/run_tests.py --discovery
-python3 scripts/run_tests.py --report_file junit.xml
-python3 scripts/run_tests.py --testplan testplans/testplan-freebsd.json
+python3 scripts/run-tests.py --discovery
+python3 scripts/run-tests.py --report_file junit.xml
+python3 scripts/run-tests.py --testplan testplans/testplan-freebsd.json
 ```
 
 ## TODO
