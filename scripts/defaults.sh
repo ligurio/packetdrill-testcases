@@ -1,9 +1,14 @@
 #!/bin/sh
 # Set standard production config values that relate to TCP behavior.
 
-os=$(uname -o)
-if [ "$os" == "GNU/Linux" ]; then
+UNAME=$(uname)
+
+if [ "$UNAME" == "Linux" ] ; then
+  echo "Linux"
   . scripts/defaults-linux.sh
-elif [ "$os" == "FreeBSD" ]; then
+elif [ "$UNAME" == "FreeBSD" ] ; then
+  echo "FreeBSD"
   . scripts/defaults-freebsd.sh
+elif [ "$UNAME" == "Darwin" ] ; then
+  echo "Darwin"
 fi
