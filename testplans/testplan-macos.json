@@ -1,478 +1,478 @@
 [
   {
     "path": "testcases/tcp/close/close-local-close-then-remote-fin.pkt",
-    "skip_reason": ""
+    "skip_reason": "timing error: expected system call start at 0.010082 sec but happened at 0.045507 sec"
   },
   {
     "path": "testcases/tcp/blocking/blocking-write.pkt",
-    "skip_reason": ""
+    "skip_reason": "timing error: expected inbound packet at 0.100162 sec but happened at 0.169172 sec"
   },
   {
     "path": "testcases/tcp/blocking/blocking-accept.pkt",
-    "skip_reason": ""
+    "skip_reason": "timing error: expected inbound packet at 0.100236 sec but happened at 0.133528 sec"
   },
   {
     "path": "testcases/tcp/blocking/blocking-read.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: bad outbound TCP options"
   },
   {
     "path": "testcases/tcp/blocking/blocking-connect.pkt",
-    "skip_reason": ""
+    "skip_reason": "timing error: expected system call start at 0.100049 sec but happened at 0.236610 sec"
   },
   {
     "path": "testcases/tcp/validate/validate-established-no-flags.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: bad outbound TCP options"
   },
   {
     "path": "testcases/tcp/eor/no-coalesce-retrans.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: bad outbound TCP options"
   },
   {
     "path": "testcases/tcp/eor/no-coalesce-small.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: bad outbound TCP options"
   },
   {
     "path": "testcases/tcp/eor/no-coalesce-large.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: bad outbound TCP options"
   },
   {
     "path": "testcases/tcp/eor/no-coalesce-subsequent.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: bad outbound TCP options"
   },
   {
     "path": "testcases/tcp/epoll/epoll_in_edge.pkt",
-    "skip_reason": ""
+    "skip_reason": "parse error at 'events': syntax error"
   },
   {
     "path": "testcases/tcp/epoll/epoll_out_edge_default_notsent_lowat.pkt",
-    "skip_reason": ""
+    "skip_reason": "parse error at 'events': syntax error"
   },
   {
     "path": "testcases/tcp/epoll/epoll_out_edge_notsent_lowat.pkt",
-    "skip_reason": ""
+    "skip_reason": "parse error at 'events': syntax error"
   },
   {
     "path": "testcases/tcp/epoll/epoll_out_edge.pkt",
-    "skip_reason": ""
+    "skip_reason": "parse error at 'events': syntax error"
   },
   {
     "path": "testcases/tcp/timestamping/client-only-last-byte.pkt",
-    "skip_reason": ""
+    "skip_reason": "parse error at 'msg_flags': syntax error"
   },
   {
     "path": "testcases/tcp/timestamping/partial.pkt",
-    "skip_reason": ""
+    "skip_reason": "parse error at 'msg_flags': syntax error"
   },
   {
     "path": "testcases/tcp/timestamping/server.pkt",
-    "skip_reason": ""
+    "skip_reason": "parse error at 'msg_flags': syntax error"
   },
   {
     "path": "testcases/tcp/notsent_lowat/notsent-lowat-setsockopt.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: bad outbound TCP options"
   },
   {
     "path": "testcases/tcp/notsent_lowat/notsent-lowat-default.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: bad outbound TCP options"
   },
   {
     "path": "testcases/tcp/notsent_lowat/notsent-lowat-sysctl.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: bad outbound TCP options"
   },
   {
     "path": "testcases/tcp/fast_retransmit/fr-4pkt-sack-bsd.pkt",
-    "skip_reason": ""
+    "skip_reason": "timing error: expected inbound packet at 0.100000 sec but happened at 0.248032 sec"
   },
   {
     "path": "testcases/tcp/tcp_info/tcp-info-rwnd-limited.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: live packet field ipv4_total_length: expected: 60 (0x3c) vs actual: 64 (0x40)"
   },
   {
     "path": "testcases/tcp/tcp_info/tcp-info-last_data_recv.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: live packet field ipv4_total_length: expected: 60 (0x3c) vs actual: 64 (0x40)"
   },
   {
     "path": "testcases/tcp/tcp_info/tcp-info-sndbuf-limited.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: live packet field ipv4_total_length: expected: 60 (0x3c) vs actual: 64 (0x40)"
   },
   {
     "path": "testcases/tcp/close/close-on-syn-sent.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: live packet field tcp_ece: expected: 0 (0x0) vs actual: 1 (0x1)"
   },
   {
     "path": "testcases/tcp/close/close-local-close-then-remote-fin.pkt",
-    "skip_reason": ""
+    "skip_reason": "timing error: expected system call start at 0.010063 sec but happened at 0.055994 sec"
   },
   {
     "path": "testcases/tcp/close/close-remote-fin-then-close.pkt",
-    "skip_reason": ""
+    "skip_reason": "runtime error in setsockopt call: unknown symbol: 'SOL_IP'"
   },
   {
     "path": "testcases/tcp/sack/sack-route-refresh-ip-tos.pkt",
-    "skip_reason": ""
+    "skip_reason": "runtime error in setsockopt call: unknown symbol: 'SOL_IP'"
   },
   {
     "path": "testcases/tcp/sack/sack-shift-sacked-2-6-8-3-9-nofack.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: bad outbound TCP options"
   },
   {
     "path": "testcases/tcp/sack/sack-shift-sacked-7-5-6-8-9-fack.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: bad outbound TCP options"
   },
   {
     "path": "testcases/tcp/sack/sack-shift-sacked-7-3-4-8-9-fack.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: bad outbound TCP options"
   },
   {
     "path": "testcases/tcp/sendfile/sendfile-simple.pkt",
-    "skip_reason": ""
+    "skip_reason": "dd: unknown operand status"
   },
   {
     "path": "testcases/tcp/ioctl/ioctl-siocinq-fin.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: bad outbound TCP options"
   },
   {
     "path": "testcases/tcp/syscall_bad_arg/syscall-invalid-buf-ptr.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: bad outbound TCP options"
   },
   {
     "path": "testcases/tcp/syscall_bad_arg/fastopen-invalid-buf-ptr.pkt",
-    "skip_reason": ""
+    "skip_reason": "parse error at 'is': syntax error"
   },
   {
     "path": "testcases/tcp/syscall_bad_arg/sendmsg-empty-iov.pkt",
-    "skip_reason": ""
+    "skip_reason": "parse error at 'msg_flags': syntax error"
   },
   {
     "path": "testcases/tcp/inq/client.pkt",
-    "skip_reason": ""
+    "skip_reason": "parse error at 'msg_flags': syntax error"
   },
   {
     "path": "testcases/tcp/inq/server.pkt",
-    "skip_reason": ""
+    "skip_reason": "parse error at 'msg_flags': syntax error"
   },
   {
     "path": "testcases/tcp/md5/md5-only-on-client-ack.pkt",
-    "skip_reason": ""
+    "skip_reason": "parse error at 'md5': syntax error"
   },
   {
     "path": "testcases/tcp/cwnd_moderation/cwnd-moderation-ecn-enter-cwr-no-moderation-700.pkt",
-    "skip_reason": ""
+    "skip_reason": "failed with unknown reason"
   },
   {
     "path": "testcases/tcp/cwnd_moderation/cwnd-moderation-disorder-no-moderation.pkt",
-    "skip_reason": ""
+    "skip_reason": " timing error: expected inbound packet at 0.100195 sec but happened at 0.248708 sec"
   },
   {
     "path": "testcases/tcp/limited_transmit/limited-transmit-no-sack.pkt",
-    "skip_reason": ""
+    "skip_reason": "timing error: expected inbound packet at 0.100090 sec but happened at 0.175008 sec"
   },
   {
     "path": "testcases/tcp/limited_transmit/limited-transmit-sack.pkt",
-    "skip_reason": ""
+    "skip_reason": "timing error: expected inbound packet at 0.100215 sec but happened at 0.174733 sec"
   },
   {
     "path": "testcases/tcp/mtu_probe/basic-v6.pkt",
-    "skip_reason": ""
+    "skip_reason": "option 'strict_segments' unknown"
   },
   {
     "path": "testcases/tcp/mtu_probe/basic-v4.pkt",
-    "skip_reason": ""
+    "skip_reason": "option 'strict_segments' unknown"
   },
   {
     "path": "testcases/tcp/splice/tcp_splice_loop_test.pkt",
-    "skip_reason": ""
+    "skip_reason": "semantic error: Invalid TCP flag: 'U'"
   },
   {
     "path": "testcases/tcp/user_timeout/user_timeout.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: bad outbound TCP options"
   },
   {
     "path": "testcases/tcp/user_timeout/user-timeout-probe.pkt",
-    "skip_reason": ""
+    "skip_reason": "timing error: expected inbound packet at 0.100467 sec but happened at 0.108474 sec"
   },
   {
     "path": "testcases/tcp/nagle/sockopt_cork_nodelay.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: bad outbound TCP options"
   },
   {
     "path": "testcases/tcp/nagle/https_client.pkt",
-    "skip_reason": ""
+    "skip_reason": "ethtool: command not found, runtime error in setsockopt call: unknown symbol: 'SOL_TCP'"
   },
   {
     "path": "testcases/tcp/nagle/sendmsg_msg_more.pkt",
-    "skip_reason": ""
+    "skip_reason": "parse error at 'msg_flags': syntax error"
   },
   {
     "path": "testcases/tcp/shutdown/shutdown-rd-close.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: bad outbound TCP options"
   },
   {
     "path": "testcases/tcp/shutdown/shutdown-wr-close.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: bad outbound TCP options"
   },
   {
     "path": "testcases/tcp/shutdown/shutdown-rd-wr-close.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: bad outbound TCP options"
   },
   {
     "path": "testcases/tcp/shutdown/shutdown-rdwr-send-queue-ack-close.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: bad outbound TCP options"
   },
   {
     "path": "testcases/tcp/shutdown/shutdown-rdwr-close.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: bad outbound TCP options"
   },
   {
     "path": "testcases/tcp/shutdown/shutdown-rdwr-write-queue-close.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: bad outbound TCP options"
   },
   {
     "path": "testcases/tcp/zerocopy/small.pkt",
-    "skip_reason": ""
+    "skip_reason": "parse error at 'msg_flags': syntax error"
   },
   {
     "path": "testcases/tcp/zerocopy/client.pkt",
-    "skip_reason": ""
+    "skip_reason": "parse error at 'msg_flags': syntax error"
   },
   {
     "path": "testcases/tcp/zerocopy/epoll_oneshot.pkt",
-    "skip_reason": ""
+    "skip_reason": "parse error at 'events': syntax error"
   },
   {
     "path": "testcases/tcp/zerocopy/epoll_edge.pkt",
-    "skip_reason": ""
+    "skip_reason": "parse error at 'events': syntax error"
   },
   {
     "path": "testcases/tcp/zerocopy/fastopen-client.pkt",
-    "skip_reason": ""
+    "skip_reason": "parse error at 'msg_flags': syntax error"
   },
   {
     "path": "testcases/tcp/zerocopy/maxfrags.pkt",
-    "skip_reason": ""
+    "skip_reason": "parse error at 'msg_flags': syntax error"
   },
   {
     "path": "testcases/tcp/zerocopy/fastopen-server.pkt",
-    "skip_reason": ""
+    "skip_reason": "parse error at 'msg_flags': syntax error"
   },
   {
     "path": "testcases/tcp/zerocopy/epoll_exclusive.pkt",
-    "skip_reason": ""
+    "skip_reason": "parse error at 'events': syntax error"
   },
   {
     "path": "testcases/tcp/zerocopy/closed.pkt",
-    "skip_reason": ""
+    "skip_reason": "parse error at 'msg_flags': syntax error"
   },
   {
     "path": "testcases/tcp/zerocopy/basic.pkt",
-    "skip_reason": ""
+    "skip_reason": "parse error at 'msg_flags': syntax error"
   },
   {
     "path": "testcases/tcp/zerocopy/batch.pkt",
-    "skip_reason": ""
+    "skip_reason": "parse error at 'msg_flags': syntax error"
   },
   {
     "path": "testcases/tcp/ts_recent/invalid_ack.pkt",
-    "skip_reason": ""
+    "skip_reason": "timing error: expected inbound packet at 0.100119 sec but happened at 0.174662 sec"
   },
   {
     "path": "testcases/tcp/ts_recent/fin_tsval.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: live packet field ipv4_total_length: expected: 56 (0x38) vs actual: 60 (0x3c)"
   },
   {
     "path": "testcases/tcp/ts_recent/reset_tsval.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: live packet field ipv4_total_length: expected: 56 (0x38) vs actual: 60 (0x3c)"
   },
   {
     "path": "testcases/tcp/mss/mss-setsockopt-tcp_maxseg-server.pkt",
-    "skip_reason": ""
+    "skip_reason": "timing error: expected system call start at 0.010140 sec but happened at 0.018330 sec"
   },
   {
     "path": "testcases/tcp/mss/mss-setsockopt-tcp_maxseg-client.pkt",
-    "skip_reason": ""
+    "skip_reason": "timing error: expected system call start at 0.010122 sec but happened at 0.053167 sec"
   },
   {
     "path": "testcases/tcp/mss/mss-getsockopt-tcp_maxseg-server.pkt",
-    "skip_reason": ""
+    "skip_reason": "timing error: expected inbound packet at 0.100103 sec but happened at 0.188326 sec"
   },
   {
     "path": "testcases/tcp/gro/gro-mss-option.pkt",
-    "skip_reason": ""
+    "skip_reason": "option 'mss' unknown"
   },
   {
     "path": "testcases/tcp/mss/mss-getsockopt-tcp_maxseg-client-ts.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: live packet field ipv4_total_length: expected: 60 (0x3c) vs actual: 64 (0x40)"
   },
   {
     "path": "testcases/tcp/mss/mss-getsockopt-tcp_maxseg-client.pkt",
-    "skip_reason": ""
+    "skip_reason": "timing error: expected system call start at 0.100000 sec but happened at 0.212402 sec"
   },
   {
     "path": "testcases/tcp/mss/mss-getsockopt-tcp_maxseg-server-advmss-ipv4.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: live packet field ipv4_total_length: expected: 1500 (0x5dc) vs actual: 40 (0x28)"
   },
   {
     "path": "testcases/tcp/mss/mss-getsockopt-tcp_maxseg-server-advmss-ts-ipv4.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: live packet field ipv4_total_length: expected: 60 (0x3c) vs actual: 64 (0x40)"
   },
   {
     "path": "testcases/tcp/mss/mss-getsockopt-tcp_maxseg-server-ts.pkt",
-    "skip_reason": ""
+    "skip_reason": "timing error: expected inbound packet at 0.100000 sec but happened at 0.228734 sec"
   },
   {
     "path": "testcases/tcp/ICMP/icmp-all-types.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: live packet field tcp_fin: expected: 1 (0x1) vs actual: 0 (0x0)"
   },
   {
     "path": "testcases/tcp/close/close-last-ack-lost.pkt",
-    "skip_reason": ""
+    "skip_reason": "timing error: expected inbound packet at 0.100000 sec but happened at 0.241639 sec"
   },
   {
     "path": "testcases/tcp/close/close-read-data-fin.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: live packet field tcp_ack_seq: expected: 1001 (0x3e9) vs actual: 1 (0x1)"
   },
   {
     "path": "testcases/tcp/close/close-unread-data-rst.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: live packet field tcp_ack_seq: expected: 1001 (0x3e9) vs actual: 1 (0x1)"
   },
   {
     "path": "testcases/tcp/close/close-write-data-rst.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: live packet field tcp_fin: expected: 1 (0x1) vs actual: 0 (0x0)"
   },
   {
     "path": "testcases/tcp/close/simultaneous-close.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: live packet field tcp_fin: expected: 1 (0x1) vs actual: 0 (0x0)"
   },
   {
     "path": "testcases/tcp/connect/http-get-nonblocking-ts.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: live packet field ipv4_total_length: expected: 60 (0x3c) vs actual: 64 (0x40)"
   },
   {
     "path": "testcases/tcp/early_retransmit/early-retransmit.pkt",
-    "skip_reason": ""
+    "skip_reason": "failed with unknown reason"
   },
   {
     "path": "testcases/tcp/fast_recovery/fast-recovery.pkt",
-    "skip_reason": ""
+    "skip_reason": "timing error: expected inbound packet at 0.100000 sec but happened at 0.227627 sec"
   },
   {
     "path": "testcases/tcp/fast_retransmit/fr-4pkt-sack-bsd.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: live packet field ipv4_total_length: expected: 1040 (0x410) vs actual: 40 (0x28)"
   },
   {
     "path": "testcases/tcp/init_rto/init_rto_passive_open.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: timing error: expected outbound packet at 3.100000 sec but happened at 1.184678 sec"
   },
   {
     "path": "testcases/tcp/initial_window/iw10-base-case.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: timing error: expected outbound packet at 0.200000 sec but happened at 1.483124 sec"
   },
   {
     "path": "testcases/tcp/initial_window/iw10-short-response.pkt",
-    "skip_reason": ""
+    "skip_reason": "timing error: expected inbound packet at 0.100000 sec but happened at 0.211222 sec"
   },
   {
     "path": "testcases/tcp/listen/listen-incoming-ack.pkt",
-    "skip_reason": ""
+    "skip_reason": "timing error: expected inbound packet at 0.200000 sec but happened at 0.315131 sec"
   },
   {
     "path": "testcases/tcp/listen/listen-incoming-no-tcp-flags.pkt",
-    "skip_reason": ""
+    "skip_reason": "timing error: expected inbound packet at 0.200000 sec but happened at 0.322743 sec"
   },
   {
     "path": "testcases/tcp/listen/listen-incoming-rst.pkt",
-    "skip_reason": ""
+    "skip_reason": "timing error: expected inbound packet at 0.100000 sec but happened at 0.205226 sec"
   },
   {
     "path": "testcases/tcp/listen/listen-incoming-syn-ack.pkt",
-    "skip_reason": ""
+    "skip_reason": "timing error: expected inbound packet at 0.200000 sec but happened at 0.307271 sec"
   },
   {
     "path": "testcases/tcp/listen/listen-incoming-syn-rst.pkt",
-    "skip_reason": ""
+    "skip_reason": "timing error: expected inbound packet at 0.100000 sec but happened at 0.244059 sec"
   },
   {
     "path": "testcases/tcp/pmtu_discovery/pmtu-10pkt.pkt",
-    "skip_reason": ""
+    "skip_reason": "error executing `sysctl -w net.inet.tcp.hostcache.purgenow=1` command: non-zero status 1"
   },
   {
     "path": "testcases/tcp/receiver_rtt/rcv-rtt-with-timestamps-new.pkt",
-    "skip_reason": ""
+    "skip_reason": "runtime error in getsockopt call: optval: expected: 65536 actual: 131072"
   },
   {
     "path": "testcases/tcp/receiver_rtt/rcv-rtt-without-timestamps-new.pkt",
-    "skip_reason": ""
+    "skip_reason": "runtime error in getsockopt call: optval: expected: 65536 actual: 131072"
   },
   {
     "path": "testcases/tcp/reset/rst-non-synchronized.pkt",
-    "skip_reason": ""
+    "skip_reason": "timing error: expected inbound packet at 0.100000 sec but happened at 0.204032 sec"
   },
   {
     "path": "testcases/tcp/reset/rst-syn-sent.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: live packet field tcp_ece: expected: 0 (0x0) vs actual: 1 (0x1)"
   },
   {
     "path": "testcases/tcp/reset/rst-sync-est-fin-wait-1.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: live packet field tcp_fin: expected: 1 (0x1) vs actual: 0 (0x0)"
   },
   {
     "path": "testcases/tcp/reset/rst-sync-est-fin-wait-2.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: live packet field tcp_fin: expected: 1 (0x1) vs actual: 0 (0x0)"
   },
   {
     "path": "testcases/tcp/reset/rst-sync-est-time-wait.pkt",
-    "skip_reason": ""
+    "skip_reason": "sh: sockstat: command not found"
   },
   {
     "path": "testcases/tcp/reset/rst-synchronized-established.pkt",
-    "skip_reason": ""
+    "skip_reason": "failed with unknown reason"
   },
   {
     "path": "testcases/tcp/reset/rst_sync_close_wait.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: live packet field tcp_ack_seq: expected: 2 (0x2) vs actual: 1 (0x1)"
   },
   {
     "path": "testcases/tcp/rto/retransmission_timeout.pkt",
-    "skip_reason": ""
+    "skip_reason": "timing error: expected inbound packet at 0.100000 sec but happened at 0.210280 sec"
   },
   {
     "path": "testcases/tcp/shutdown/shutdown-rd.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: live packet field tcp_ack_seq: expected: 1001 (0x3e9) vs actual: 1 (0x1)"
   },
   {
     "path": "testcases/tcp/shutdown/shutdown-rdwr.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: live packet field tcp_fin: expected: 1 (0x1) vs actual: 0 (0x0)"
   },
   {
     "path": "testcases/tcp/shutdown/shutdown-wr.pkt",
-    "skip_reason": ""
+    "skip_reason": "timing error: expected inbound packet at 0.100000 sec but happened at 0.231863 sec"
   },
   {
     "path": "testcases/tcp/slow_start/slow-start.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: live packet field ipv4_total_length: expected: 1040 (0x410) vs actual: 40 (0x28)"
   },
   {
     "path": "testcases/tcp/time_wait/time-wait.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: live packet field tcp_fin: expected: 1 (0x1) vs actual: 0 (0x0)"
   },
   {
     "path": "testcases/tcp/undo/undo-fr-acks-dropped-then-dsack.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: live packet field ipv4_total_length: expected: 1040 (0x410) vs actual: 40 (0x28)"
   },
   {
     "path": "testcases/tcp/blocking/blocking-simple-server.pkt",
-    "skip_reason": ""
+    "skip_reason": "timing error: expected inbound packet at 0.050096 sec but happened at 0.060464 sec"
   },
   {
     "path": "testcases/tcp/ecn/ecn-uses-ect0.pkt",
-    "skip_reason": ""
+    "skip_reason": "failed with unknown reason"
   },
   {
     "path": "testcases/tcp/shutdown/shutdown-recv-after-shut-rd.pkt",
-    "skip_reason": ""
+    "skip_reason": "timing error: expected inbound packet at 0.050060 sec but happened at 0.150243 sec"
   },
   {
     "path": "testcases/tcp/shutdown/shutdown-double-shut-wr.pkt",
-    "skip_reason": ""
+    "skip_reason": "timing error: expected inbound packet at 0.050244 sec but happened at 0.147460 sec"
   }
 ]
