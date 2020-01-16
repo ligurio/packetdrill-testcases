@@ -2,18 +2,19 @@
 
 set -ex
 
-if [ -z "$NPLAB"]; then
+if [ -z "$NPLAB" ]; then
   git_repo="https://github.com/google/packetdrill"
 else
   git_repo="https://github.com/nplab/packetdrill"
 fi
 
-os=$(uname -o)
-if [ "$os" -eq "GNU/Linux" ]; then
+UNAME=$(uname)
+
+if [ "$UNAME" == "Linux" ] ; then
+  echo "Linux"
   apt-get install -y make git libsctp-dev bison flex python
-elif [ "$os" -eq "FreeBSD" ]; then
-  pkg install git bison python
-  sysctl -w vm.old_mlock=1
+elif [ "$UNAME" == "Darwin" ] ; then
+  echo "Darwin"
 fi
 
 [ ! -d 'packetdrill/gtests/net/packetdrill' ] && $(rm -rf packetdrill; git clone $git_repo)
