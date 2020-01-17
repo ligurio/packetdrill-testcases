@@ -25,7 +25,7 @@
   },
   {
     "path": "testcases/tcp/eor/no-coalesce-retrans.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: timing error: expected outbound packet in relative time range +0.004000~+0.008000 sec but happened at +0.015073 sec"
   },
   {
     "path": "testcases/tcp/eor/no-coalesce-small.pkt",
@@ -45,27 +45,27 @@
   },
   {
     "path": "testcases/tcp/epoll/epoll_out_edge_default_notsent_lowat.pkt",
-    "skip_reason": ""
+    "skip_reason": "runtime error in epoll_wait call: Expected result 1 but got 0 with errno 2 (No such file or directory)"
   },
   {
     "path": "testcases/tcp/epoll/epoll_out_edge_notsent_lowat.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: fragment payload: expected 4000 bytes vs actual 10000 bytes; total payload: expected 16000 bytes vs actual 14000 bytes"
   },
   {
     "path": "testcases/tcp/epoll/epoll_out_edge.pkt",
-    "skip_reason": ""
+    "skip_reason": "runtime error in epoll_wait call: Expected result 1 but got 0 with errno 2 (No such file or directory)"
   },
   {
     "path": "testcases/tcp/timestamping/client-only-last-byte.pkt",
-    "skip_reason": ""
+    "skip_reason": "runtime error in recvmsg call: unknown symbol: 'CMSG_LEVEL_IP'"
   },
   {
     "path": "testcases/tcp/timestamping/partial.pkt",
-    "skip_reason": ""
+    "skip_reason": "runtime error in recvmsg call: unknown symbol: 'CMSG_LEVEL_IP'"
   },
   {
     "path": "testcases/tcp/timestamping/server.pkt",
-    "skip_reason": ""
+    "skip_reason": "runtime error in recvmsg call: unknown symbol: 'CMSG_LEVEL_IP'"
   },
   {
     "path": "testcases/tcp/notsent_lowat/notsent-lowat-setsockopt.pkt",
@@ -73,7 +73,7 @@
   },
   {
     "path": "testcases/tcp/notsent_lowat/notsent-lowat-default.pkt",
-    "skip_reason": ""
+    "skip_reason": "error executing cleanup command: non-zero status 2"
   },
   {
     "path": "testcases/tcp/notsent_lowat/notsent-lowat-sysctl.pkt",
@@ -81,7 +81,7 @@
   },
   {
     "path": "testcases/tcp/fast_retransmit/fr-4pkt-sack-bsd.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: live packet payload: expected 1000 bytes vs actual 4000 bytes"
   },
   {
     "path": "testcases/tcp/tcp_info/tcp-info-rwnd-limited.pkt",
@@ -93,7 +93,7 @@
   },
   {
     "path": "testcases/tcp/tcp_info/tcp-info-sndbuf-limited.pkt",
-    "skip_reason": ""
+    "skip_reason": "error executing code: '/usr/bin/python' returned non-zero status 1"
   },
   {
     "path": "testcases/tcp/close/close-on-syn-sent.pkt",
@@ -101,11 +101,11 @@
   },
   {
     "path": "testcases/tcp/close/close-local-close-then-remote-fin.pkt",
-    "skip_reason": ""
+    "skip_reason": "failed with unknown reason"
   },
   {
     "path": "testcases/tcp/close/close-remote-fin-then-close.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: timing error: expected outbound packet at 0.010320 sec but happened at 0.015760 sec; tolerance 0.004000 sec"
   },
   {
     "path": "testcases/tcp/sack/sack-route-refresh-ip-tos.pkt",
@@ -117,11 +117,11 @@
   },
   {
     "path": "testcases/tcp/sack/sack-shift-sacked-7-5-6-8-9-fack.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: timing error: expected outbound packet at 0.227530 sec but happened at 0.239770 sec; tolerance 0.004000 sec"
   },
   {
     "path": "testcases/tcp/sack/sack-shift-sacked-7-3-4-8-9-fack.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: timing error: expected outbound packet at 0.227513 sec but happened at 0.239775 sec; tolerance 0.004000 sec"
   },
   {
     "path": "testcases/tcp/sendfile/sendfile-simple.pkt",
@@ -137,7 +137,7 @@
   },
   {
     "path": "testcases/tcp/syscall_bad_arg/fastopen-invalid-buf-ptr.pkt",
-    "skip_reason": ""
+    "skip_reason": "failed with unknown reason"
   },
   {
     "path": "testcases/tcp/syscall_bad_arg/sendmsg-empty-iov.pkt",
@@ -173,11 +173,11 @@
   },
   {
     "path": "testcases/tcp/mtu_probe/basic-v6.pkt",
-    "skip_reason": ""
+    "skip_reason": "error executing route command 'ip -6 route del fd::3/128 > /dev/null 2>&1 ; ip -6 route add fd::3/128 dev tun0 via fd::2 > /dev/null 2>&1'"
   },
   {
     "path": "testcases/tcp/mtu_probe/basic-v4.pkt",
-    "skip_reason": ""
+    "skip_reason": "error executing cleanup command: non-zero status 2"
   },
   {
     "path": "testcases/tcp/splice/tcp_splice_loop_test.pkt",
@@ -189,7 +189,7 @@
   },
   {
     "path": "testcases/tcp/user_timeout/user-timeout-probe.pkt",
-    "skip_reason": ""
+    "skip_reason": "runtime error in write call: Expected result -1 but got 24 with errno 2 (No such file or directory)"
   },
   {
     "path": "testcases/tcp/nagle/sockopt_cork_nodelay.pkt",
@@ -197,7 +197,7 @@
   },
   {
     "path": "testcases/tcp/nagle/https_client.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: live packet payload: expected 974 bytes vs actual 1024 bytes"
   },
   {
     "path": "testcases/tcp/nagle/sendmsg_msg_more.pkt",
@@ -217,7 +217,7 @@
   },
   {
     "path": "testcases/tcp/shutdown/shutdown-rdwr-send-queue-ack-close.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: fragment payload: expected 756 bytes vs actual 1000 bytes; total payload: expected 2000 bytes vs actual 1756 bytes"
   },
   {
     "path": "testcases/tcp/shutdown/shutdown-rdwr-close.pkt",
@@ -225,51 +225,51 @@
   },
   {
     "path": "testcases/tcp/shutdown/shutdown-rdwr-write-queue-close.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: timing error: expected outbound packet in relative time range +0.010000~+0.015000 sec but happened at +0.023209 sec"
   },
   {
     "path": "testcases/tcp/zerocopy/small.pkt",
-    "skip_reason": ""
+    "skip_reason": "runtime error in recvmsg call: unknown symbol: 'CMSG_LEVEL_IP'"
   },
   {
     "path": "testcases/tcp/zerocopy/client.pkt",
-    "skip_reason": ""
+    "skip_reason": "runtime error in recvmsg call: unknown symbol: 'CMSG_LEVEL_IP'"
   },
   {
     "path": "testcases/tcp/zerocopy/epoll_oneshot.pkt",
-    "skip_reason": ""
+    "skip_reason": "runtime error in recvmsg call: unknown symbol: 'CMSG_LEVEL_IP'"
   },
   {
     "path": "testcases/tcp/zerocopy/epoll_edge.pkt",
-    "skip_reason": ""
+    "skip_reason": "runtime error in recvmsg call: unknown symbol: 'CMSG_LEVEL_IP'"
   },
   {
     "path": "testcases/tcp/zerocopy/fastopen-client.pkt",
-    "skip_reason": ""
+    "skip_reason": "runtime error in sendto call: Expected errno 115 (Operation now in progress) but got 22 (Invalid argument)"
   },
   {
     "path": "testcases/tcp/zerocopy/maxfrags.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: incorrect outbound data payload"
   },
   {
     "path": "testcases/tcp/zerocopy/fastopen-server.pkt",
-    "skip_reason": ""
+    "skip_reason": "runtime error in sendto call: Expected result 1000 but got -1 with errno 22 (Invalid argument)"
   },
   {
     "path": "testcases/tcp/zerocopy/epoll_exclusive.pkt",
-    "skip_reason": ""
+    "skip_reason": "runtime error in recvmsg call: unknown symbol: 'CMSG_LEVEL_IP'"
   },
   {
     "path": "testcases/tcp/zerocopy/closed.pkt",
-    "skip_reason": ""
+    "skip_reason": "runtime error in send call: Expected errno 32 (Broken pipe) but got 22 (Invalid argument)"
   },
   {
     "path": "testcases/tcp/zerocopy/basic.pkt",
-    "skip_reason": ""
+    "skip_reason": "runtime error in recvmsg call: unknown symbol: 'CMSG_LEVEL_IP'"
   },
   {
     "path": "testcases/tcp/zerocopy/batch.pkt",
-    "skip_reason": ""
+    "skip_reason": "runtime error in recvmsg call: unknown symbol: 'CMSG_LEVEL_IP'"
   },
   {
     "path": "testcases/tcp/ts_recent/invalid_ack.pkt",
@@ -289,7 +289,7 @@
   },
   {
     "path": "testcases/tcp/mss/mss-setsockopt-tcp_maxseg-client.pkt",
-    "skip_reason": ""
+    "skip_reason": "runtime error in getsockopt call: Bad getsockopt optval: expected: 1100 actual: 524"
   },
   {
     "path": "testcases/tcp/mss/mss-getsockopt-tcp_maxseg-server.pkt",
@@ -301,43 +301,43 @@
   },
   {
     "path": "testcases/tcp/mss/mss-getsockopt-tcp_maxseg-client-ts.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: bad outbound TCP options"
   },
   {
     "path": "testcases/tcp/mss/mss-getsockopt-tcp_maxseg-client.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: bad outbound TCP options"
   },
   {
     "path": "testcases/tcp/mss/mss-getsockopt-tcp_maxseg-server-advmss-ipv4.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: bad outbound TCP options"
   },
   {
     "path": "testcases/tcp/mss/mss-getsockopt-tcp_maxseg-server-advmss-ts-ipv4.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: bad outbound TCP options"
   },
   {
     "path": "testcases/tcp/mss/mss-getsockopt-tcp_maxseg-server-ts.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: unable to infer live TS ecr for script TS ecr 100;  no matching or preceding outound TS val"
   },
   {
     "path": "testcases/tcp/ICMP/icmp-all-types.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: live packet field tcp_window: expected: 1026 (0x402) vs actual: 256 (0x100)"
   },
   {
     "path": "testcases/tcp/close/close-last-ack-lost.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: timing error: expected outbound packet at 3.110000 sec but happened at 0.319789 sec; tolerance 0.100000 sec"
   },
   {
     "path": "testcases/tcp/close/close-read-data-fin.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: timing error: expected outbound packet at 0.350000 sec but happened at 0.210076 sec; tolerance 0.100000 sec"
   },
   {
     "path": "testcases/tcp/close/close-unread-data-rst.pkt",
-    "skip_reason": ""
+    "skip_reason": "runtime error in read call: unable to find fd with script fd 4"
   },
   {
     "path": "testcases/tcp/close/close-write-data-rst.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: live packet field tcp_ack_seq: expected: 1001 (0x3e9) vs actual: 0 (0x0)"
   },
   {
     "path": "testcases/tcp/close/simultaneous-close.pkt",
@@ -345,31 +345,31 @@
   },
   {
     "path": "testcases/tcp/connect/http-get-nonblocking-ts.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: bad outbound TCP options"
   },
   {
     "path": "testcases/tcp/early_retransmit/early-retransmit.pkt",
-    "skip_reason": ""
+    "skip_reason": "cannot stat /proc/sys/net/inet/tcp/rfc5827: No such file or directory"
   },
   {
     "path": "testcases/tcp/fast_recovery/fast-recovery.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: live packet payload: expected 1000 bytes vs actual 5000 bytes"
   },
   {
     "path": "testcases/tcp/fast_retransmit/fr-4pkt-sack-bsd.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: live packet payload: expected 1000 bytes vs actual 4000 bytes"
   },
   {
     "path": "testcases/tcp/init_rto/init_rto_passive_open.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: timing error: expected outbound packet at 3.100000 sec but happened at 1.127779 sec; tolerance 0.100000 sec"
   },
   {
     "path": "testcases/tcp/initial_window/iw10-base-case.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: live packet payload: expected 1460 bytes vs actual 7300 bytes"
   },
   {
     "path": "testcases/tcp/initial_window/iw10-short-response.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: bad outbound TCP options"
   },
   {
     "path": "testcases/tcp/listen/listen-incoming-ack.pkt",
@@ -393,51 +393,51 @@
   },
   {
     "path": "testcases/tcp/pmtu_discovery/pmtu-10pkt.pkt",
-    "skip_reason": ""
+    "skip_reason": "parse error at '1': syntax error"
   },
   {
     "path": "testcases/tcp/receiver_rtt/rcv-rtt-with-timestamps-new.pkt",
-    "skip_reason": ""
+    "skip_reason": "runtime error in getsockopt call: Bad getsockopt optval: expected: 65536 actual: 540000"
   },
   {
     "path": "testcases/tcp/receiver_rtt/rcv-rtt-without-timestamps-new.pkt",
-    "skip_reason": ""
+    "skip_reason": "runtime error in getsockopt call: Bad getsockopt optval: expected: 65536 actual: 540000"
   },
   {
     "path": "testcases/tcp/reset/rst-non-synchronized.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: live packet field tcp_seq: expected: 0 (0x0) vs actual: 155771 (0x2607b)"
   },
   {
     "path": "testcases/tcp/reset/rst-syn-sent.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: timing error: expected outbound packet at 3.100000 sec but happened at 1.119783 sec; tolerance 0.100000 sec"
   },
   {
     "path": "testcases/tcp/reset/rst-sync-est-fin-wait-1.pkt",
-    "skip_reason": ""
+    "skip_reason": "runtime error in write call: unable to find fd with script fd 4"
   },
   {
     "path": "testcases/tcp/reset/rst-sync-est-fin-wait-2.pkt",
-    "skip_reason": ""
+    "skip_reason": "runtime error in write call: unable to find fd with script fd 4"
   },
   {
     "path": "testcases/tcp/reset/rst-sync-est-time-wait.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: live packet field tcp_fin: expected: 1 (0x1) vs actual: 0 (0x0)"
   },
   {
     "path": "testcases/tcp/reset/rst-synchronized-established.pkt",
-    "skip_reason": ""
+    "skip_reason": "error executing `sockstat -s -P tcp -p 8080 | grep 'packetdril' | awk '{print $8}' | grep 'CLOSED'` command: non-zero status 1"
   },
   {
     "path": "testcases/tcp/reset/rst_sync_close_wait.pkt",
-    "skip_reason": ""
+    "skip_reason": "runtime error in write call: Expected result 1000 but got -1 with errno 32 (Broken pipe)"
   },
   {
     "path": "testcases/tcp/rto/retransmission_timeout.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: live packet payload: expected 1000 bytes vs actual 5000 bytes"
   },
   {
     "path": "testcases/tcp/shutdown/shutdown-rd.pkt",
-    "skip_reason": ""
+    "skip_reason": "runtime error in read call: Expected result 0 but got 1000 with errno 2 (No such file or directory)"
   },
   {
     "path": "testcases/tcp/shutdown/shutdown-rdwr.pkt",
@@ -449,7 +449,7 @@
   },
   {
     "path": "testcases/tcp/slow_start/slow-start.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: live packet payload: expected 1000 bytes vs actual 5000 bytes"
   },
   {
     "path": "testcases/tcp/time_wait/time-wait.pkt",
@@ -457,7 +457,7 @@
   },
   {
     "path": "testcases/tcp/undo/undo-fr-acks-dropped-then-dsack.pkt",
-    "skip_reason": ""
+    "skip_reason": "error handling packet: live packet payload: expected 1000 bytes vs actual 2000 bytes"
   },
   {
     "path": "testcases/tcp/blocking/blocking-simple-server.pkt",
@@ -469,10 +469,10 @@
   },
   {
     "path": "testcases/tcp/shutdown/shutdown-recv-after-shut-rd.pkt",
-    "skip_reason": ""
+    "skip_reason": "runtime error in recv call: Expected result 0 but got 1000 with errno 2 (No such file or directory)"
   },
   {
     "path": "testcases/tcp/shutdown/shutdown-double-shut-wr.pkt",
-    "skip_reason": ""
+    "skip_reason": "Timeout is exceed (20 sec)"
   }
 ]
