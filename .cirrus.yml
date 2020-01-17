@@ -31,7 +31,7 @@ macos_task:
   test_script:
     - NPLAB=1 scripts/install-packetdrill.sh
     - . venv/bin/activate
-    - sudo -E python3 scripts/run-tests.py --testplan testplans/testplan-macos.json --report_file junit.xml
+    - python3 scripts/run-tests.py --testplan testplans/testplan-macos.json --report_file junit.xml
   always:
     junit_artifacts:
       path: "*.xml"
