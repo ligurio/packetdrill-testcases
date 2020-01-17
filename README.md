@@ -2,7 +2,7 @@
 
 | Platform      |  Status       |
 | ------------- |:-------------:|
-| Linux         | [![Build Status](https://travis-ci.org/ligurio/packetdrill-testcases.svg?branch=master)](https://travis-ci.org/ligurio/packetdrill-testcases) |
+| Ubuntu 18.04.3 LTS (Bionic Beaver) | [![Build Status](https://travis-ci.org/ligurio/packetdrill-testcases.svg?branch=master)](https://travis-ci.org/ligurio/packetdrill-testcases) |
 | FreeBSD 12.1  | [![Build Status](https://api.cirrus-ci.com/github/ligurio/packetdrill-testcases.svg?task=freebsd_12)](https://cirrus-ci.com/github/ligurio/packetdrill-testcases) |
 | macOS Mojave  | [![Build Status](https://api.cirrus-ci.com/github/ligurio/packetdrill-testcases.svg?task=macos)](https://cirrus-ci.com/github/ligurio/packetdrill-testcases) |
 
