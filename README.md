@@ -33,8 +33,6 @@ python3 scripts/run-tests.py --testplan testplans/testplan-freebsd.json
 
 ## TODO
 
-- https://www.computer-networking.info/2nd/html/exercises/packetdrill.html
-- [review flaky testcases](https://github.com/google/packetdrill/issues/23)
 - [libuinet](https://github.com/pkelsey/libuinet)
 - [F-stack](https://github.com/F-Stack/f-stack)
 - [LWIP](https://savannah.nongnu.org/projects/lwip/)
