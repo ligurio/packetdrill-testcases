@@ -1,0 +1,15 @@
+diff --git a/gtests/net/packetdrill/run.c b/gtests/net/packetdrill/run.c
+index 37ec449..a75a759 100644
+--- a/packetdrill/gtests/net/packetdrill/run.c
++++ b/packetdrill/gtests/net/packetdrill/run.c
+@@ -475,8 +475,10 @@ void set_scheduling_priority(void)
+  */
+ void lock_memory(void)
+ {
++/*
+ 	if (mlockall(MCL_CURRENT | MCL_FUTURE))
+ 		die_perror("lockall(MCL_CURRENT | MCL_FUTURE)");
++*/
+ }
+ 
+ /* Wait for and return the wall time at which we should start the

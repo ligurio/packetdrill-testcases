@@ -10,14 +10,15 @@ fi
 
 UNAME=$(uname)
 
-if [ "$UNAME" == "Linux" ] ; then
+if [ "$UNAME" = "Linux" ] ; then
   echo "Linux"
-  apt-get install -y make git libsctp-dev bison flex python
-elif [ "$UNAME" == "Darwin" ] ; then
+  apt-get install -y make git bison flex python patch
+elif [ "$UNAME" = "Darwin" ] ; then
   echo "Darwin"
 fi
 
 [ ! -d 'packetdrill/gtests/net/packetdrill' ] && $(rm -rf packetdrill; git clone $git_repo)
+[ "$UNAME" = "Linux" ] && (patch -p1 < scripts/disable_lockall.patch)
 cd packetdrill/gtests/net/packetdrill
 ./configure
 make

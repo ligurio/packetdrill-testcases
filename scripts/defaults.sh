@@ -3,12 +3,12 @@
 
 UNAME=$(uname)
 
-if [ "$UNAME" == "Linux" ] ; then
+if [ "$UNAME" = "Linux" ] ; then
   echo "Linux"
   . scripts/defaults-linux.sh
-elif [ "$UNAME" == "FreeBSD" ] ; then
+elif [ "$UNAME" = "FreeBSD" ] ; then
   echo "FreeBSD"
   . scripts/defaults-freebsd.sh
-elif [ "$UNAME" == "Darwin" ] ; then
+elif [ "$UNAME" = "Darwin" ] ; then
   echo "Darwin"
 fi

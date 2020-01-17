@@ -11,15 +11,7 @@ matrix:
   include:
     - os: linux
       arch: amd64
-      dist: xenial
-    - os: linux
-      arch: amd64
       dist: bionic
-
-cache:
-  directories:
-    - packetdrill
-    - venv
 
 install:
   - sudo scripts/install-packetdrill.sh
