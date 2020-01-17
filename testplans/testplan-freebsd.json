@@ -494,5 +494,17 @@
   {
     "path": "testcases/tcp/shutdown/shutdown-double-shut-wr.pkt",
     "skip_reason": ""
+  },
+  {
+    "path": "testcases/udp/udp_bug.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/udp/udp_client.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/udp/udp_server.pkt",
+    "skip_reason": ""
   }
 ]

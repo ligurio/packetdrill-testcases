@@ -474,5 +474,17 @@
   {
     "path": "testcases/tcp/shutdown/shutdown-double-shut-wr.pkt",
     "skip_reason": "timing error: expected inbound packet at 0.050244 sec but happened at 0.147460 sec"
+  },
+  {
+    "path": "testcases/udp/udp_bug.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/udp/udp_client.pkt",
+    "skip_reason": ""
+  },
+  {
+    "path": "testcases/udp/udp_server.pkt",
+    "skip_reason": ""
   }
 ]
