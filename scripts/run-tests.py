@@ -15,7 +15,7 @@ import json
 DEFAULT_TEST_TIMEOUT = 20
 DEFAULT_TEST_DIR = "testcases"
 DEFAULT_REPORT_NAME = "report.xml"
-DEFAULT_COMMAND_LINE = "/usr/local/bin/packetdrill --verbose {}"
+DEFAULT_COMMAND_LINE = "sudo /usr/local/bin/packetdrill --verbose {}"
 
 SUPPORTED_FILE_EXTENSIONS = [".pkt"]
 
