@@ -1,0 +1,13 @@
+Precondition:
+IUT supports PR-SCTP.
+Association is established between tester and IUT, where in the INIT-Chunk sent by the tester the forward-tsn-supported parameter is NOT set.
+Arrange the data at the tester that an FORWARD TSN chunk is sent to the IUT.
+
+Purpose:
+Ensure that the IUT upon receipt of an FORWARD TSN chunk at an association where PR-SCTP is not supported sends an ERROR-Chunk 
+where any cause is considered valid. Protocol violation would be an reasonable cause.
+
+References:
+<a href="https://tools.ietf.org/html/rfc3758#section-3.3.2">RFC 3758 [section 3.3.2]</a>, <a href="https://tools.ietf.org/html/rfc4960#section-3.3.3">RFC 4960 [section 3.3.3]</a>
+
+

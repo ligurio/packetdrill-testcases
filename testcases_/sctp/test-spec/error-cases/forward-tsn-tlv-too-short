@@ -1,0 +1,11 @@
+Precondition:
+IUT does support PR-SCTP. 
+Association is established between tester and IUT.
+Arrange the data at the tester such that an FORWARD-TSN-Chunk with an
+too short length in the common header is sent to the IUT.
+
+Purpose:
+Ensure that the IUT either discards this invalid chunk or responds with an ABORT-chunk.
+
+References:
+<a href="https://tools.ietf.org/html/rfc3758#section-3.2">RFC 3758 [section 3.2]</a>

@@ -1,0 +1,16 @@
+Precondition:
+IUT does support the NR-SACK extension and make sure that the IUT does never drain any queues of partial received DATA-Chunks. 
+Association is established between tester and IUT where both sides have announced support for NR-SACK-Chunks at the handshake.
+Arrange the data at the tester such that it sends one ordered fragmented user message consisting of three DATA-Chunks (with relative
+tsn numbers 1, 2, 3) and one unordered not fragmented user message (with tsn 4) to the IUT.
+Send the DATA-Chunks in the following order to the IUT (relative tsn numbers): 2, 3, 4, 1.
+
+Purpose:
+Ensure that the IUT sends an NR-SACK-Chunk where it announces the out-of-order DATA-Chunks 2, 3 and 4 in the nr-gaps.
+Ensure also the IUT sends after receiving all fragmentes of the user messages an NR-SACK-Chunk where the cum_tsn-value is adjusted.
+Then also verify that the fragmented user message is delivered and that the not fragmented unordered user message can be delivered
+before the fragmented ordered user message to the userland.
+
+References:
+<a href="https://tools.ietf.org/html/draft-tuexen-tsvwg-sctp-multipath-13#section-4.4.1">Load Sharing for SCTP [section 4.4.1]</a>,
+<a href="https://tools.ietf.org/html/rfc4960#section-6.2">RFC 4960 [section 6.2]</a>

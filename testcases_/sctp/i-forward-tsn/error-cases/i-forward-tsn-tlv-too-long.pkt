@@ -1,0 +1,67 @@
+// SPDX-License-Identifier: BSD-3-Clause
+// Copyright (c) 2016, nplab
+// Source: https://github.com/nplab/PR_SCTP_Testsuite
+//
+// Copyright (c) 2016 Julian Cordes
+// All rights reserved.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+//
+// THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
+// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+// SUCH DAMAGE.
+//
+--tolerance_usecs=250000
+
+ 0.0 `sysctl -w net.inet.sctp.ecn_enable=0`
++0.0 `sysctl -w net.inet.sctp.pr_enable=1`
++0.0 `sysctl -w net.inet.sctp.asconf_enable=0`
++0.0 `sysctl -w net.inet.sctp.auth_enable=0`
++0.0 `sysctl -w net.inet.sctp.reconfig_enable=0`
++0.0 `sysctl -w net.inet.sctp.nrsack_enable=0`
++0.0 `sysctl -w net.inet.sctp.pktdrop_enable=0`
+
++0.0 socket(..., SOCK_STREAM, IPPROTO_SCTP) = 3
++0.0 setsockopt(3, IPPROTO_SCTP, SCTP_FRAGMENT_INTERLEAVE, [2], 4) = 0
++0.0 setsockopt(3, IPPROTO_SCTP, SCTP_INTERLEAVING_SUPPORTED, {assoc_value=1}, 8) = 0
++0.0 bind(3, ..., ...) = 0
++0.0 listen(3, 1) = 0
++0.0 < sctp: INIT[flgs=0, tag=1, a_rwnd=1500, os=1, is=1, tsn=1,
+                  FORWARD_TSN_SUPPORTED[], SUPPORTED_EXTENSIONS[types=[I_DATA, I_FORWARD_TSN]]]
++0.0 > sctp: INIT_ACK[flgs=0, tag=2, a_rwnd=..., os=..., is=..., tsn=1,
+                      FORWARD_TSN_SUPPORTED[],
+                      SUPPORTED_EXTENSIONS[types=[FORWARD_TSN, I_FORWARD_TSN, I_DATA]],
+                      STATE_COOKIE[len=..., val=...]]
++0.1 < sctp: COOKIE_ECHO[flgs=0, len=..., val=...]
++0.0 > sctp: COOKIE_ACK[flgs=0]
++0.0 accept(3, ..., ...) = 4
++0.0 close(3) = 0
++0.0 fcntl(4, F_GETFL) = 0x2 (flags O_RDWR)
++0.0 fcntl(4, F_SETFL, O_RDWR|O_NONBLOCK) = 0
+
+// send an I-FORWARD-TSN-Chunk with length=256 in header where the actual length on the wire is 16...
+//                                  |  new cum_tsn          |   sid_1   | reserved_1| message_id_1    
++0.0 < sctp: [0xc2, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01]
+// now wait some time to see if empty I_FORWARD_TSN was silently discarded
++1.0 < sctp: I_FORWARD_TSN[cum_tsn=2, ids=[{1,1,0}]]
++0.1 > sctp: SACK[flgs=0, cum_tsn=2, a_rwnd=..., gaps=[], dups=[]]
+// Tear down the association
++0.0 < sctp: SHUTDOWN[flgs=0, cum_tsn=0]
++0.0 > sctp: SHUTDOWN_ACK[flgs=0]
++0.0 < sctp: SHUTDOWN_COMPLETE[flgs=0]
++0.0 close(4) = 0

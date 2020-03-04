@@ -1,0 +1,22 @@
+Precondition:
+IUT supports PR-SCTP.
+Association where PR-SCTP is enabled is established between tester and IUT.
+Arrange the data at the tester such the cwnd of the IUT can have three user messages 
+outstanding.
+Let the IUT send three ordered not fragmented user message to the tester, where the first
+and the third user message should be sent unreliable and the second user message reliable.
+
+Then wait so long until the unreliable user messages are abandoned.
+
+Purpose:
+Expect the IUT to send a valid FORWARD-TSN for the first unreliable user message and bundles
+it with the still outstanding reliable second user message. After that the tester should send a SACK
+where the cumulative ack is pointing to the second user message also expect the IUT to send
+a valid FORWARD-TSN for the third user message.
+
+
+References:
+<a href="https://tools.ietf.org/html/rfc3758#section-3.5">RFC 3758 [section 3.5]</a>
+
+
+

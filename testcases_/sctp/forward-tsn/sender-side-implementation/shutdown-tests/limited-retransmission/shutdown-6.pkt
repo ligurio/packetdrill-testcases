@@ -1,0 +1,130 @@
+// SPDX-License-Identifier: BSD-3-Clause
+// Copyright (c) 2016, nplab
+// Source: https://github.com/nplab/PR_SCTP_Testsuite
+//
+// Copyright (c) 2016 Julian Cordes
+// All rights reserved.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+//
+// THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
+// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+// SUCH DAMAGE.
+//
+
+
+--tolerance_usecs=80000
+
+#ifdef FreeBSD
+ 0.0 `sysctl -w net.inet.sctp.ecn_enable=0`
++0.0 `sysctl -w net.inet.sctp.pr_enable=1`
++0.0 `sysctl -w net.inet.sctp.asconf_enable=0`
++0.0 `sysctl -w net.inet.sctp.auth_enable=0`
++0.0 `sysctl -w net.inet.sctp.reconfig_enable=0`
++0.0 `sysctl -w net.inet.sctp.nrsack_enable=0`
++0.0 `sysctl -w net.inet.sctp.pktdrop_enable=0`
+// set rto_min and rto_initial to 100ms for this test case
++0.0 `sysctl -i net.inet.sctp.rto_min=100`
++0.0 `sysctl -i net.inet.sctp.rto_initial=100`
+#endif
+
+#ifdef Linux
+// only enable PR-SCTP extension on Linux
+ 0.0 `sysctl -ew net.sctp.auth_enable=0`
++0.0 `sysctl -ew net.sctp.prsctp_enable=1`
+// set rto_min and rto_initial to 100ms for this test case
++0.0 `sysctl -ew net.sctp.rto_min=100`
++0.0 `sysctl -ew net.sctp.rto_initial=100
+#endif
+
+
++0.0 socket(..., SOCK_STREAM, IPPROTO_SCTP) = 3
+#ifdef Linux
++0.0 setsockopt(3, IPPROTO_SCTP, SCTP_EVENTS, {sctp_data_io_event=1,
+                                               sctp_association_event=0,
+                                               sctp_address_event=0,
+                                               sctp_send_failure_event=0,
+                                               sctp_peer_error_event=0,
+                                               sctp_shutdown_event=0,
+                                               sctp_partial_delivery_event=0,
+                                               sctp_adaptation_layer_event=0,
+                                               sctp_authentication_event=0,
+                                               sctp_sender_dry_event=0}, 10) = 0
+#endif
+#ifdef FreeBSD
+// The structure is missing the sctp_stream_reset_event field.
++0.0 setsockopt(3, IPPROTO_SCTP, SCTP_EVENTS, {sctp_data_io_event=1,
+                                               sctp_association_event=0,
+                                               sctp_address_event=0,
+                                               sctp_send_failure_event=0,
+                                               sctp_peer_error_event=0,
+                                               sctp_shutdown_event=0,
+                                               sctp_partial_delivery_event=0,
+                                               sctp_adaptation_layer_event=0,
+                                               sctp_authentication_event=0,
+                                               sctp_sender_dry_event=0}, 11) = 0
+#endif
++0.0 bind(3, ..., ...) = 0
++0.0 listen(3, 1) = 0
++0.0 < sctp: INIT[flgs=0, tag=1, a_rwnd=1500, os=16, is=16, tsn=1,
+                  FORWARD_TSN_SUPPORTED[]]
+#ifdef FreeBSD
++0.0 > sctp: INIT_ACK[flgs=0, tag=2, a_rwnd=..., os=..., is=..., tsn=1,
+                      FORWARD_TSN_SUPPORTED[],
+                      SUPPORTED_EXTENSIONS[types=[FORWARD_TSN]],
+                      STATE_COOKIE[len=..., val=...]]
+#endif
+#ifdef Linux
++0.0 > sctp: INIT_ACK[flgs=0, tag=2, a_rwnd=..., os=..., is=..., tsn=1, STATE_COOKIE[len=..., val=...], FORWARD_TSN_SUPPORTED[]]
+#endif
++0.0 < sctp: COOKIE_ECHO[flgs=0, len=..., val=...]
++0.0 > sctp: COOKIE_ACK[flgs=0]
++0.0 accept(3, ..., ...) = 4
++0.0 close(3) = 0
++0.0 fcntl(4, F_GETFL) = 0x2 (flags O_RDWR)
++0.0 fcntl(4, F_SETFL, O_RDWR|O_NONBLOCK) = 0
++0.0 setsockopt(4, IPPROTO_SCTP, SCTP_RTOINFO, {srto_initial=100, srto_max=800, srto_min=100}, 16) = 0
+
+//sctp_sendv(int sd, const struct iovec *iov, int iovcnt, struct sockaddr *addrs, int addrcnt, void *info, socklen_t infolen, unsigned int infotype, int flags);
+
++0.0 sctp_sendv(4, [{..., 1000}], 1, ..., 1, 
+                    {sendv_flags=SCTP_SEND_SNDINFO_VALID|SCTP_SEND_PRINFO_VALID,
+                     sendv_sndinfo={snd_sid=1, snd_flags=0, snd_ppid=htonl(1234), snd_context=0, snd_assoc_id=0},
+                     sendv_prinfo={pr_policy=SCTP_PR_SCTP_RTX, pr_value=0},
+                     sendv_authinfo={auth_keynumber=123}}, 32, SCTP_SENDV_SPA, 0) = 1000
+
+// send some data and dont sack it, to see if FORWARD_TSN is sent
++0.0 > sctp: DATA[flgs=BE, len=1016, tsn=1, sid=1, ssn=0, ppid=1234]
++0.1 > sctp: FORWARD_TSN[cum_tsn=1, ids=[{1,0}]]
++0.0 < sctp: SACK[flgs=0, cum_tsn=1, a_rwnd=10000, gaps=[], dups=[]]
++0.0 sctp_sendv(4, [{..., 1000}], 1, ..., 1, 
+                    {sendv_flags=SCTP_SEND_SNDINFO_VALID|SCTP_SEND_PRINFO_VALID,
+                     sendv_sndinfo={snd_sid=1, snd_flags=0, snd_ppid=htonl(1234), snd_context=0, snd_assoc_id=0},
+                     sendv_prinfo={pr_policy=SCTP_PR_SCTP_RTX, pr_value=2},
+                     sendv_authinfo={auth_keynumber=123}}, 32, SCTP_SENDV_SPA, 0) = 1000
++0.0 > sctp: DATA[flgs=BE, len=1016, tsn=2, sid=1, ssn=1, ppid=1234]
+// disable further send operations with shutdown
++0.0 shutdown(4, SHUT_WR) = 0
++0.2 > sctp: DATA[flgs=BE, len=1016, tsn=2, sid=1, ssn=1, ppid=1234]
++0.4 > sctp: DATA[flgs=BE, len=1016, tsn=2, sid=1, ssn=1, ppid=1234]
++0.8 > sctp: FORWARD_TSN[cum_tsn=2, ids=[{1,1}]]
++0.0 < sctp: SACK[flgs=0, cum_tsn=2, a_rwnd=10000, gaps=[], dups=[]]
++0.0 > sctp: SHUTDOWN[flgs=0, cum_tsn=0]
++0.0 < sctp: SHUTDOWN_ACK[flgs=0]
++0.0 > sctp: SHUTDOWN_COMPLETE[flgs=0]
++0.0 close(4) = 0

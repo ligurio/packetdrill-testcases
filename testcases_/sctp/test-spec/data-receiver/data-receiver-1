@@ -1,0 +1,11 @@
+Precondition:
+IUT does support the NR-SACK extension. 
+Association is established between tester and IUT where both sides have announced support for NR-SACK-Chunks at the handshake.
+Arrange the data at the tester such that it sends one unordered not fragmented user message to the IUT.
+
+Purpose:
+Ensure that the IUT transmits an NR-SACK-Chunk which acknowledges the incoming user message by adjusting the cum_tsn-value.
+
+References:
+<a href="https://tools.ietf.org/html/draft-tuexen-tsvwg-sctp-multipath-13#section-4.4.1">Load Sharing for SCTP [section 4.4.1]</a>,
+<a href="https://tools.ietf.org/html/rfc4960#section-6.2">RFC 4960 [section 6.2]</a>

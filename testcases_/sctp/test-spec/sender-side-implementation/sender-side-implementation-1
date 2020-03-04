@@ -1,0 +1,15 @@
+Precondition:
+IUT supports PR-SCTP. 
+Association where PR-SCTP is enabled is established between tester and IUT.
+Let the IUT send a fragmented user message as three not bundled data chunks with the stream identifier 1 and the stream sequence number 0 to the tester. Send an SACK at the tester for the first two data chunks.
+Then wait so long until the T3-rtx timer of the sender expires and flags the outstanding DATA-Chunk as abandoned.
+
+Purpose:
+Ensure that the IUT sends a FORWARD TSN-Chunk where the new cumulative tsn is pointing to the last (third) DATA-Chunk and that the stream identifier is 1 and the stream sequence number is 0. 
+Also ensure that the sender does not advance the cwnd based on the abandoned chunk.
+
+References:
+<a href="https://tools.ietf.org/html/rfc3758#section-3.5">RFC 3758 [section 3.5 - A2, C3 and C4]</a>
+
+
+

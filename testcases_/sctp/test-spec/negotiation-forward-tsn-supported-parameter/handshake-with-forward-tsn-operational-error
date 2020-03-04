@@ -1,0 +1,21 @@
+Precondition:
+IUT does support PR-SCTP. 
+Let the IUT send a INIT-Chunk with the Forward-TSN-Supported parameter set. 
+Arrange the data at the tester that an INIT-ACK-Chunk is sent, where the Forward-TSN-Supported parameter
+is listed at the Unrecognized Parameters.
+
+Purpose:
+Ensure the IUT to either:
+<ol>
+	<li>end the initiation process. (in cases where the initiation process already ended, it may need to send an ABORT)</li>
+	<li>continue the initiation process and marks the association such that PR-SCTP is NOT supported. 
+	     In this case the endpoint receiving the operational error should note that the FORWARD-TSN-Chunk is NOT supported.
+		 Also ensure that the IUT does not trasmit a FORWARD-TSN-Chunk at any time during the association.
+	</li>
+</ol>
+
+References:
+<a href="https://tools.ietf.org/html/rfc3758#page-8">RFC 3758 [section 3.3.3]</a>
+
+
+

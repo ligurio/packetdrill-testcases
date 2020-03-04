@@ -1,0 +1,21 @@
+Precondition:
+IUT supports PR-SCTP. 
+Association where PR-SCTP is enabled is established between tester and IUT.
+Arrange the data at the tester such that three last DATA-Chunk (e.g. with E-Bit set) of 
+three fragmented user messages that were delivered with two DATA-Chunks are sent to the IUT.
+Expect all DATA-Chunks to be SACKed in the gap-blocks by the IUT.
+Then send to the IUT an FORWARD-TSN-Chunk that skips the first outstanding user message.
+Expect that the IUT skips this first outstanding user message and advances the cum_tsn.
+After that send the first fragment of the third user message to the IUT.
+
+Purpose:
+Expect the IUT to SACK this out-of-order DATA-Chunk correctly. If that the third user message was delivered
+unordered expect the IUT to deliver this user message to the userland.
+Then send the still outstanding first fragment of the second user message to the IUT. Expect it also
+the be SACKed and delivered to the userland by the IUT.
+
+References:
+<a href="https://tools.ietf.org/html/rfc3758#section-3.6">RFC 3758 [section 3.6]</a>
+
+
+

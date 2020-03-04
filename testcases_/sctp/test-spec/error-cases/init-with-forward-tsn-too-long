@@ -1,0 +1,12 @@
+Precondition:
+IUT does support PR-SCTP. 
+Association is not established between tester and IUT.
+Arrange the data at the tester such that an INIT-Chunk with a forward-tsn-supported parameter
+where the length of the forward-tsn-supported parameter is too long (e.g. 8 bytes instead of 4 bytes)
+is sent to the IUT.
+
+Purpose:
+Ensure that the IUT either discards this invalid chunk or responds with an ABORT-chunk.
+
+References:
+<a href="https://tools.ietf.org/html/rfc3758#section-3.1">RFC 3758 [section 3.1]</a>

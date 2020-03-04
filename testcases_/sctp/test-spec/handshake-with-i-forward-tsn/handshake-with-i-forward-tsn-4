@@ -1,0 +1,15 @@
+Precondition:
+IUT supports PR-SCTP and the Stream Schedulers and User Message Interleaving extension.
+Association is established between tester and IUT, where in the INIT-Chunk sent by the tester the forward-tsn-supported parameter is NOT set
+and the FORWARD-TSN and the I-FORWARD-TSN-Chunk are NOT listed at the supported extensions parameter.
+Arrange the data at the tester that an I-FORWARD-TSN chunk is sent to the IUT.
+
+Purpose:
+Ensure that the IUT upon receipt of an I-FORWARD-TSN chunk at an association where PR-SCTP is not supported sends an ABORT-Chunk 
+where the ABORT-Chunk may include the protocol violation error cause.
+
+References:
+
+<a href="https://tools.ietf.org/html/rfc3758#section-3.3.2">RFC 3758 [section 3.3.2]</a>, <a href="https://tools.ietf.org/html/rfc4960#section-3.3.3.1">RFC 4960 [section 3.3.3.1]</a>,
+<a href="https://tools.ietf.org/html/draft-ietf-tsvwg-sctp-ndata-09#page-9">Stream Schedulers and User Message Interleaving for SCTP [section 2.3.1]</a>
+

@@ -1,0 +1,15 @@
+Precondition:
+IUT does support the NR-SACK extension. 
+Association is established between tester and IUT where both sides have announced support for NR-SACK-Chunks at the handshake.
+Arrange the data at the IUT such that it sends two not fragmented user message to the tester.
+Then first send at the tester an NR-SACK-Chunk which acknowledges the second user messsage in the gap-acknowledgements.
+After a short time (for example 100 ms) then send another NR-SACK-Chunk at the tester that acknowledges both user messages.
+
+Purpose:
+Ensure that the IUT does not retransmit any DATA-Chunk. 
+After a short time then also let the IUT send another third not fragmented user message.
+Ensure that it does transmit this message to the tester and then also acknowledge this user message.
+
+References:
+<a href="https://tools.ietf.org/html/draft-tuexen-tsvwg-sctp-multipath-13#section-4.4.2">Load Sharing for SCTP [section 4.4.2]</a>,
+<a href="https://tools.ietf.org/html/rfc4960#section-6.2.1">RFC 4960 [section 6.2.1]</a>

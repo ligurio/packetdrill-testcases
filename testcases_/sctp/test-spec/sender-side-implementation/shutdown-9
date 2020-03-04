@@ -1,0 +1,19 @@
+Precondition:
+IUT supports PR-SCTP. 
+Association where PR-SCTP is enabled is established between tester and IUT.
+Let the IUT send one ordered not fragmented unreliable user message to the tester.
+After receiving the DATA-Chunk call the shutdown system-call with SHUT_WR.
+Ensure that the IUT abandones this user message after shutdown has been called and does
+not try to retransmit it.
+
+Purpose:
+Ensure that the IUT after it has abandoned the still outstanding fragmented user message first transmits
+an valid FORWARD-TSN-Chunk. Then also ensure that this valid FORWARD-TSN-Chunk is retransmitted. 
+After the retransmission send an SACK-Chunk for this FORWARD-TSN-Chunk and also ensure that the shutdown process completes successfully.
+
+References:
+<a href="https://tools.ietf.org/html/draft-ietf-tsvwg-sctpsocket-32#page-23">Sockets API Extensions for SCTP - Shutdown</a>,
+<a href="https://tools.ietf.org/html/rfc4960#page-107">RFC 4960 [section 9.2]</a>
+
+
+

@@ -1,0 +1,17 @@
+Precondition:
+IUT supports PR-SCTP.
+Association where PR-SCTP is enabled is established between tester and IUT.
+Let the IUT send one ordered not fragmented user message to the tester. 
+Then wait so long until the user message is abandoned 
+and the IUT sends a FORWARD-TSN-Chunk for the outstanding user message.
+Arrange the data at the tester such that the FORWARD-TSN-Chunk is not acknowledged with
+a SACK-Chunk.
+
+Purpose:
+Ensure that the IUT retransmits the FORWARD TSN-Chunk for the abandoned user message.
+
+References:
+<a href="https://tools.ietf.org/html/rfc3758#section-3.5">RFC 3758 [section 3.5]</a>
+
+
+

@@ -1,0 +1,14 @@
+Precondition:
+IUT supports PR-SCTP. 
+Association where PR-SCTP is enabled is established between tester and IUT.
+Arrange the data at the tester such that a FORWARD-TSN for two ordered user message with cum_tsn=2 is sent to the IUT.
+
+Purpose:
+Ensure that the IUT has advanced the stream sequence numbers for both streams reported in the FORWARD-TSN correctly.
+Also ensure that the IUT has advanced the cumulative tsn to point locally to the cum_tsn specified in the FORWARD-TSN-Chunk. 
+
+References:
+<a href="https://tools.ietf.org/html/rfc3758#section-3.6">RFC 3758 [section 3.6]</a>
+
+
+

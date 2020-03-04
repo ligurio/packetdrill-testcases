@@ -1,0 +1,14 @@
+Precondition:
+IUT does support the NR-SACK extension.
+Association is established between tester and IUT, where the NR-SACK extension has been enabled.
+Arrange the data at the tester such that DATA-Chunks from the IUT are ackowledged with SACK- and
+NR-SACK-Chunks.
+
+Purpose:
+Ensure that the IUT either accepts this misbehaviour by accepting both types or sends
+an ABORT-Chunk to terminate the association.
+
+References:
+<span class="todo">Needs clarification in the internet draft</span>
+
+<a href="https://tools.ietf.org/html/draft-tuexen-tsvwg-sctp-multipath-13#page-6">Load Sharing for SCTP [section 4.1]</a>

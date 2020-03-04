@@ -1,0 +1,12 @@
+Precondition:
+IUT does support the NR-SACK extension. 
+Association is not established between tester and IUT.
+Arrange the data at the tester such that in the INIT-Chunk the NR-SACK-Chunk is NOT listed
+at the supported extensions parameter. Then complete the handshake to establish
+the association.
+
+Purpose:
+Ensure that the IUT has disabled the NR-SACK extension for this association.
+
+References:
+<a href="https://tools.ietf.org/html/draft-tuexen-tsvwg-sctp-multipath-13#page-6">Load Sharing for SCTP [section 4.1]</a>

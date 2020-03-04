@@ -1,0 +1,88 @@
+// SPDX-License-Identifier: BSD-3-Clause
+// Copyright (c) 2016, nplab
+// Source: https://github.com/nplab/PR_SCTP_Testsuite
+//
+// Copyright (c) 2016 Julian Cordes
+// All rights reserved.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+//
+// THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
+// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+// SUCH DAMAGE.
+//
+
+--tolerance_usecs=750000
+
+#ifdef FreeBSD
+// only enable PR-SCTP extension on FreeBSD
+ 0.0 `sysctl -i net.inet.sctp.ecn_enable=0`
++0.0 `sysctl -i net.inet.sctp.pr_enable=1`
++0.0 `sysctl -i net.inet.sctp.asconf_enable=0`
++0.0 `sysctl -i net.inet.sctp.pktdrop_enable=0`
++0.0 `sysctl -i net.inet.sctp.reconfig_enable=0`
++0.0 `sysctl -i net.inet.sctp.auth_enable=0`    // FreeBSD 11 and higher
++0.0 `sysctl -i net.inet.sctp.auth_disable=1`   // FreeBSD 9.x and 10.x
++0.0 `sysctl -i net.inet.sctp.nrsack_enable=0`  // FreeBSD 11 and higher
++0.0 `sysctl -i net.inet.sctp.nrsack_on_off=0`  // FreeBSD 9.x and 10.x
+#endif
+
+#ifdef Linux
+// only enable PR-SCTP extension on Linux
+ 0.0 `sysctl -ew net.sctp.auth_enable=0`
++0.0 `sysctl -ew net.sctp.prsctp_enable=1`
+#endif
+
+
++0.0 socket(..., SOCK_STREAM, IPPROTO_SCTP) = 3
++0.0 bind(3, ..., ...) = 0
++0.0 listen(3, 1) = 0
++0.0 < sctp: INIT[flgs=0, tag=1, a_rwnd=1500, os=16, is=16, tsn=1,
+                  FORWARD_TSN_SUPPORTED[]]
+#ifdef FreeBSD
++0.0 > sctp: INIT_ACK[flgs=0, tag=2, a_rwnd=..., os=..., is=..., tsn=1,
+                      FORWARD_TSN_SUPPORTED[],
+                      SUPPORTED_EXTENSIONS[types=[FORWARD_TSN]],
+                      STATE_COOKIE[len=..., val=...]]
+#endif
+#ifdef Linux
++0.0 > sctp: INIT_ACK[flgs=0, tag=2, a_rwnd=..., os=..., is=..., tsn=1, STATE_COOKIE[len=..., val=...], FORWARD_TSN_SUPPORTED[]]
+#endif
++0.1 < sctp: COOKIE_ECHO[flgs=0, len=..., val=...]
++0.0 > sctp: COOKIE_ACK[flgs=0]
++0.0 accept(3, ..., ...) = 4
++0.0 close(3) = 0
++0.0 fcntl(4, F_GETFL) = 0x2 (flags O_RDWR)
++0.0 fcntl(4, F_SETFL, O_RDWR|O_NONBLOCK) = 0
+
++0.1 < sctp: DATA[flgs=E, len=1016, tsn=4, sid=2, ssn=0, ppid=0]
++0.0 > sctp: SACK[flgs=0, cum_tsn=0, a_rwnd=..., gaps=[4:4], dups=[]]
++0.1 < sctp: DATA[flgs=B, len=1016, tsn=3, sid=2, ssn=0, ppid=0]
++0.0 > sctp: SACK[flgs=0, cum_tsn=0, a_rwnd=..., gaps=[3:4], dups=[]]
++0.1 sctp_recvmsg(4, ..., 6000, ..., ..., ..., MSG_EOR) = 2000
++0.0 < sctp: DATA[flgs=B, len=1016, tsn=5, sid=3, ssn=0, ppid=0]
++0.0 > sctp: SACK[flgs=0, cum_tsn=0, a_rwnd=..., gaps=[3:5], dups=[]]
++0.1 < sctp: FORWARD_TSN[cum_tsn=2, ids=[{1,0}]];
+             DATA[flgs=E, len=1016, tsn=6, sid=3, ssn=0, ppid=0]
++0.0 > sctp: SACK[flgs=0, cum_tsn=6, a_rwnd=..., gaps=[], dups=[]]
++0.1 sctp_recvmsg(4, ..., 6000, ..., ..., ..., MSG_EOR) = 2000
+// Tear down the association
++0.0 < sctp: SHUTDOWN[flgs=0, cum_tsn=0]
++0.0 > sctp: SHUTDOWN_ACK[flgs=0]
++0.0 < sctp: SHUTDOWN_COMPLETE[flgs=0]
++0.0 close(4) = 0

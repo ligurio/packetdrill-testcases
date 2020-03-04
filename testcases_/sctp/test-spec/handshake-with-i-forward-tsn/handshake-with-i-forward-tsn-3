@@ -1,0 +1,15 @@
+Precondition:
+IUT does not support PR-SCTP and the Stream Schedulers and User Message Interleaving extension. 
+Association is not established between tester and IUT.
+Configure the IUT to send an INIT-Chunk to the tester.
+The tester responds with an INIT-ACK where the forward-tsn-supported parameter is set. 
+Also arrange the data such that in the INIT-ACK-Chunk the FORWARD-TSN and the I-FORWARD-TSN-Chunk are listed
+at the supported extensions parameter.
+
+Purpose:
+Ensure that the IUT upon receipt of an INIT-ACK-chunk with a forward-tsn-supported parameter sends an ERROR-Chunk 
+with the cause "invalid mandatory parameter".
+
+References:
+<a href="https://tools.ietf.org/html/rfc3758#section-3.3.2">RFC 3758 [section 3.3.2]</a>, <a href="https://tools.ietf.org/html/rfc4960#section-3.3.3.1">RFC 4960 [section 3.3.3.1]</a>,
+<a href="https://tools.ietf.org/html/draft-ietf-tsvwg-sctp-ndata-09#page-9">Stream Schedulers and User Message Interleaving for SCTP [section 2.3.1]</a>

@@ -1,0 +1,14 @@
+Precondition:
+IUT does not support PR-SCTP. 
+Association is not established between tester and IUT.
+Configure the IUT to send an INIT-Chunk to the tester.
+The tester responds with an INIT-ACK where the forward-tsn-supported parameter is set. 
+
+Purpose:
+Ensure that the IUT upon receipt of an INIT-ACK-chunk with a forward-tsn-supported parameter sends an ERROR-Chunk 
+with the cause "invalid mandatory parameter".
+
+References:
+<a href="https://tools.ietf.org/html/rfc3758#section-3.3.2">RFC 3758 [section 3.3.2]</a>, <a href="https://tools.ietf.org/html/rfc4960#section-3.3.3">RFC 4960 [section 3.3.3]</a>
+
+

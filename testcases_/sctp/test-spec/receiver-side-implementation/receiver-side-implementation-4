@@ -1,0 +1,17 @@
+Precondition:
+IUT supports PR-SCTP. 
+Arrange the data at the tester such that an unfragmented unordered DATA-Chunk is sent to the IUT.
+Expect the IUT to send an SACK for this DATA-Chunk. After a while arrange the data at the tester
+such that an FORWAD-TSN-Chunk is sent to the IUT, which should point to the cumulative tsn of 
+the first DATA-Chunk.
+
+
+Purpose:
+Ensure that the IUT sends a SACK-Chunk where the new cumulative tsn is the cum_tsn specified in the FORWARD-TSN-Chunk.
+Also ensure that the IUT has advanced the cumulative tsn point locally to the cum_tsn specified in the FORWARD-TSN-Chunk.
+
+References:
+<a href="https://tools.ietf.org/html/rfc3758#section-3.6">RFC 3758 [section 3.6]</a>
+
+
+

@@ -1,0 +1,16 @@
+Precondition:
+IUT supports PR-SCTP and the Stream Schedulers and User Message Interleaving extension.
+Association is established between tester and IUT.
+Configure the IUT to send an INIT-Chunk to the tester.
+The tester responds with an INIT-ACK, where in the INIT-Chunk sent by the tester the forward-tsn-supported parameter is set
+and the FORWARD-TSN, the I-FORWARD-TSN and the I-DATA are listed at the supported extensions parameter.
+Make sure that the IUT has enabled the User Message Interleaving extension.
+Let the IUT send one ordered unreliable DATA-Chunk to the tester.
+
+Purpose:
+Ensure that the IUT has enabled PR-SCTP and uses correct I-DATA and I-FORWARD-TSN-Chunks for this association.
+
+References:
+<a href="https://tools.ietf.org/html/rfc3758#section-3.3.2">RFC 3758 [section 3.3.2]</a>, <a href="https://tools.ietf.org/html/rfc4960#section-3.3.3.1">RFC 4960 [section 3.3.3.1]</a>,
+<a href="https://tools.ietf.org/html/draft-ietf-tsvwg-sctp-ndata-09#page-9">Stream Schedulers and User Message Interleaving for SCTP [section 2.3.1]</a>
+

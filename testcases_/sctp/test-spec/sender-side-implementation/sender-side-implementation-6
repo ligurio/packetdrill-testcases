@@ -1,0 +1,15 @@
+Precondition:
+IUT supports PR-SCTP.
+Association where PR-SCTP is enabled is established between tester and IUT.
+Let the IUT send two ordered not fragmented user messages to the tester, where the first user message
+has the stream identifier 1 and the second user message has the stream identifier 2. 
+Then wait so long until the T3-rtx timer of the sender expires and flags both outstanding DATA-Chunks as abandoned.
+
+Purpose:
+Ensure that the IUT sends a valid FORWARD TSN-Chunk for the first DATA-Chunk and discards the second user message.
+
+References:
+<a href="https://tools.ietf.org/html/rfc3758#section-3.5">RFC 3758 [section 3.5]</a>
+
+
+

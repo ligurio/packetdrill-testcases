@@ -1,0 +1,1457 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test-Suite for the SCTP Partial Reliability Extension</title>
+     <!-- Bootstrap core CSS -->
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="bootstrap/css/ie-bugfix.css" rel="stylesheet">
+     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <style type="text/css">
+            * {
+                    padding: 0;
+                    margin: 0;
+            }
+            body {
+                    margin: 10px 100px 10px 20px;
+            }
+            h1 {
+                    margin: 20px 0px;
+            }
+            h2 {
+                    margin: 15px 10px;
+            }
+            h3 {
+                    margin: 12px 15px;
+            }
+            ul {
+                    padding: 1em 2em;
+                    list-style-type: disc;
+                    list-style-position: outside;
+                    list-style-image: none;
+            }
+
+            .overview_ol {
+                    list-style-type: upper-roman; 
+                    padding: 1em 2em;
+            }
+
+            ol {
+                    padding: 1em 2em;
+            }
+
+            #abbreviation_table {
+                    border-collapse: collapse;
+            }
+
+            #abbreviation_table td {
+                    border: 1px solid black;
+                    padding: 10px;
+            }
+
+            .test_case_table {
+                    /*width: 75%;*/
+                    /*border-collapse: collapse;*/
+                    margin: 20px 20px;
+                    background-color: #fbfbfb;
+            }
+
+            .test_case_table td {
+                    border: 1px solid black;
+                    padding: 10px;
+            }
+
+            .todo {
+                    color: red;
+            }
+            
+            .footer {
+                text-align: center;
+            }
+
+            a {
+                    color: blue;
+            }
+    </style>
+    </head>
+    <body>
+        <div class="container">
+        <h1>Test-Suite for the SCTP Partial Reliability Extension</h1>
+        
+	<h2>Introduction</h2>
+        <div class="well">
+            <p>This is a document that defines a test suite for the partial reliability extension of sctp.
+                The designed test suite for PR-SCTP consists of eight different categories. A practial implementation of
+                these test-cases can be found for the tool packetdrill under <a href="https://github.com/nplab/PR_SCTP_Testsuite">https://github.com/nplab/PR_SCTP_Testsuite</a>.
+                Most test-cases were specified close to the specification of the tested extensions of SCTP. Therefore each test-case
+                lists the relevant references that were used to design the test-case. 
+            </p>
+                
+            <p> 
+                Please note that the categories <i>Sender Side Implementation</i> and <i>Receiver Side Implementation</i> can be applied to either the classic 
+                PR-SCTP or the PR-SCTP extension with user message interleaving (see <a href="https://tools.ietf.org/html/draft-ietf-tsvwg-sctp-ndata-09">Stream Schedulers and User Message Interleaving for SCTP</a>).
+                If these tests are applied to the user message interleaving extension then the sid/ssn-values in the DATA-Chunks have to converted
+                such that they match the new sid/mid/fsn-values in the I-DATA-Chunk (and also use the I-DATA-Chunk instead). 
+                Also each FORWARD-TSN-Chunk has to be replaced by an equivalent I-FORWARD-TSN-Chunk. Other than these conversions
+                every test case of the categories <i>Sender Side Implementation</i> and <i>Receiver Side Implementation</i> can also
+                be applied to the Stream Schedulers and User Message Interleaving extension.
+            </p>
+        </div>
+
+	<h2 id="overview">Overview of Test-Suite-Structure</h2>
+	<div class="col-sm-12"><div class="col-sm-4"><div class="panel panel-default"><div class="panel-heading"><h3 class="panel-title">Negotiation of Forward-TSN-supported parameter</h3></div><div class="panel-body"><ul><li><a href="#handshake-with-forward-tsn-1">handshake-with-forward-tsn-1</a></li><li><a href="#handshake-with-forward-tsn-2">handshake-with-forward-tsn-2</a></li><li><a href="#handshake-with-forward-tsn-3">handshake-with-forward-tsn-3</a></li><li><a href="#handshake-with-forward-tsn-4">handshake-with-forward-tsn-4</a></li><li><a href="#handshake-with-forward-tsn-5">handshake-with-forward-tsn-5</a></li><li><a href="#handshake-with-forward-tsn-6">handshake-with-forward-tsn-6</a></li><li><a href="#handshake-with-forward-tsn-7">handshake-with-forward-tsn-7</a></li><li><a href="#handshake-with-forward-tsn-operational-error">handshake-with-forward-tsn-operational-error</a></li></ul></div></div></div><div class="col-sm-4"><div class="panel panel-default"><div class="panel-heading"><h3 class="panel-title">Sender Side Implementation</h3></div><div class="panel-body"><ul><li><a href="#sender-side-implementation-1">sender-side-implementation-1</a></li><li><a href="#sender-side-implementation-2">sender-side-implementation-2</a></li><li><a href="#sender-side-implementation-3">sender-side-implementation-3</a></li><li><a href="#sender-side-implementation-4">sender-side-implementation-4</a></li><li><a href="#sender-side-implementation-5">sender-side-implementation-5</a></li><li><a href="#sender-side-implementation-6">sender-side-implementation-6</a></li><li><a href="#sender-side-implementation-7">sender-side-implementation-7</a></li><li><a href="#sender-side-implementation-8">sender-side-implementation-8</a></li><li><a href="#sender-side-implementation-9">sender-side-implementation-9</a></li><li><a href="#sender-side-implementation-10">sender-side-implementation-10</a></li><li><a href="#sender-side-implementation-11">sender-side-implementation-11</a></li><li><a href="#sender-side-implementation-12">sender-side-implementation-12</a></li><li><a href="#shutdown-1">shutdown-1</a></li><li><a href="#shutdown-2">shutdown-2</a></li><li><a href="#shutdown-3">shutdown-3</a></li><li><a href="#shutdown-4">shutdown-4</a></li><li><a href="#shutdown-5">shutdown-5</a></li><li><a href="#shutdown-6">shutdown-6</a></li><li><a href="#shutdown-7">shutdown-7</a></li><li><a href="#shutdown-8">shutdown-8</a></li><li><a href="#shutdown-9">shutdown-9</a></li><li><a href="#shutdown-10">shutdown-10</a></li><li><a href="#shutdown-11">shutdown-11</a></li><li><a href="#shutdown-12">shutdown-12</a></li><li><a href="#shutdown-13">shutdown-13</a></li><li><a href="#shutdown-received-1">shutdown-received-1</a></li><li><a href="#shutdown-received-2">shutdown-received-2</a></li><li><a href="#shutdown-received-4">shutdown-received-4</a></li><li><a href="#shutdown-received-5">shutdown-received-5</a></li><li><a href="#shutdown-received-6">shutdown-received-6</a></li><li><a href="#shutdown-received-7">shutdown-received-7</a></li><li><a href="#shutdown-received-8">shutdown-received-8</a></li><li><a href="#shutdown-received-9">shutdown-received-9</a></li><li><a href="#shutdown-received-10">shutdown-received-10</a></li><li><a href="#shutdown-received-11">shutdown-received-11</a></li><li><a href="#shutdown-received-12">shutdown-received-12</a></li><li><a href="#shutdown-received-13">shutdown-received-13</a></li></ul></div></div></div><div class="col-sm-4"><div class="panel panel-default"><div class="panel-heading"><h3 class="panel-title">Receiver Side Implementation</h3></div><div class="panel-body"><ul><li><a href="#packet-loss-1">packet-loss-1</a></li><li><a href="#packet-loss-2">packet-loss-2</a></li><li><a href="#packet-loss-3">packet-loss-3</a></li><li><a href="#packet-loss-4">packet-loss-4</a></li><li><a href="#packet-loss-5">packet-loss-5</a></li><li><a href="#packet-loss-6">packet-loss-6</a></li><li><a href="#packet-loss-7">packet-loss-7</a></li><li><a href="#packet-loss-8">packet-loss-8</a></li><li><a href="#packet-loss-9">packet-loss-9</a></li><li><a href="#packet-loss-10">packet-loss-10</a></li><li><a href="#packet-loss-11">packet-loss-11</a></li><li><a href="#packet-loss-12">packet-loss-12</a></li><li><a href="#packet-loss-13">packet-loss-13</a></li><li><a href="#packet-loss-14">packet-loss-14</a></li><li><a href="#receiver-side-implementation-1">receiver-side-implementation-1</a></li><li><a href="#receiver-side-implementation-2">receiver-side-implementation-2</a></li><li><a href="#receiver-side-implementation-3">receiver-side-implementation-3</a></li><li><a href="#receiver-side-implementation-4">receiver-side-implementation-4</a></li><li><a href="#receiver-side-implementation-5">receiver-side-implementation-5</a></li><li><a href="#receiver-side-implementation-6">receiver-side-implementation-6</a></li><li><a href="#receiver-side-implementation-7">receiver-side-implementation-7</a></li><li><a href="#receiver-side-implementation-8">receiver-side-implementation-8</a></li><li><a href="#receiver-side-implementation-9">receiver-side-implementation-9</a></li><li><a href="#receiver-side-implementation-10">receiver-side-implementation-10</a></li></ul></div></div></div></div><div class="col-sm-12"><div class="col-sm-4"><div class="panel panel-default"><div class="panel-heading"><h3 class="panel-title">Error Cases</h3></div><div class="panel-body"><ul><li><a href="#forward-tsn-tlv-too-long">forward-tsn-tlv-too-long</a></li><li><a href="#forward-tsn-tlv-too-short">forward-tsn-tlv-too-short</a></li><li><a href="#forward-tsn-too-short">forward-tsn-too-short</a></li><li><a href="#i-forward-tsn-tlv-too-long">i-forward-tsn-tlv-too-long</a></li><li><a href="#i-forward-tsn-tlv-too-short">i-forward-tsn-tlv-too-short</a></li><li><a href="#i-forward-tsn-too-short">i-forward-tsn-too-short</a></li><li><a href="#init-with-forward-tsn-tlv-too-long">init-with-forward-tsn-tlv-too-long</a></li><li><a href="#init-with-forward-tsn-tlv-too-short">init-with-forward-tsn-tlv-too-short</a></li><li><a href="#init-with-forward-tsn-too-long">init-with-forward-tsn-too-long</a></li><li><a href="#init-with-forward-tsn-too-short">init-with-forward-tsn-too-short</a></li></ul></div></div></div><div class="col-sm-4"><div class="panel panel-default"><div class="panel-heading"><h3 class="panel-title">Handshake with I-FORWARD-TSN</h3></div><div class="panel-body"><ul><li><a href="#handshake-with-i-forward-tsn-1">handshake-with-i-forward-tsn-1</a></li><li><a href="#handshake-with-i-forward-tsn-2">handshake-with-i-forward-tsn-2</a></li><li><a href="#handshake-with-i-forward-tsn-3">handshake-with-i-forward-tsn-3</a></li><li><a href="#handshake-with-i-forward-tsn-4">handshake-with-i-forward-tsn-4</a></li><li><a href="#handshake-with-i-forward-tsn-5">handshake-with-i-forward-tsn-5</a></li><li><a href="#handshake-with-i-forward-tsn-6">handshake-with-i-forward-tsn-6</a></li><li><a href="#handshake-with-i-forward-tsn-7">handshake-with-i-forward-tsn-7</a></li><li><a href="#handshake-with-i-forward-tsn-8">handshake-with-i-forward-tsn-8</a></li><li><a href="#handshake-with-i-forward-tsn-9">handshake-with-i-forward-tsn-9</a></li><li><a href="#handshake-with-i-forward-tsn-10">handshake-with-i-forward-tsn-10</a></li><li><a href="#handshake-with-i-forward-tsn-11">handshake-with-i-forward-tsn-11</a></li><li><a href="#handshake-with-i-forward-tsn-12">handshake-with-i-forward-tsn-12</a></li><li><a href="#handshake-with-i-forward-tsn-13">handshake-with-i-forward-tsn-13</a></li><li><a href="#handshake-with-i-forward-tsn-14">handshake-with-i-forward-tsn-14</a></li><li><a href="#handshake-with-i-forward-tsn-15">handshake-with-i-forward-tsn-15</a></li></ul></div></div></div><div class="col-sm-4"><div class="panel panel-default"><div class="panel-heading"><h3 class="panel-title">Handshake with NR-SACK</h3></div><div class="panel-body"><ul><li><a href="#handshake-with-nr-sack-1">handshake-with-nr-sack-1</a></li><li><a href="#handshake-with-nr-sack-2">handshake-with-nr-sack-2</a></li><li><a href="#handshake-with-nr-sack-3">handshake-with-nr-sack-3</a></li><li><a href="#handshake-with-nr-sack-4">handshake-with-nr-sack-4</a></li><li><a href="#handshake-with-nr-sack-5">handshake-with-nr-sack-5</a></li><li><a href="#handshake-with-nr-sack-6">handshake-with-nr-sack-6</a></li><li><a href="#handshake-with-nr-sack-7">handshake-with-nr-sack-7</a></li><li><a href="#handshake-with-nr-sack-8">handshake-with-nr-sack-8</a></li></ul></div></div></div></div><div class="col-sm-12"><div class="col-sm-4"><div class="panel panel-default"><div class="panel-heading"><h3 class="panel-title">Data Sender with NR-SACK</h3></div><div class="panel-body"><ul><li><a href="#data-sender-1">data-sender-1</a></li><li><a href="#data-sender-2">data-sender-2</a></li><li><a href="#data-sender-3">data-sender-3</a></li><li><a href="#data-sender-4">data-sender-4</a></li><li><a href="#data-sender-5">data-sender-5</a></li><li><a href="#data-sender-6">data-sender-6</a></li><li><a href="#data-sender-7">data-sender-7</a></li><li><a href="#data-sender-8">data-sender-8</a></li><li><a href="#data-sender-9">data-sender-9</a></li><li><a href="#data-sender-10">data-sender-10</a></li><li><a href="#data-sender-11">data-sender-11</a></li><li><a href="#data-sender-12">data-sender-12</a></li><li><a href="#data-sender-13">data-sender-13</a></li><li><a href="#data-sender-14">data-sender-14</a></li><li><a href="#data-sender-15">data-sender-15</a></li><li><a href="#data-sender-16">data-sender-16</a></li></ul></div></div></div><div class="col-sm-4"><div class="panel panel-default"><div class="panel-heading"><h3 class="panel-title">Data Receiver with NR-SACK</h3></div><div class="panel-body"><ul><li><a href="#data-receiver-1">data-receiver-1</a></li><li><a href="#data-receiver-2">data-receiver-2</a></li><li><a href="#data-receiver-3">data-receiver-3</a></li><li><a href="#data-receiver-4">data-receiver-4</a></li><li><a href="#data-receiver-5">data-receiver-5</a></li><li><a href="#data-receiver-6">data-receiver-6</a></li><li><a href="#data-receiver-7">data-receiver-7</a></li><li><a href="#data-receiver-8">data-receiver-8</a></li><li><a href="#data-receiver-9">data-receiver-9</a></li><li><a href="#data-receiver-10">data-receiver-10</a></li><li><a href="#data-receiver-11">data-receiver-11</a></li><li><a href="#data-receiver-12">data-receiver-12</a></li><li><a href="#data-receiver-13">data-receiver-13</a></li><li><a href="#data-receiver-14">data-receiver-14</a></li><li><a href="#data-receiver-15">data-receiver-15</a></li><li><a href="#data-receiver-16">data-receiver-16</a></li><li><a href="#data-receiver-17">data-receiver-17</a></li><li><a href="#data-receiver-18">data-receiver-18</a></li><li><a href="#data-receiver-19">data-receiver-19</a></li><li><a href="#data-receiver-20">data-receiver-20</a></li><li><a href="#data-receiver-21">data-receiver-21</a></li><li><a href="#data-receiver-22">data-receiver-22</a></li></ul></div></div></div></div>    <div class="col-sm-6">
+    <h3>Abbreviations</h3>
+        <table class="table table-bordered"><tbody><tr><td>IUT</td><td>Implementation under Test</td></tr><tr><td>NR-SACK</td><td>Non-Renegable Selective Acknowledgements</td></tr><tr><td>PR-SCTP</td><td>Partial Reliability Extension for SCTP</td></tr><tr><td>RFC</td><td>Request for comments</td></tr><tr><td>SCTP</td><td>Stream Control Transmission Protocol</td></tr><tr><td>TSN</td><td>Transmission Sequence Number</td></tr><tr><td>cum_tsn</td><td>Cumulative Transmission Sequence Number</td></tr><tr><td>cwnd</td><td>Congestion Window Size</td></tr><tr><td>gaps</td><td>Gap Ackowledgement Blocks</td></tr><tr><td>nr-gaps</td><td>Non Renegable Gap Ackowledgement Blocks</td></tr></tbody></table>    </div>
+
+    <div class="col-sm-6">
+	<h3>External references</h3>
+	This testsuite is based upen the following documents:
+        
+        <div style="margin-top: 15px;" class="list-group"><a class="list-group-item" id="rfc4960" href="https://tools.ietf.org/html/rfc4960" title="RFC 4960 (SCTP)">RFC 4960 (SCTP)</a><a class="list-group-item" id="rfc3758" href="https://www.ietf.org/rfc/rfc3758.txt" title="RFC 3758 (PR-SCTP)">RFC 3758 (PR-SCTP)</a><a class="list-group-item" id="rfc6458" href="https://www.ietf.org/rfc/rfc6458.txt" title="RFC 6458 (Sockets API Extensions for SCTP)">RFC 6458 (Sockets API Extensions for SCTP)</a><a class="list-group-item" id="rfc7496" href="https://www.ietf.org/rfc/rfc7496.txt" title="RFC 7496 (Additional Policies for SCTP)">RFC 7496 (Additional Policies for SCTP)</a><a class="list-group-item" id="ndata05" href="https://tools.ietf.org/html/draft-ietf-tsvwg-sctp-ndata-05" title="Internet Draft - Stream Schedulers and User Message Interleaving for SCTP">Internet Draft - Stream Schedulers and User Message Interleaving for SCTP</a><a class="list-group-item" id="loadsharing" href="https://tools.ietf.org/html/draft-tuexen-tsvwg-sctp-multipath-05" title="Internet Draft - Load Sharing for SCTP">Internet Draft - Load Sharing for SCTP</a></div>        
+    </div>
+
+    <div class="col-sm-12">
+        <h1>Definition of the Test-Cases</h1>
+
+        <h2>Negotiation of Forward-TSN-supported parameter</h2><table class="table table-bordered test_case_table" id="handshake-with-forward-tsn-1"><tbody><tr><td>ID</td><td>handshake-with-forward-tsn-1</td></tr><tr><td>Precondition</td><td>IUT does not support PR-SCTP. 
+Association is not established between tester and IUT.
+Arrange the data at the tester such that an INIT-Chunk with a forward-tsn-supported parameter is sent to the IUT.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT responds with an INIT-ACK-chunk where the forward-tsn-supported parameter is listed at the 
+unrecognized parameters.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/rfc3758#section-3.3.2">RFC 3758 [section 3.3.2]</a>, <a href="https://tools.ietf.org/html/rfc4960#section-3.3.3.1">RFC 4960 [section 3.3.3.1]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="handshake-with-forward-tsn-2"><tbody><tr><td>ID</td><td>handshake-with-forward-tsn-2</td></tr><tr><td>Precondition</td><td>IUT does not support PR-SCTP. 
+Association is not established between tester and IUT. 
+Configure the IUT to send an INIT-Chunk to the tester.
+</td></tr><tr><td>Purpose</td><td>Ensure that the received INIT-Chunk from the IUT does not contain the forward-tsn-supported parameter in the optional parameter list.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/rfc3758#section-3.3.2">RFC 3758 [section 3.3.2]</a>, <a href="https://tools.ietf.org/html/rfc4960#section-3.3.3.1">RFC 4960 [section 3.3.3.1]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="handshake-with-forward-tsn-3"><tbody><tr><td>ID</td><td>handshake-with-forward-tsn-3</td></tr><tr><td>Precondition</td><td>IUT does not support PR-SCTP. 
+Association is not established between tester and IUT.
+Configure the IUT to send an INIT-Chunk to the tester.
+The tester responds with an INIT-ACK where the forward-tsn-supported parameter is set. 
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT upon receipt of an INIT-ACK-chunk with a forward-tsn-supported parameter sends an ERROR-Chunk 
+with the cause "invalid mandatory parameter".
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/rfc3758#section-3.3.2">RFC 3758 [section 3.3.2]</a>, <a href="https://tools.ietf.org/html/rfc4960#section-3.3.3">RFC 4960 [section 3.3.3]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="handshake-with-forward-tsn-4"><tbody><tr><td>ID</td><td>handshake-with-forward-tsn-4</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP.
+Association is established between tester and IUT, where in the INIT-Chunk sent by the tester the forward-tsn-supported parameter is NOT set.
+Arrange the data at the tester that an FORWARD TSN chunk is sent to the IUT.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT upon receipt of an FORWARD TSN chunk at an association where PR-SCTP is not supported sends an ERROR-Chunk 
+where any cause is considered valid. Protocol violation would be an reasonable cause.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/rfc3758#section-3.3.2">RFC 3758 [section 3.3.2]</a>, <a href="https://tools.ietf.org/html/rfc4960#section-3.3.3">RFC 4960 [section 3.3.3]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="handshake-with-forward-tsn-5"><tbody><tr><td>ID</td><td>handshake-with-forward-tsn-5</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP.
+Association is established between tester and IUT, where in the INIT-ACK-Chunk sent by the tester the forward-tsn-supported parameter is NOT set.
+Arrange the data at the tester that an FORWARD TSN chunk is sent to the IUT.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT upon receipt of an FORWARD TSN chunk at an association where PR-SCTP is not supported sends an ERROR-Chunk 
+where any cause is considered valid. Protocol violation would be an reasonable cause.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/rfc3758#section-3.3.2">RFC 3758 [section 3.3.2]</a>, <a href="https://tools.ietf.org/html/rfc4960#section-3.3.3">RFC 4960 [section 3.3.3]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="handshake-with-forward-tsn-6"><tbody><tr><td>ID</td><td>handshake-with-forward-tsn-6</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP. 
+Association is established between tester and IUT, where the forward-tsn-supported parameter is set in the INIT-Chunk and the INIT-ACK-Chunk.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT has enabled PR-SCTP for this association.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/rfc3758#section-3.3.2">RFC 3758 [section 3.3.2]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="handshake-with-forward-tsn-7"><tbody><tr><td>ID</td><td>handshake-with-forward-tsn-7</td></tr><tr><td>Precondition</td><td>IUT does support PR-SCTP. 
+Association is not established between tester and IUT.
+Arrange the data at the tester such that an INIT-Chunk with a forward-tsn-supported parameter is sent to the IUT. 
+Dont send an COOKIE-ECHO-Chunk after receival of the INIT-ACK-Chunk from the IUT. 
+Instead retransmit the INIT-Chunk - but this time without the forward tsn parameter set.
+After that complete the handshake for this association. 
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT has disabled PR-SCTP for this association.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/rfc3758#section-3.3.2">RFC 3758 [section 3.3.2]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="handshake-with-forward-tsn-operational-error"><tbody><tr><td>ID</td><td>handshake-with-forward-tsn-operational-error</td></tr><tr><td>Precondition</td><td>IUT does support PR-SCTP. 
+Let the IUT send a INIT-Chunk with the Forward-TSN-Supported parameter set. 
+Arrange the data at the tester that an INIT-ACK-Chunk is sent, where the Forward-TSN-Supported parameter
+is listed at the Unrecognized Parameters.
+</td></tr><tr><td>Purpose</td><td>Ensure the IUT to either:
+<ol>
+	<li>end the initiation process. (in cases where the initiation process already ended, it may need to send an ABORT)</li>
+	<li>continue the initiation process and marks the association such that PR-SCTP is NOT supported. 
+	     In this case the endpoint receiving the operational error should note that the FORWARD-TSN-Chunk is NOT supported.
+		 Also ensure that the IUT does not trasmit a FORWARD-TSN-Chunk at any time during the association.
+	</li>
+</ol>
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/rfc3758#page-8">RFC 3758 [section 3.3.3]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><h2>Sender Side Implementation</h2><p><strong>Notice:</strong> These test cases use the term "abandoned" like defined in <a href="https://tools.ietf.org/html/rfc3758#section-3.4">RFC 3758 [section 3.4]</a>. 
+                                    This means that these test cases have to be implemented for each specific policy rule that defines when a data chunk should be considered "abandoned" for the sender.</p><table class="table table-bordered test_case_table" id="sender-side-implementation-1"><tbody><tr><td>ID</td><td>sender-side-implementation-1</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP. 
+Association where PR-SCTP is enabled is established between tester and IUT.
+Let the IUT send a fragmented user message as three not bundled data chunks with the stream identifier 1 and the stream sequence number 0 to the tester. Send an SACK at the tester for the first two data chunks.
+Then wait so long until the T3-rtx timer of the sender expires and flags the outstanding DATA-Chunk as abandoned.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT sends a FORWARD TSN-Chunk where the new cumulative tsn is pointing to the last (third) DATA-Chunk and that the stream identifier is 1 and the stream sequence number is 0. 
+Also ensure that the sender does not advance the cwnd based on the abandoned chunk.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/rfc3758#section-3.5">RFC 3758 [section 3.5 - A2, C3 and C4]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="sender-side-implementation-2"><tbody><tr><td>ID</td><td>sender-side-implementation-2</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP. 
+Association where PR-SCTP is enabled is established between tester and IUT.
+Let the IUT send a fragmented user message as three not bundled unordered data chunks to the tester. Send an SACK at the tester for the first two data chunks.
+Then wait so long until the T3-rtx timer of the sender expires and flags the outstanding DATA-Chunk as abandoned.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT sends a FORWARD TSN-Chunk where the new cumulative tsn is pointing to the last (third) DATA-Chunk and that the stream identifier and the stream sequence number are not set in the FORWARD TSN. 
+Also ensure that the sender does not advance the cwnd based on the abandoned chunk. 
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/rfc3758#section-3.5">RFC 3758 [section 3.5 - A2, C3 and C4]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="sender-side-implementation-3"><tbody><tr><td>ID</td><td>sender-side-implementation-3</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP. 
+Association where PR-SCTP is enabled is established between tester and IUT.
+Let the IUT send a fragmented user message as three not bundled unordered and fragmented data chunks to the tester. Send an SACK at the tester for the first two data chunks.
+Then wait so long until the T3-rtx timer of the sender expires and flags the outstanding DATA-Chunk as abandoned.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT sends a valid FORWARD TSN-Chunk and abandons all fragmented chunks at the the same time.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/rfc3758#section-3.5">RFC 3758 [section 3.5 - A3]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="sender-side-implementation-4"><tbody><tr><td>ID</td><td>sender-side-implementation-4</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP. 
+Association where PR-SCTP is enabled is established between tester and IUT.
+Let the IUT send three not fragmented unordered user messages in three DATA-Chunks.
+Arrange the data such that the IUT will abandon the second user message before the third user message.
+Send a SACK for the first DATA-Chunk at the tester. 
+Then wait so long until the T3-rtx timer of the sender expires and flags the second DATA-Chunk as abandoned.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT sends a valid FORWARD TSN-Chunk and bundles it with the third DATA-Chunk. 
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/rfc3758#section-3.5">RFC 3758 [section 3.5 - F2]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="sender-side-implementation-5"><tbody><tr><td>ID</td><td>sender-side-implementation-5</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP. 
+Association where PR-SCTP is enabled is established between tester and IUT.
+Let the IUT send a single unordered not fragmented user message in one DATA-Chunk.
+Don't send a SACK for the user message and wait so long until the T3-rtx timer of 
+the sender expires and flags the DATA-Chunk as abandoned.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT sends a valid FORWARD TSN-Chunk and does not delay the sending of the forward tsn to more than 500ms. 
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/rfc3758#section-3.5">RFC 3758 [section 3.5 - F3]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="sender-side-implementation-6"><tbody><tr><td>ID</td><td>sender-side-implementation-6</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP.
+Association where PR-SCTP is enabled is established between tester and IUT.
+Let the IUT send two ordered not fragmented user messages to the tester, where the first user message
+has the stream identifier 1 and the second user message has the stream identifier 2. 
+Then wait so long until the T3-rtx timer of the sender expires and flags both outstanding DATA-Chunks as abandoned.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT sends a valid FORWARD TSN-Chunk for the first DATA-Chunk and discards the second user message.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/rfc3758#section-3.5">RFC 3758 [section 3.5]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="sender-side-implementation-7"><tbody><tr><td>ID</td><td>sender-side-implementation-7</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP.
+Association where PR-SCTP is enabled is established between tester and IUT.
+Let the IUT send two ordered not fragmented user messages to the tester, where the first user message
+has the stream identifier 1 and the second user message has the stream identifier 2.
+Arrange the data such that the first user message is abandoned first.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT sends a valid FORWARD TSN-Chunk for the first user message and bundles it with the still outstanding second user message.
+Send a SACK for the FORWARD TSN-Chunk but not for the second user message. Then also ensure that the IUT
+generates also a valid FORWARD TSN-Chunk for the second user message.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/rfc3758#section-3.5">RFC 3758 [section 3.5]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="sender-side-implementation-8"><tbody><tr><td>ID</td><td>sender-side-implementation-8</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP.
+Association where PR-SCTP is enabled is established between tester and IUT.
+Let the IUT send one ordered not fragmented user messages to the tester with
+the stream identifier 1. Wait so long until the IUT sends a valid FORWARD-TSN-Chunk
+for this user message. Then let the IUT send one unordered not fragmented user message to
+the tester.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT also sends a valid FORWARD TSN-Chunk for the unordered user message.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/rfc3758#section-3.5">RFC 3758 [section 3.5]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="sender-side-implementation-9"><tbody><tr><td>ID</td><td>sender-side-implementation-9</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP.
+Association where PR-SCTP is enabled is established between tester and IUT.
+Let the IUT send two ordered not fragmented user messages to the tester with
+different stream identifiers. Let both user messages be abandoned at the same time. 
+Then wait so long until the IUT abandons both user messages.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT sends a valid FORWARD TSN-Chunk for both outstanding ordered user messages.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/rfc3758#section-3.5">RFC 3758 [section 3.5]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="sender-side-implementation-10"><tbody><tr><td>ID</td><td>sender-side-implementation-10</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP.
+Association where PR-SCTP is enabled is established between tester and IUT.
+Let the IUT send one ordered not fragmented user message to the tester. 
+Then wait so long until the user message is abandoned 
+and the IUT sends a FORWARD-TSN-Chunk for the outstanding user message.
+Arrange the data at the tester such that the FORWARD-TSN-Chunk is not acknowledged with
+a SACK-Chunk.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT retransmits the FORWARD TSN-Chunk for the abandoned user message.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/rfc3758#section-3.5">RFC 3758 [section 3.5]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="sender-side-implementation-11"><tbody><tr><td>ID</td><td>sender-side-implementation-11</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP.
+Association where PR-SCTP is enabled is established between tester and IUT.
+Arrange the data at the tester such the cwnd of the IUT can have three user messages 
+outstanding.
+Let the IUT send three ordered not fragmented user message to the tester, where the first
+and the third user message should be sent unreliable and the second user message reliable.
+Then wait so long until the unreliable user messages are abandoned.
+</td></tr><tr><td>Purpose</td><td>Expect the IUT to send a valid FORWARD-TSN for the first unreliable user message and bundles
+it with the still outstanding reliable second user message. After that the tester should send a SACK
+where the cumulative ack is pointing to the second user message also expect the IUT to send
+a valid FORWARD-TSN for the third user message.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/rfc3758#section-3.5">RFC 3758 [section 3.5]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="sender-side-implementation-12"><tbody><tr><td>ID</td><td>sender-side-implementation-12</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP.
+Association where PR-SCTP is enabled is established between tester and IUT.
+Arrange the data at the tester such the cwnd of the IUT can have three user messages 
+outstanding.
+Let the IUT send three ordered not fragmented user message to the tester, where the first
+and the third user message should be sent unreliable and the second user message reliable.
+Arrange the data at the tester such that a SACK is sent to the IUT where only the second
+reliable user message is acknowledged.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT first transmits a valid FORWARD-TSN-Chunk for the first unreliable user message.
+The tester then should send a SACK, where the cumulative ack is pointing to the second user message.
+After that also ensure that the IUT transmits a valid FORWARD-TSN-Chunk for the still outstanding 
+unreliable user message.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/rfc3758#section-3.5">RFC 3758 [section 3.5]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="shutdown-1"><tbody><tr><td>ID</td><td>shutdown-1</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP. 
+Association where PR-SCTP is enabled is established between tester and IUT.
+Let the IUT send one ordered not fragmented unreliable user message to the tester. 
+Do not send an SACK-Chunk so that the IUT abandons this user message. 
+After receiving the correct FORWARD-TSN-Chunk send an SACK-Chunk such that the
+abandoned user messsage is acknowledged. After that call the shutdown 
+system-call with SHUT_WR.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT sends an valid SHUTDOWN-Chunk.
+Also ensure that the sending of further user messages is not allowed.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/draft-ietf-tsvwg-sctpsocket-32#page-23">Sockets API Extensions for SCTP - Shutdown</a>,
+<a href="https://tools.ietf.org/html/rfc4960#page-107">RFC 4960 [section 9.2]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="shutdown-2"><tbody><tr><td>ID</td><td>shutdown-2</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP. 
+Association where PR-SCTP is enabled is established between tester and IUT.
+Let the IUT send one ordered not fragmented unreliable user message to the tester.
+After that call the shutdown system-call with SHUT_WR.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT after it has abandoned the still outstanding user message first transmits
+an valid FORWARD-TSN-Chunk for this user message. Send an SACK for this user message. Then also ensure that after the receiving of the
+SHUTDOWN-Chunk the shutdown process completes successfully and that the sending of further user messages is not allowed.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/draft-ietf-tsvwg-sctpsocket-32#page-23">Sockets API Extensions for SCTP - Shutdown</a>,
+<a href="https://tools.ietf.org/html/rfc4960#page-107">RFC 4960 [section 9.2]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="shutdown-3"><tbody><tr><td>ID</td><td>shutdown-3</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP. 
+Association where PR-SCTP is enabled is established between tester and IUT.
+Let the IUT send one ordered not fragmented unreliable user message to the tester.
+After that call the shutdown system-call with SHUT_WR.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT after it has abandoned the still outstanding user message first transmits
+an valid FORWARD-TSN-Chunk for this user message. Send an SACK for this FORWARD-TSN-Chunk. Then also ensure that after the receiving of the
+SHUTDOWN-Chunk the shutdown process completes successfully.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/draft-ietf-tsvwg-sctpsocket-32#page-23">Sockets API Extensions for SCTP - Shutdown</a>,
+<a href="https://tools.ietf.org/html/rfc4960#page-107">RFC 4960 [section 9.2]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="shutdown-4"><tbody><tr><td>ID</td><td>shutdown-4</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP. 
+Association where PR-SCTP is enabled is established between tester and IUT.
+Let the IUT send one ordered fragmented unreliable user message as two DATA-Chunks to the tester.
+After receiving both DATA-Chunks send an SACK-Chunk for the first DATA-Chunk of the
+fragmented user message and then call the shutdown system-call with SHUT_WR.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT after it has abandoned the still outstanding fragmented user message first transmits
+an valid FORWARD-TSN-Chunk for this user message (such that the cum_tsn is pointing to the second DATA-Chunk). 
+Send an SACK for this FORWARD-TSN-Chunk. Then also ensure that after the receiving of the
+SHUTDOWN-Chunk the shutdown process completes successfully.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/draft-ietf-tsvwg-sctpsocket-32#page-23">Sockets API Extensions for SCTP - Shutdown</a>,
+<a href="https://tools.ietf.org/html/rfc4960#page-107">RFC 4960 [section 9.2]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="shutdown-5"><tbody><tr><td>ID</td><td>shutdown-5</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP. 
+Association where PR-SCTP is enabled is established between tester and IUT.
+Let the IUT send one ordered not fragmented unreliable user message to the tester.
+After receiving the DATA-Chunk call the shutdown system-call with SHUT_WR.
+Also ensure that the DATA-Chunk must be retransmitted one more time after
+calling shutdown before it gets abandoned by the IUT.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT retransmits the still outstanding user message.
+After it has abandoned the retransmitted user message also ensure that it sends
+an valid FORWARD-TSN-Chunk. Send an SACK for this FORWARD-TSN-Chunk. 
+Then also ensure that after the receiving of the SHUTDOWN-Chunk the shutdown process completes successfully.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/draft-ietf-tsvwg-sctpsocket-32#page-23">Sockets API Extensions for SCTP - Shutdown</a>,
+<a href="https://tools.ietf.org/html/rfc4960#page-107">RFC 4960 [section 9.2]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="shutdown-6"><tbody><tr><td>ID</td><td>shutdown-6</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP. 
+Association where PR-SCTP is enabled is established between tester and IUT.
+Let the IUT send one ordered not fragmented unreliable user message to the tester.
+After receiving the DATA-Chunk call the shutdown system-call with SHUT_WR.
+Also ensure that the DATA-Chunk must be retransmitted two more times after
+calling shutdown before it gets abandoned by the IUT.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT retransmits the still outstanding user message two more times.
+After it has abandoned the retransmitted user message also ensure that it sends
+an valid FORWARD-TSN-Chunk. Send an SACK for this FORWARD-TSN-Chunk. 
+Then also ensure that after the receiving of the SHUTDOWN-Chunk the shutdown process completes successfully.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/draft-ietf-tsvwg-sctpsocket-32#page-23">Sockets API Extensions for SCTP - Shutdown</a>,
+<a href="https://tools.ietf.org/html/rfc4960#page-107">RFC 4960 [section 9.2]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="shutdown-7"><tbody><tr><td>ID</td><td>shutdown-7</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP. 
+Association where PR-SCTP is enabled is established between tester and IUT.
+Let the IUT send one ordered not fragmented unreliable user message to the tester.
+After receiving the DATA-Chunk call the shutdown system-call with SHUT_WR.
+Also ensure that the DATA-Chunk must be retransmitted one more time after
+calling shutdown before it gets abandoned by the IUT.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT retransmits the still outstanding user message.
+After receiving the retransmitted DATA-Chunk send an SACK-Chunk for this user message. 
+Then also ensure that the IUT sends an SHUTDOWN-Chunk and that the shutdown process completes successfully.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/draft-ietf-tsvwg-sctpsocket-32#page-23">Sockets API Extensions for SCTP - Shutdown</a>,
+<a href="https://tools.ietf.org/html/rfc4960#page-107">RFC 4960 [section 9.2]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="shutdown-8"><tbody><tr><td>ID</td><td>shutdown-8</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP. 
+Association where PR-SCTP is enabled is established between tester and IUT.
+Let the IUT send one ordered not fragmented unreliable user message to the tester.
+After receiving the DATA-Chunk call the shutdown system-call with SHUT_WR.
+Also ensure that the DATA-Chunk must be retransmitted two more times after
+calling shutdown before it gets abandoned by the IUT.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT retransmits the still outstanding user message two more times.
+Then send an SACK-Chunk for this user message. 
+After that also ensure that the IUT sends an SHUTDOWN-Chunk and that the shutdown process completes successfully.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/draft-ietf-tsvwg-sctpsocket-32#page-23">Sockets API Extensions for SCTP - Shutdown</a>,
+<a href="https://tools.ietf.org/html/rfc4960#page-107">RFC 4960 [section 9.2]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="shutdown-9"><tbody><tr><td>ID</td><td>shutdown-9</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP. 
+Association where PR-SCTP is enabled is established between tester and IUT.
+Let the IUT send one ordered not fragmented unreliable user message to the tester.
+After receiving the DATA-Chunk call the shutdown system-call with SHUT_WR.
+Ensure that the IUT abandones this user message after shutdown has been called and does
+not try to retransmit it.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT after it has abandoned the still outstanding fragmented user message first transmits
+an valid FORWARD-TSN-Chunk. Then also ensure that this valid FORWARD-TSN-Chunk is retransmitted. 
+After the retransmission send an SACK-Chunk for this FORWARD-TSN-Chunk and also ensure that the shutdown process completes successfully.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/draft-ietf-tsvwg-sctpsocket-32#page-23">Sockets API Extensions for SCTP - Shutdown</a>,
+<a href="https://tools.ietf.org/html/rfc4960#page-107">RFC 4960 [section 9.2]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="shutdown-10"><tbody><tr><td>ID</td><td>shutdown-10</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP. 
+Association where PR-SCTP is enabled is established between tester and IUT.
+Let the IUT send one ordered not fragmented unreliable user message to the tester.
+After receiving the DATA-Chunk call the shutdown system-call with SHUT_WR.
+Also ensure that the DATA-Chunk must be retransmitted two more times after
+calling shutdown before it gets abandoned by the IUT.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT retransmits the still outstanding user message two more times.
+After that expect the IUT to send an valid FORWARD-TSN-Chunk for this user message.
+Send an SACK after the receiving of the FORWARD-TSN-Chunk to the IUT.
+Then also ensure that the IUT sends an SHUTDOWN-Chunk and that the shutdown process completes successfully.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/draft-ietf-tsvwg-sctpsocket-32#page-23">Sockets API Extensions for SCTP - Shutdown</a>,
+<a href="https://tools.ietf.org/html/rfc4960#page-107">RFC 4960 [section 9.2]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="shutdown-11"><tbody><tr><td>ID</td><td>shutdown-11</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP. 
+Association where PR-SCTP is enabled is established between tester and IUT.
+Let the IUT send one unordered not fragmented unreliable user message to the tester.
+After receiving the DATA-Chunk call the shutdown system-call with SHUT_WR.
+Also ensure that the DATA-Chunk must be retransmitted one more time after
+calling shutdown before it gets abandoned by the IUT.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT retransmits the still outstanding user message.
+After receiving the retransmitted DATA-Chunk send an SACK-Chunk for this user message. 
+Then also ensure that the IUT sends an SHUTDOWN-Chunk and that the shutdown process completes successfully.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/draft-ietf-tsvwg-sctpsocket-32#page-23">Sockets API Extensions for SCTP - Shutdown</a>,
+<a href="https://tools.ietf.org/html/rfc4960#page-107">RFC 4960 [section 9.2]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="shutdown-12"><tbody><tr><td>ID</td><td>shutdown-12</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP. 
+Association where PR-SCTP is enabled is established between tester and IUT.
+Let the IUT send one unordered not fragmented unreliable user message to the tester.
+After receiving the DATA-Chunk call the shutdown system-call with SHUT_WR.
+Also ensure that the DATA-Chunk must be retransmitted two more times after
+calling shutdown before it gets abandoned by the IUT.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT retransmits the still outstanding user message two more times.
+Then send an SACK-Chunk for this user message. 
+After that also ensure that the IUT sends an SHUTDOWN-Chunk and that the shutdown process completes successfully.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/draft-ietf-tsvwg-sctpsocket-32#page-23">Sockets API Extensions for SCTP - Shutdown</a>,
+<a href="https://tools.ietf.org/html/rfc4960#page-107">RFC 4960 [section 9.2]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="shutdown-13"><tbody><tr><td>ID</td><td>shutdown-13</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP. 
+Association where PR-SCTP is enabled is established between tester and IUT.
+Let the IUT send one unordered not fragmented unreliable user message to the tester.
+After receiving the DATA-Chunk call the shutdown system-call with SHUT_WR.
+Ensure that the IUT abandones this user message after shutdown has been called and does
+not try to retransmit it.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT after it has abandoned the still outstanding fragmented user message first transmits
+an valid FORWARD-TSN-Chunk. Then also ensure that this valid FORWARD-TSN-Chunk is retransmitted. 
+After the retransmission send an SACK-Chunk for this FORWARD-TSN-Chunk and also ensure that the shutdown process completes successfully.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/draft-ietf-tsvwg-sctpsocket-32#page-23">Sockets API Extensions for SCTP - Shutdown</a>,
+<a href="https://tools.ietf.org/html/rfc4960#page-107">RFC 4960 [section 9.2]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="shutdown-received-1"><tbody><tr><td>ID</td><td>shutdown-received-1</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP. 
+Association where PR-SCTP is enabled is established between tester and IUT.
+Let the IUT send one ordered not fragmented unreliable user message to the tester. 
+Make sure that the sent message will be retransmitted one more time before it 
+is abandoned by the IUT. Now send an SHUTDOWN-Chunk to the IUT such that the
+cum_tsn does not acknowledge the still outstanding DATA-Chunk.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT retransmits the still outstanding DATA-Chunk one more time and that the sending of further user messages is not allowed.
+After that also ensure that the IUT abandons this user message and sends a valid
+FORWARD-TSN-Chunk. Then also verify that the shutdown process completes successfully.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/draft-ietf-tsvwg-sctpsocket-32#page-23">Sockets API Extensions for SCTP - Shutdown</a>,
+<a href="https://tools.ietf.org/html/rfc4960#page-107">RFC 4960 [section 9.2]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="shutdown-received-2"><tbody><tr><td>ID</td><td>shutdown-received-2</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP. 
+Association where PR-SCTP is enabled is established between tester and IUT.
+Let the IUT send one ordered not fragmented unreliable user message to the tester. 
+Make sure that the sent message will not be retransmitted. 
+Now send an SHUTDOWN-Chunk to the IUT such that the cum_tsn does not acknowledge the still outstanding DATA-Chunk.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT abandons this user message and sends a valid FORWARD-TSN-Chunk. 
+Then also verify that the shutdown process completes successfully.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/draft-ietf-tsvwg-sctpsocket-32#page-23">Sockets API Extensions for SCTP - Shutdown</a>,
+<a href="https://tools.ietf.org/html/rfc4960#page-107">RFC 4960 [section 9.2]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="shutdown-received-4"><tbody><tr><td>ID</td><td>shutdown-received-4</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP. 
+Association where PR-SCTP is enabled is established between tester and IUT.
+Let the IUT send one ordered fragmented unreliable user message as two DATA-Chunks to the tester. 
+Make sure that the sent message will not be retransmitted. 
+Now send an SHUTDOWN-Chunk to the IUT such that the cum_tsn does only acknowledge the first outstanding DATA-Chunk.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT abandons this user message and sends a valid FORWARD-TSN-Chunk where the cum_tsn
+is equal to the second outstanding DATA-Chunk of the fragmented user message. 
+Then also verify that the shutdown process completes successfully.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/draft-ietf-tsvwg-sctpsocket-32#page-23">Sockets API Extensions for SCTP - Shutdown</a>,
+<a href="https://tools.ietf.org/html/rfc4960#page-107">RFC 4960 [section 9.2]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="shutdown-received-5"><tbody><tr><td>ID</td><td>shutdown-received-5</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP. 
+Association where PR-SCTP is enabled is established between tester and IUT.
+Let the IUT send one ordered not fragmented unreliable user message to the tester. 
+Make sure that the sent message will be retransmitted one more time before it 
+is abandoned by the IUT. Now send an SHUTDOWN-Chunk to the IUT such that the
+cum_tsn does not acknowledge the still outstanding DATA-Chunk.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT retransmits the still outstanding DATA-Chunk one more time.
+After that also ensure that the IUT abandons this user message and sends a valid
+FORWARD-TSN-Chunk. Then also verify that the shutdown process completes successfully.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/draft-ietf-tsvwg-sctpsocket-32#page-23">Sockets API Extensions for SCTP - Shutdown</a>,
+<a href="https://tools.ietf.org/html/rfc4960#page-107">RFC 4960 [section 9.2]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="shutdown-received-6"><tbody><tr><td>ID</td><td>shutdown-received-6</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP. 
+Association where PR-SCTP is enabled is established between tester and IUT.
+Let the IUT send one ordered not fragmented unreliable user message to the tester. 
+Make sure that the sent message will be retransmitted two more times before it 
+is abandoned by the IUT. Now send an SHUTDOWN-Chunk to the IUT such that the
+cum_tsn does not acknowledge the still outstanding DATA-Chunk.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT retransmits the still outstanding DATA-Chunk two times.
+After that also ensure that the IUT abandons this user message and sends a valid
+FORWARD-TSN-Chunk. Then also verify that the shutdown process completes successfully.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/draft-ietf-tsvwg-sctpsocket-32#page-23">Sockets API Extensions for SCTP - Shutdown</a>,
+<a href="https://tools.ietf.org/html/rfc4960#page-107">RFC 4960 [section 9.2]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="shutdown-received-7"><tbody><tr><td>ID</td><td>shutdown-received-7</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP. 
+Association where PR-SCTP is enabled is established between tester and IUT.
+Let the IUT send one ordered not fragmented unreliable user message to the tester. 
+Make sure that the sent message will be retransmitted two more times before it 
+is abandoned by the IUT. Now send an SHUTDOWN-Chunk to the IUT such that the
+cum_tsn does not acknowledge the still outstanding DATA-Chunk.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT retransmits the still outstanding DATA-Chunk.
+After the retransmission send an SHUTDOWN-Chunk to the IUT such that the outstanding
+DATA-Chunk is acknowledged. Then verify that the shutdown process completes successfully.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/draft-ietf-tsvwg-sctpsocket-32#page-23">Sockets API Extensions for SCTP - Shutdown</a>,
+<a href="https://tools.ietf.org/html/rfc4960#page-107">RFC 4960 [section 9.2]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="shutdown-received-8"><tbody><tr><td>ID</td><td>shutdown-received-8</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP. 
+Association where PR-SCTP is enabled is established between tester and IUT.
+Let the IUT send one ordered not fragmented unreliable user message to the tester. 
+Make sure that the sent message will be retransmitted two more times before it 
+is abandoned by the IUT. Now send an SHUTDOWN-Chunk to the IUT such that the
+cum_tsn does not acknowledge the still outstanding DATA-Chunk.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT retransmits the still outstanding DATA-Chunk two times.
+After the second retransmission send an SHUTDOWN-Chunk to the IUT such that the outstanding
+DATA-Chunk is acknowledged. Then verify that the shutdown process completes successfully.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/draft-ietf-tsvwg-sctpsocket-32#page-23">Sockets API Extensions for SCTP - Shutdown</a>,
+<a href="https://tools.ietf.org/html/rfc4960#page-107">RFC 4960 [section 9.2]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="shutdown-received-9"><tbody><tr><td>ID</td><td>shutdown-received-9</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP. 
+Association where PR-SCTP is enabled is established between tester and IUT.
+Let the IUT send one ordered not fragmented unreliable user message to the tester. 
+Make sure that the sent message will not be retransmitted. 
+Now send an SHUTDOWN-Chunk to the IUT such that the cum_tsn does only acknowledge the still outstanding DATA-Chunk.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT abandons this user message and sends a valid FORWARD-TSN-Chunk where the cum_tsn
+is equal to the second outstanding DATA-Chunk of the fragmented user message. Also ensure that the FORWARD-TSN-Chunk
+is retransmitted a second time. Then send an SHUTDOWN-Chunk to the IUT where the outstanding DATA_Chunk is acknowledged.
+Then also verify that the shutdown process completes successfully.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/draft-ietf-tsvwg-sctpsocket-32#page-23">Sockets API Extensions for SCTP - Shutdown</a>,
+<a href="https://tools.ietf.org/html/rfc4960#page-107">RFC 4960 [section 9.2]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="shutdown-received-10"><tbody><tr><td>ID</td><td>shutdown-received-10</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP. 
+Association where PR-SCTP is enabled is established between tester and IUT.
+Let the IUT send one unordered not fragmented unreliable user message to the tester. 
+Make sure that the sent message will be retransmitted two more times before it 
+is abandoned by the IUT. Now send an SHUTDOWN-Chunk to the IUT such that the
+cum_tsn does not acknowledge the still outstanding DATA-Chunk.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT retransmits the still outstanding DATA-Chunk two times.
+After that also ensure that the IUT abandons this user message and sends a valid
+FORWARD-TSN-Chunk. Then also verify that the shutdown process completes successfully.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/draft-ietf-tsvwg-sctpsocket-32#page-23">Sockets API Extensions for SCTP - Shutdown</a>,
+<a href="https://tools.ietf.org/html/rfc4960#page-107">RFC 4960 [section 9.2]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="shutdown-received-11"><tbody><tr><td>ID</td><td>shutdown-received-11</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP. 
+Association where PR-SCTP is enabled is established between tester and IUT.
+Let the IUT send one unordered not fragmented unreliable user message to the tester. 
+Make sure that the sent message will be retransmitted two more times before it 
+is abandoned by the IUT. Now send an SHUTDOWN-Chunk to the IUT such that the
+cum_tsn does not acknowledge the still outstanding DATA-Chunk.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT retransmits the still outstanding DATA-Chunk.
+After the retransmission send an SHUTDOWN-Chunk to the IUT such that the outstanding
+DATA-Chunk is acknowledged. Then verify that the shutdown process completes successfully.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/draft-ietf-tsvwg-sctpsocket-32#page-23">Sockets API Extensions for SCTP - Shutdown</a>,
+<a href="https://tools.ietf.org/html/rfc4960#page-107">RFC 4960 [section 9.2]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="shutdown-received-12"><tbody><tr><td>ID</td><td>shutdown-received-12</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP. 
+Association where PR-SCTP is enabled is established between tester and IUT.
+Let the IUT send one unordered not fragmented unreliable user message to the tester. 
+Make sure that the sent message will be retransmitted two more times before it 
+is abandoned by the IUT. Now send an SHUTDOWN-Chunk to the IUT such that the
+cum_tsn does not acknowledge the still outstanding DATA-Chunk.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT retransmits the still outstanding DATA-Chunk two times.
+After the second retransmission send an SHUTDOWN-Chunk to the IUT such that the outstanding
+DATA-Chunk is acknowledged. Then verify that the shutdown process completes successfully.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/draft-ietf-tsvwg-sctpsocket-32#page-23">Sockets API Extensions for SCTP - Shutdown</a>,
+<a href="https://tools.ietf.org/html/rfc4960#page-107">RFC 4960 [section 9.2]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="shutdown-received-13"><tbody><tr><td>ID</td><td>shutdown-received-13</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP. 
+Association where PR-SCTP is enabled is established between tester and IUT.
+Let the IUT send one unordered not fragmented unreliable user message to the tester. 
+Make sure that the sent message will not be retransmitted. 
+Now send an SHUTDOWN-Chunk to the IUT such that the cum_tsn does only acknowledge the still outstanding DATA-Chunk.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT abandons this user message and sends a valid FORWARD-TSN-Chunk where the cum_tsn
+is equal to the second outstanding DATA-Chunk of the fragmented user message. Also ensure that the FORWARD-TSN-Chunk
+is retransmitted a second time. Then send an SHUTDOWN-Chunk to the IUT where the outstanding DATA_Chunk is acknowledged.
+Then also verify that the shutdown process completes successfully.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/draft-ietf-tsvwg-sctpsocket-32#page-23">Sockets API Extensions for SCTP - Shutdown</a>,
+<a href="https://tools.ietf.org/html/rfc4960#page-107">RFC 4960 [section 9.2]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><h2>Receiver Side Implementation</h2><p><strong>Notice:</strong> Please note that the packet-loss test-cases can be applied to ordered, unordered or an mixture of both DATA-Chunks. To avoid redundant definitions of equivalent loss patterns these descriptions are so generic that they can be applied to both ordered and unordered or an mixture of both.</p><table class="table table-bordered test_case_table" id="packet-loss-1"><tbody><tr><td>ID</td><td>packet-loss-1</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP. 
+Association where PR-SCTP is enabled is established between tester and IUT.
+Arrange the data at the tester such that the last DATA-Chunk (e.g. with E-Bit set) of 
+an fragmented user messages that was delivered with two DATA-Chunks is sent to the IUT.
+After receiving an SACK for the DATA-Chunk send to the IUT an bundled packet consisting of an FORWARD-TSN-Chunk
+that skips the still outstanding user message and an first DATA-Chunk (e.g. with B-Bit set) of another
+fragmented user message.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT sends a SACK-Chunk where the new cumulative tsn is the cum_tsn of the next user message.
+Then send the last DATA-Chunk of the still outstanding user message, expect it to be SACKed by the IUT.
+Also verify that the now complete received user message is delivered to the userland application.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/rfc3758#section-3.6">RFC 3758 [section 3.6]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="packet-loss-2"><tbody><tr><td>ID</td><td>packet-loss-2</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP. 
+Association where PR-SCTP is enabled is established between tester and IUT.
+Arrange the data at the tester such that two last DATA-Chunk (e.g. with E-Bit set) of 
+two fragmented user messages that were delivered with two DATA-Chunks are sent to the IUT.
+Expect both DATA-Chunks to be SACKed by the IUT.
+Then send to the IUT an bundled packet consisting of an FORWARD-TSN-Chunk
+that skips the first outstanding user message and the first DATA-Chunk (e.g. with B-Bit set) of the second outstanding
+fragmented user message.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT sends one SACK-Chunk where the new cumulative tsn is equal to the last fragment 
+of the second user message. 
+Also verify that the now complete received user message is delivered to the userland application.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/rfc3758#section-3.6">RFC 3758 [section 3.6]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="packet-loss-3"><tbody><tr><td>ID</td><td>packet-loss-3</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP. 
+Association where PR-SCTP is enabled is established between tester and IUT.
+Arrange the data at the tester such that two last DATA-Chunk (e.g. with E-Bit set) of 
+two fragmented user messages that were delivered with two DATA-Chunks are sent to the IUT.
+Expect both DATA-Chunks to be SACKed by the IUT.
+Then send to the IUT an FORWARD-TSN-Chunk that skips the first outstanding user message.
+Expect it to be SACKed such that the cum_tsn is equal to the cum_tsn in the FORWARD-TSN-Chunk.
+Then send to the IUT  the first DATA-Chunk (e.g. with B-Bit set) of the second outstanding
+fragmented user message.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT sends one SACK-Chunk where the new cumulative tsn is equal to the last fragment 
+of the second user message. 
+Also verify that the now complete received user message is delivered to the userland.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/rfc3758#section-3.6">RFC 3758 [section 3.6]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="packet-loss-4"><tbody><tr><td>ID</td><td>packet-loss-4</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP. 
+Association where PR-SCTP is enabled is established between tester and IUT.
+Arrange the data at the tester such that three last DATA-Chunk (e.g. with E-Bit set) of 
+three fragmented user messages that were delivered with two DATA-Chunks are sent to the IUT.
+Expect all DATA-Chunks to be SACKed in the gap-blocks by the IUT.
+Then send to the IUT an FORWARD-TSN-Chunk that skips the first outstanding user message.
+</td></tr><tr><td>Purpose</td><td>Expect that the IUT skips this first outstanding user message and advances the cum_tsn.
+After that send both outstanding first fragments (e.g. with B-Bit set) of the two still
+outstanding user messages to the IUT. Expect the IUT to SACK both DATA-Chunks correctly and
+also verify that both user messages are delivered to the userland.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/rfc3758#section-3.6">RFC 3758 [section 3.6]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="packet-loss-5"><tbody><tr><td>ID</td><td>packet-loss-5</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP. 
+Association where PR-SCTP is enabled is established between tester and IUT.
+Arrange the data at the tester such that three last DATA-Chunk (e.g. with E-Bit set) of 
+three fragmented user messages that were delivered with two DATA-Chunks are sent to the IUT.
+Expect all DATA-Chunks to be SACKed in the gap-blocks by the IUT.
+Then send to the IUT an bundled packet consisting of an FORWARD-TSN-Chunk
+that skips the first outstanding user message and an first DATA-Chunk (e.g. with B-Bit set) of the second
+fragmented user message.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT sends one SACK-Chunk where the new cumulative tsn is equal to the last fragment 
+of the second user message. 
+After that send the outstanding first fragment (e.g. with B-Bit set) of the third still
+outstanding user messages to the IUT. Expect it to be SACKed correctly by the IUT.
+Also verify that both user messages are delivered to the userland.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/rfc3758#section-3.6">RFC 3758 [section 3.6]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="packet-loss-6"><tbody><tr><td>ID</td><td>packet-loss-6</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP. 
+Association where PR-SCTP is enabled is established between tester and IUT.
+Arrange the data at the tester such that three last DATA-Chunk (e.g. with E-Bit set) of 
+three fragmented user messages that were delivered with two DATA-Chunks are sent to the IUT.
+Expect all DATA-Chunks to be SACKed in the gap-blocks by the IUT.
+Then send to the IUT an FORWARD-TSN-Chunk that skips the first outstanding user message.
+Expect that the IUT skips this first outstanding user message and advances the cum_tsn.
+After that send the first fragment of the third user message to the IUT.
+</td></tr><tr><td>Purpose</td><td>Expect the IUT to SACK this out-of-order DATA-Chunk correctly. If that the third user message was delivered
+unordered expect the IUT to deliver this user message to the userland.
+Then send the still outstanding first fragment of the second user message to the IUT. Expect it also
+the be SACKed and delivered to the userland by the IUT.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/rfc3758#section-3.6">RFC 3758 [section 3.6]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="packet-loss-7"><tbody><tr><td>ID</td><td>packet-loss-7</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP. 
+Association where PR-SCTP is enabled is established between tester and IUT.
+Arrange the data at the tester such that two last DATA-Chunk (e.g. with E-Bit set) of 
+two fragmented user messages that were delivered with two DATA-Chunks are sent to the IUT.
+Expect both DATA-Chunks to be SACKed by the IUT.
+Then send to the IUT the first DATA-Chunk (e.g. with B-Bit set) of the second outstanding
+fragmented user message.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT SACKs this out-of-order DATA-Chunk in the gap-ackowledgements and
+in case of unordered DATA-Chunks delivers this user message to the userland.
+Then send the still missing first DATA-Chunk (e.g. with B-Bit set) of the first user message to the IUT.
+Expect it also to be SACKed by the IUT and that the second message is delivered to the userland.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/rfc3758#section-3.6">RFC 3758 [section 3.6]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="packet-loss-8"><tbody><tr><td>ID</td><td>packet-loss-8</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP. 
+Association where PR-SCTP is enabled is established between tester and IUT.
+Arrange the data at the tester such that one last DATA-Chunk (e.g. with E-Bit set) of 
+one fragmented user messages that was delivered with two DATA-Chunks is sent to the IUT.
+Expect it to be SACKed by the IUT.
+Then send 13 not fragmented user messages to the IUT.
+</td></tr><tr><td>Purpose</td><td>Expect all 13 DATA-Chunks to be SACKed in gap-ackowledgments by the IUT. Then send an
+FORWARD-TSN-Chunk to the IUT that skips the still oustanding fragmented user message.
+Expect it to be SACKed such the cum_tsn is now equal the the last DATA-Chunk received.
+Then also verify that all 13 user messages are delivered to the userland.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/rfc3758#section-3.6">RFC 3758 [section 3.6]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="packet-loss-9"><tbody><tr><td>ID</td><td>packet-loss-9</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP. 
+Association where PR-SCTP is enabled is established between tester and IUT.
+Arrange the data at the tester such that three last DATA-Chunk (e.g. with E-Bit set) of 
+three fragmented user messages that were delivered with two DATA-Chunks are sent to the IUT.
+Expect all DATA-Chunks to be SACKed in the gap-blocks by the IUT.
+Then send to the IUT an FORWARD-TSN-Chunk that skips the first outstanding user message.
+Expect the IUT to SACK this FORWARD-TSN correctly and then send another FORWARD-TSN-Chunk that skips the second outstanding user message.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT sends one SACK-Chunk where the new cumulative tsn is equal to the last fragment 
+of the second user message. 
+After that send the outstanding first fragment (e.g. with B-Bit set) of the third still
+outstanding user messages to the IUT. Expect it to be SACKed correctly by the IUT.
+Also verify that the third user message is delivered to the userland.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/rfc3758#section-3.6">RFC 3758 [section 3.6]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="packet-loss-10"><tbody><tr><td>ID</td><td>packet-loss-10</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP. 
+Association where PR-SCTP is enabled is established between tester and IUT.
+Arrange the data at the tester such that two DATA-Chunks (first with E-Bit set, second with B-Bit set) of 
+an fragmented user messages that was delivered with two DATA-Chunks are sent to the IUT.
+Make sure that the TSNs in this fragmented user message indicate that there is still one outstanding
+fragmented user message. Expect the IUT to acknowledge both DATA-Chunks. Then send the first part (with B-Bit set)
+of a third fragmented user message to the IUT, expect it also to be SACKed. 
+Then send an packet consisting of the last fragment of the third user message (with E-Bit set) and an FORWARD-TSN-Chunk
+that skips the still oustanding first user message.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT SACKs at this moment all outstanding user messages such that the cum_tsn must
+be the tsn of the last fragment of the third user message. Also ensure that the two fully transmitted
+user messages are delivered to the userland.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/rfc3758#section-3.6">RFC 3758 [section 3.6]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="packet-loss-11"><tbody><tr><td>ID</td><td>packet-loss-11</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP. 
+Association where PR-SCTP is enabled is established between tester and IUT.
+Arrange the data at the tester such that two last DATA-Chunk (e.g. with E-Bit set) of 
+two fragmented user messages that were delivered with two DATA-Chunks are sent to the IUT.
+Expect both DATA-Chunks to be SACKed by the IUT.
+Then send to the IUT the first DATA-Chunk (e.g. with B-Bit set) of the second outstanding
+fragmented user message. Expect it also to be SACKed by the IUT.
+Then send to the IUT the first DATA-Chunk (with B-Bit set) of an fragmented third
+user message which should also be SACKed.
+Then send one packet that consists of an FORWARD-TSN that skips the still outstanding first
+user message and the last DATA-Chunk (with E-Bit set) of the third user message.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT processes the bundled FORWARD-TSN-Chunk and DATA-Chunk correctly and sends
+an SACK-Chunk where the cum_tsn-value is equal to the tsn-value of the DATA-Chunk in the bundled packet.
+Also ensure that the two fully transmitted user messages are delivered to the userland.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/rfc3758#section-3.6">RFC 3758 [section 3.6]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="packet-loss-12"><tbody><tr><td>ID</td><td>packet-loss-12</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP. 
+Association where PR-SCTP is enabled is established between tester and IUT.
+Arrange the data at the tester such that two DATA-Chunks (first with E-Bit set, second with B-Bit set) of 
+an fragmented user messages that was delivered with two DATA-Chunks are sent to the IUT.
+Make sure that the TSNs in this fragmented user message indicate that there is still one outstanding
+fragmented user message. Expect both DATA-Chunks to be SACKed by the IUT.
+Then send the last DATA-Chunk (with E-Bit set) of an third fragmented user message to the IUT. Expect it also to be SACKed.
+Then send an packet consisting of the first fragment of the third user message (with B-Bit set) and an FORWARD-TSN-Chunk
+that skips the still oustanding first user message.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT processes the bundled FORWARD-TSN-Chunk and DATA-Chunk correctly and sends
+an SACK-Chunk where the cum_tsn-value is equal to the tsn-value of the DATA-Chunk in the bundled packet.
+Also ensure that the two fully transmitted user messages are delivered to the userland.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/rfc3758#section-3.6">RFC 3758 [section 3.6]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="packet-loss-13"><tbody><tr><td>ID</td><td>packet-loss-13</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP. 
+Association where PR-SCTP is enabled is established between tester and IUT.
+Arrange the data at the tester such that three last DATA-Chunk (e.g. with E-Bit set) of 
+three fragmented user messages that were delivered with two DATA-Chunks are sent to the IUT.
+Expect all DATA-Chunks to be SACKed in the gap-blocks by the IUT.
+Then send to the IUT the first DATA-Chunk (with B-Bit set) of the third user message.
+Expect it also to be SACKed.
+Then send to the IUT an an bundled packet consisting of an FORWARD-TSN-Chunk that skips the first outstanding user message
+and an FORWARD-TSN-Chunk that skips the second outstanding user message.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT sends one SACK-Chunk where the new cumulative tsn is equal to the last fragment 
+of the third user message. 
+Also verify that the third user message is delivered to the userland.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/rfc3758#section-3.6">RFC 3758 [section 3.6]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="packet-loss-14"><tbody><tr><td>ID</td><td>packet-loss-14</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP. 
+Association where PR-SCTP is enabled is established between tester and IUT.
+Arrange the data at the tester such that three DATA-Chunks are sent to the IUT,
+where the first DATA-Chunk is the last fragment (E-Bit set) of an fourth user message,
+the second DATA-Chunk is the first fragment (B-Bit set) of an third user message and
+the third DATA-Chunk is the last fragment (E-Bit set) of the third user message.
+Expect all to be SACKed by the IUT. Then send an bundled packet consisting of
+an FORWARD-TSN-Chunk that skips the outstanding first user message and an first DATA-Chunk
+of the fragmented second user message. Expect it to be SACKed by the IUT correctly.
+Then send again an bundled packet consisting of an FORWARD-TSN-Chunk that skips
+this time the second user message and an DATA-Chunk that is the last fragment of
+the third user message.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT sends one SACK-Chunk where the new cumulative tsn is equal to the last fragment 
+of the fourth user message. 
+Also verify that the third and fourth user messages are delivered to the userland.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/rfc3758#section-3.6">RFC 3758 [section 3.6]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="receiver-side-implementation-1"><tbody><tr><td>ID</td><td>receiver-side-implementation-1</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP. 
+Association where PR-SCTP is enabled is established between tester and IUT.
+Arrange the data at the tester such that a FORWARD-TSN for an ordered user message is sent to the IUT.
+Let the cum_tsn of the FORWARD-TSN-Chunk be 1, the stream identifier be 1 and the stream sequence number be 0.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT sends a SACK-Chunk where the new cumulative tsn is the cum_tsn specified in the FORWARD-TSN-Chunk.
+Also ensure that the IUT has advanced the cumulative tsn to point locally to the cum_tsn specified in the FORWARD-TSN-Chunk. 
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/rfc3758#section-3.6">RFC 3758 [section 3.6]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="receiver-side-implementation-2"><tbody><tr><td>ID</td><td>receiver-side-implementation-2</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP. 
+Association where PR-SCTP is enabled is established between tester and IUT.
+Arrange the data at the tester such that an unfragmented ordered DATA-Chunk is sent to the IUT.
+Expect the IUT to send an SACK for this DATA-Chunk. After a while arrange the data at the tester
+such that an FORWAD-TSN-Chunk is sent to the IUT, which should point to the cumulative tsn of 
+the first DATA-Chunk.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT sends a SACK-Chunk where the new cumulative tsn is the cum_tsn specified in the FORWARD-TSN-Chunk.
+Also ensure that the IUT has advanced the cumulative tsn point locally to the cum_tsn specified in the FORWARD-TSN-Chunk. 
+Then also make sure that the IUT delivers the user message transfered in the DATA-Chunk to the userland application.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/rfc3758#section-3.6">RFC 3758 [section 3.6]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="receiver-side-implementation-3"><tbody><tr><td>ID</td><td>receiver-side-implementation-3</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP. 
+Association where PR-SCTP is enabled is established between tester and IUT.
+Arrange the data at the tester such that a FORWARD-TSN for an unordered user message is sent to the IUT.
+Let the cum_tsn of the FORWARD-TSN-Chunk be 1.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT sends a SACK-Chunk where the new cumulative tsn is the cum_tsn specified in the FORWARD-TSN-Chunk.
+Also ensure that the IUT has advanced the cumulative tsn point locally to the cum_tsn specified in the FORWARD-TSN-Chunk.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/rfc3758#section-3.6">RFC 3758 [section 3.6]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="receiver-side-implementation-4"><tbody><tr><td>ID</td><td>receiver-side-implementation-4</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP. 
+Arrange the data at the tester such that an unfragmented unordered DATA-Chunk is sent to the IUT.
+Expect the IUT to send an SACK for this DATA-Chunk. After a while arrange the data at the tester
+such that an FORWAD-TSN-Chunk is sent to the IUT, which should point to the cumulative tsn of 
+the first DATA-Chunk.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT sends a SACK-Chunk where the new cumulative tsn is the cum_tsn specified in the FORWARD-TSN-Chunk.
+Also ensure that the IUT has advanced the cumulative tsn point locally to the cum_tsn specified in the FORWARD-TSN-Chunk.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/rfc3758#section-3.6">RFC 3758 [section 3.6]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="receiver-side-implementation-5"><tbody><tr><td>ID</td><td>receiver-side-implementation-5</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP. 
+Association where PR-SCTP is enabled is established between tester and IUT.
+Arrange the data at the tester such that a FORWARD-TSN where the stream identifier and stream sequence numbers are reported twice.
+Let the cum_tsn of the FORWARD-TSN-Chunk be 1, the stream identifier be 1 and the stream sequence number be 0.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT sends a SACK-Chunk where the new cumulative tsn is the cum_tsn specified in the FORWARD-TSN-Chunk.
+Also ensure that the IUT has advanced the cumulative tsn to point locally to the cum_tsn specified in the FORWARD-TSN-Chunk. 
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/rfc3758#section-3.6">RFC 3758 [section 3.6]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="receiver-side-implementation-6"><tbody><tr><td>ID</td><td>receiver-side-implementation-6</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP. 
+Association where PR-SCTP is enabled is established between tester and IUT.
+Arrange the data at the tester such that a FORWARD-TSN for two ordered user message with cum_tsn=2 is sent to the IUT.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT has advanced the stream sequence numbers for both streams reported in the FORWARD-TSN correctly.
+Also ensure that the IUT has advanced the cumulative tsn to point locally to the cum_tsn specified in the FORWARD-TSN-Chunk. 
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/rfc3758#section-3.6">RFC 3758 [section 3.6]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="receiver-side-implementation-7"><tbody><tr><td>ID</td><td>receiver-side-implementation-7</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP. 
+Association where PR-SCTP is enabled is established between tester and IUT.
+Arrange the data at the tester such that one ordered not fragmented user message is sent to the IUT.
+Upon receipt of the SACK-Chunk for the outstanding user message let the tester send an FORWARD-TSN-Chunk to 
+the IUT such that the outstanding user message should be discarded at the receiver.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT upon receipt of the FORWARD-TSN-Chunk sends a SACK-Chunk where the cum_tsn is equal to
+the cum_tsn specified in the FORWARD-TSN-Chunk. Also ensure that the IUT delivers the user message to 
+the userland.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/rfc3758#section-3.6">RFC 3758 [section 3.6]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="receiver-side-implementation-8"><tbody><tr><td>ID</td><td>receiver-side-implementation-8</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP. 
+Association where PR-SCTP is enabled is established between tester and IUT.
+Arrange the data at the tester two ordered not fragmented user messages are sent to the IUT.
+After the IUT sends an SACK for both user messages arrange the dat at the tester such that an FORWARD-TSN-Chunk
+is sent to the IUT where the cum_tsn is pointing to the first user message.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT upon receipt of the FORWARD-TSN-Chunk sends a SACK-Chunk where the cum_tsn is equal to
+the cum_tsn specified in the DATA-Chunk of the second user message. Then also ensure that the IUT after receipt of an
+FORWARD-TSN-Chunk where the cum_tsn is pointing to the second user message sends (again) a SACK-Chunk where the cum_tsn is equal to
+the cum_tsn specified in the DATA-Chunk of the second user message
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/rfc3758#section-3.6">RFC 3758 [section 3.6]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="receiver-side-implementation-9"><tbody><tr><td>ID</td><td>receiver-side-implementation-9</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP. 
+Association where PR-SCTP is enabled is established between tester and IUT.
+Arrange the data at the tester such that only the last DATA-Chunk of an 
+fragmented ordered user message is sent to the IUT. After receipt of 
+an SACK where the last DATA-Chunk is listed at the gap acknowledgements
+send at the tester a FORWARD-TSN to the IUT such that the cum_tsn is pointing to
+the last DATA-Chunk of the fragmented ordered user message. 
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT upon receipt of the FORWARD-TSN-Chunk sends a SACK-Chunk where the cum_tsn is equal to
+the cum_tsn specified in the last DATA-Chunk of the user message. Then also ensure that the IUT has
+discarded the fragmented user message and does not deliver it to the userland.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/rfc3758#section-3.6">RFC 3758 [section 3.6]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="receiver-side-implementation-10"><tbody><tr><td>ID</td><td>receiver-side-implementation-10</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP. 
+Association where PR-SCTP is enabled is established between tester and IUT.
+Arrange the data at the tester such that only the last DATA-Chunk of an 
+fragmented ordered user message is sent to the IUT. After receipt of 
+an SACK where the last DATA-Chunk is listed at the gap acknowledgements
+send at the tester a FORWARD-TSN to the IUT such that the cum_tsn is pointing to
+the last DATA-Chunk of the fragmented ordered user message.
+After receipt of the SACK-Chunk where the cum_tsn is equal to
+the cum_tsn specified in the last DATA-Chunk of the user message transmit the
+first DATA-Chunk of the fragmented user message to the IUT.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT upon receipt of the first DATA-Chunk of the user message sends a SACK-Chunk 
+where the cum_tsn is equal to the cum_tsn specified in the FORWARD-TSN.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/rfc3758#section-3.6">RFC 3758 [section 3.6]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><h2>Error Cases</h2><table class="table table-bordered test_case_table" id="forward-tsn-tlv-too-long"><tbody><tr><td>ID</td><td>forward-tsn-tlv-too-long</td></tr><tr><td>Precondition</td><td>IUT does support PR-SCTP. 
+Association is established between tester and IUT.
+Arrange the data at the tester such that an FORWARD-TSN-Chunk with an
+too long length in the common header is sent to the IUT.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT either discards this invalid chunk or responds with an ABORT-chunk.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/rfc3758#section-3.2">RFC 3758 [section 3.2]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="forward-tsn-tlv-too-short"><tbody><tr><td>ID</td><td>forward-tsn-tlv-too-short</td></tr><tr><td>Precondition</td><td>IUT does support PR-SCTP. 
+Association is established between tester and IUT.
+Arrange the data at the tester such that an FORWARD-TSN-Chunk with an
+too short length in the common header is sent to the IUT.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT either discards this invalid chunk or responds with an ABORT-chunk.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/rfc3758#section-3.2">RFC 3758 [section 3.2]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="forward-tsn-too-short"><tbody><tr><td>ID</td><td>forward-tsn-too-short</td></tr><tr><td>Precondition</td><td>IUT does support PR-SCTP. 
+Association is established between tester and IUT.
+Arrange the data at the tester such that an FORWARD-TSN-Chunk with an
+too short length of 4 bytes is sent to the IUT.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT either discards this invalid chunk or responds with an ABORT-chunk.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/rfc3758#section-3.2">RFC 3758 [section 3.2]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="i-forward-tsn-tlv-too-long"><tbody><tr><td>ID</td><td>i-forward-tsn-tlv-too-long</td></tr><tr><td>Precondition</td><td>IUT does support PR-SCTP and the Stream Schedulers and User Message Interleaving extension. 
+Association is established between tester and IUT.
+Arrange the data at the tester such that an I-FORWARD-TSN-Chunk with an
+too long length in the common header is sent to the IUT.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT either discards this invalid chunk or responds with an ABORT-chunk.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/draft-ietf-tsvwg-sctp-ndata-09#page-9">Stream Schedulers and User Message Interleaving for SCTP [section 2.3.1]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="i-forward-tsn-tlv-too-short"><tbody><tr><td>ID</td><td>i-forward-tsn-tlv-too-short</td></tr><tr><td>Precondition</td><td>IUT does support PR-SCTP and the Stream Schedulers and User Message Interleaving extension. 
+Association is established between tester and IUT.
+Arrange the data at the tester such that an I-FORWARD-TSN-Chunk with an
+too short length in the common header is sent to the IUT.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT either discards this invalid chunk or responds with an ABORT-chunk.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/draft-ietf-tsvwg-sctp-ndata-09#page-9">Stream Schedulers and User Message Interleaving for SCTP [section 2.3.1]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="i-forward-tsn-too-short"><tbody><tr><td>ID</td><td>i-forward-tsn-too-short</td></tr><tr><td>Precondition</td><td>IUT does support PR-SCTP and the Stream Schedulers and User Message Interleaving extension. 
+Association is established between tester and IUT.
+Arrange the data at the tester such that an I-FORWARD-TSN-Chunk with an
+too short length of 4 bytes is sent to the IUT.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT either discards this invalid chunk or responds with an ABORT-chunk.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/draft-ietf-tsvwg-sctp-ndata-09#page-9">Stream Schedulers and User Message Interleaving for SCTP [section 2.3.1]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="init-with-forward-tsn-tlv-too-long"><tbody><tr><td>ID</td><td>init-with-forward-tsn-tlv-too-long</td></tr><tr><td>Precondition</td><td>IUT does support PR-SCTP. 
+Association is not established between tester and IUT.
+Arrange the data at the tester such that an INIT-Chunk with a forward-tsn-supported parameter
+with an invalid too long length in the common header is sent to the IUT.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT either discards this invalid chunk or responds with an ABORT-chunk.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/rfc3758#section-3.1">RFC 3758 [section 3.1]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="init-with-forward-tsn-tlv-too-short"><tbody><tr><td>ID</td><td>init-with-forward-tsn-tlv-too-short</td></tr><tr><td>Precondition</td><td>IUT does support PR-SCTP. 
+Association is not established between tester and IUT.
+Arrange the data at the tester such that an INIT-Chunk with a forward-tsn-supported parameter
+with an invalid too short length in the common header is sent to the IUT.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT either discards this invalid chunk or responds with an ABORT-chunk.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/rfc3758#section-3.1">RFC 3758 [section 3.1]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="init-with-forward-tsn-too-long"><tbody><tr><td>ID</td><td>init-with-forward-tsn-too-long</td></tr><tr><td>Precondition</td><td>IUT does support PR-SCTP. 
+Association is not established between tester and IUT.
+Arrange the data at the tester such that an INIT-Chunk with a forward-tsn-supported parameter
+where the length of the forward-tsn-supported parameter is too long (e.g. 8 bytes instead of 4 bytes)
+is sent to the IUT.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT either discards this invalid chunk or responds with an ABORT-chunk.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/rfc3758#section-3.1">RFC 3758 [section 3.1]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="init-with-forward-tsn-too-short"><tbody><tr><td>ID</td><td>init-with-forward-tsn-too-short</td></tr><tr><td>Precondition</td><td>IUT does support PR-SCTP. 
+Association is not established between tester and IUT.
+Arrange the data at the tester such that an INIT-Chunk with a forward-tsn-supported parameter
+where the length of the forward-tsn-supported parameter is too short (e.g. 2 bytes instead of 4 bytes)
+is sent to the IUT.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT either discards this invalid chunk or responds with an ABORT-chunk.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/rfc3758#section-3.1">RFC 3758 [section 3.1]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><h2>Handshake with I-FORWARD-TSN</h2><table class="table table-bordered test_case_table" id="handshake-with-i-forward-tsn-1"><tbody><tr><td>ID</td><td>handshake-with-i-forward-tsn-1</td></tr><tr><td>Precondition</td><td>IUT does not support PR-SCTP and the Stream Schedulers and User Message Interleaving extension. 
+Association is not established between tester and IUT.
+Arrange the data at the tester such that an INIT-Chunk with a forward-tsn-supported parameter is sent to the IUT.
+Also arrange the data such that in the INIT-Chunk the FORWARD-TSN and the I-FORWARD-TSN-Chunk are listed
+at the supported extensions parameter.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT responds with an INIT-ACK-Chunk where the forward-tsn-supported parameter is listed at the 
+unrecognized parameters. Also ensure that the IUT does not list the FORWARD-TSN and the I-FORWARD-TSN-Chunk
+at the supported extensions parameter in the INIT-ACK-Chunk.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/rfc3758#section-3.3.2">RFC 3758 [section 3.3.2]</a>, <a href="https://tools.ietf.org/html/rfc4960#section-3.3.3.1">RFC 4960 [section 3.3.3.1]</a>,
+<a href="https://tools.ietf.org/html/draft-ietf-tsvwg-sctp-ndata-09#page-9">Stream Schedulers and User Message Interleaving for SCTP [section 2.3.1]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="handshake-with-i-forward-tsn-2"><tbody><tr><td>ID</td><td>handshake-with-i-forward-tsn-2</td></tr><tr><td>Precondition</td><td>IUT does not support PR-SCTP and the Stream Schedulers and User Message Interleaving extension. 
+Association is not established between tester and IUT. 
+Configure the IUT to send an INIT-Chunk to the tester.
+</td></tr><tr><td>Purpose</td><td>Ensure that the received INIT-Chunk from the IUT does not contain the forward-tsn-supported parameter in the optional parameter list.
+Also ensure that the IUT does not list the FORWARD-TSN and the I-FORWARD-TSN-Chunk
+at the supported extensions parameter in the INIT-ACK-Chunk.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/rfc3758#section-3.3.2">RFC 3758 [section 3.3.2]</a>, <a href="https://tools.ietf.org/html/rfc4960#section-3.3.3.1">RFC 4960 [section 3.3.3.1]</a>,
+<a href="https://tools.ietf.org/html/draft-ietf-tsvwg-sctp-ndata-09#page-9">Stream Schedulers and User Message Interleaving for SCTP [section 2.3.1]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="handshake-with-i-forward-tsn-3"><tbody><tr><td>ID</td><td>handshake-with-i-forward-tsn-3</td></tr><tr><td>Precondition</td><td>IUT does not support PR-SCTP and the Stream Schedulers and User Message Interleaving extension. 
+Association is not established between tester and IUT.
+Configure the IUT to send an INIT-Chunk to the tester.
+The tester responds with an INIT-ACK where the forward-tsn-supported parameter is set. 
+Also arrange the data such that in the INIT-ACK-Chunk the FORWARD-TSN and the I-FORWARD-TSN-Chunk are listed
+at the supported extensions parameter.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT upon receipt of an INIT-ACK-chunk with a forward-tsn-supported parameter sends an ERROR-Chunk 
+with the cause "invalid mandatory parameter".
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/rfc3758#section-3.3.2">RFC 3758 [section 3.3.2]</a>, <a href="https://tools.ietf.org/html/rfc4960#section-3.3.3.1">RFC 4960 [section 3.3.3.1]</a>,
+<a href="https://tools.ietf.org/html/draft-ietf-tsvwg-sctp-ndata-09#page-9">Stream Schedulers and User Message Interleaving for SCTP [section 2.3.1]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="handshake-with-i-forward-tsn-4"><tbody><tr><td>ID</td><td>handshake-with-i-forward-tsn-4</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP and the Stream Schedulers and User Message Interleaving extension.
+Association is established between tester and IUT, where in the INIT-Chunk sent by the tester the forward-tsn-supported parameter is NOT set
+and the FORWARD-TSN and the I-FORWARD-TSN-Chunk are NOT listed at the supported extensions parameter.
+Arrange the data at the tester that an I-FORWARD-TSN chunk is sent to the IUT.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT upon receipt of an I-FORWARD-TSN chunk at an association where PR-SCTP is not supported sends an ABORT-Chunk 
+where the ABORT-Chunk may include the protocol violation error cause.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/rfc3758#section-3.3.2">RFC 3758 [section 3.3.2]</a>, <a href="https://tools.ietf.org/html/rfc4960#section-3.3.3.1">RFC 4960 [section 3.3.3.1]</a>,
+<a href="https://tools.ietf.org/html/draft-ietf-tsvwg-sctp-ndata-09#page-9">Stream Schedulers and User Message Interleaving for SCTP [section 2.3.1]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="handshake-with-i-forward-tsn-5"><tbody><tr><td>ID</td><td>handshake-with-i-forward-tsn-5</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP and the Stream Schedulers and User Message Interleaving extension.
+Association is established between tester and IUT, where in the INIT-Chunk sent by the tester the forward-tsn-supported parameter is set
+and the FORWARD-TSN and the I-FORWARD-TSN-Chunk are listed at the supported extensions parameter.
+Make sure that the IUT has not enabled the User Message Interleaving extension.
+Arrange the data at the tester that an I-FORWARD-TSN chunk is sent to the IUT.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT upon receipt of an I-FORWARD-TSN chunk at an association where the User Message Interleaving extension is not enabled 
+sends an ABORT-Chunk where the ABORT-Chunk may include the protocol violation error cause.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/rfc3758#section-3.3.2">RFC 3758 [section 3.3.2]</a>, <a href="https://tools.ietf.org/html/rfc4960#section-3.3.3.1">RFC 4960 [section 3.3.3.1]</a>,
+<a href="https://tools.ietf.org/html/draft-ietf-tsvwg-sctp-ndata-09#page-9">Stream Schedulers and User Message Interleaving for SCTP [section 2.3.1]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="handshake-with-i-forward-tsn-6"><tbody><tr><td>ID</td><td>handshake-with-i-forward-tsn-6</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP and the Stream Schedulers and User Message Interleaving extension.
+Association is established between tester and IUT, where in the INIT-Chunk sent by the tester the forward-tsn-supported parameter is set
+and the FORWARD-TSN, the I-FORWARD-TSN and the I-DATA-Chunk are listed at the supported extensions parameter.
+Make sure that the IUT has enabled the User Message Interleaving extension.
+Let the IUT send one ordered unreliable DATA-Chunk to the tester.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT has enabled PR-SCTP and uses correct I-DATA and I-FORWARD-TSN-Chunks for this association.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/rfc3758#section-3.3.2">RFC 3758 [section 3.3.2]</a>, <a href="https://tools.ietf.org/html/rfc4960#section-3.3.3.1">RFC 4960 [section 3.3.3.1]</a>,
+<a href="https://tools.ietf.org/html/draft-ietf-tsvwg-sctp-ndata-09#page-9">Stream Schedulers and User Message Interleaving for SCTP [section 2.3.1]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="handshake-with-i-forward-tsn-7"><tbody><tr><td>ID</td><td>handshake-with-i-forward-tsn-7</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP and the Stream Schedulers and User Message Interleaving extension.
+Association is established between tester and IUT, where in the INIT-Chunk sent by the tester the forward-tsn-supported parameter is set
+and the FORWARD-TSN, the I-FORWARD-TSN and the I-DATA-Chunk are listed at the supported extensions parameter.
+Make sure that the IUT has enabled the User Message Interleaving extension.
+Let the IUT send one unordered unreliable DATA-Chunk to the tester.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT has enabled PR-SCTP and uses correct I-DATA and I-FORWARD-TSN-Chunks for this association.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/rfc3758#section-3.3.2">RFC 3758 [section 3.3.2]</a>, <a href="https://tools.ietf.org/html/rfc4960#section-3.3.3.1">RFC 4960 [section 3.3.3.1]</a>,
+<a href="https://tools.ietf.org/html/draft-ietf-tsvwg-sctp-ndata-09#page-9">Stream Schedulers and User Message Interleaving for SCTP [section 2.3.1]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="handshake-with-i-forward-tsn-8"><tbody><tr><td>ID</td><td>handshake-with-i-forward-tsn-8</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP and the Stream Schedulers and User Message Interleaving extension.
+Association is established between tester and IUT, where in the INIT-Chunk sent by the tester the forward-tsn-supported parameter is set
+and the FORWARD-TSN and the I-FORWARD-TSN but NOT the I-DATA are listed at the supported extensions parameter.
+Make sure that the IUT has enabled the User Message Interleaving extension.
+Let the IUT send one ordered unreliable DATA-Chunk to the tester.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT has enabled PR-SCTP and has not enabled the User Message Interleaving extension for this association and
+therefore uses FORWARD-TSN- and DATA-Chunks.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/rfc3758#section-3.3.2">RFC 3758 [section 3.3.2]</a>, <a href="https://tools.ietf.org/html/rfc4960#section-3.3.3.1">RFC 4960 [section 3.3.3.1]</a>,
+<a href="https://tools.ietf.org/html/draft-ietf-tsvwg-sctp-ndata-09#page-9">Stream Schedulers and User Message Interleaving for SCTP [section 2.3.1]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="handshake-with-i-forward-tsn-9"><tbody><tr><td>ID</td><td>handshake-with-i-forward-tsn-9</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP and the Stream Schedulers and User Message Interleaving extension.
+Association is established between tester and IUT, where in the INIT-Chunk sent by the tester the forward-tsn-supported parameter is set
+and the FORWARD-TSN and the I-DATA but NOT the I-FORWARD-TSN are listed at the supported extensions parameter.
+Make sure that the IUT has enabled the User Message Interleaving extension.
+Let the IUT send one ordered unreliable DATA-Chunk to the tester.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT has enabled PR-SCTP and has not enabled the User Message Interleaving extension for this association and
+therefore uses FORWARD-TSN- and DATA-Chunks.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/rfc3758#section-3.3.2">RFC 3758 [section 3.3.2]</a>, <a href="https://tools.ietf.org/html/rfc4960#section-3.3.3.1">RFC 4960 [section 3.3.3.1]</a>,
+<a href="https://tools.ietf.org/html/draft-ietf-tsvwg-sctp-ndata-09#page-9">Stream Schedulers and User Message Interleaving for SCTP [section 2.3.1]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="handshake-with-i-forward-tsn-10"><tbody><tr><td>ID</td><td>handshake-with-i-forward-tsn-10</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP and the Stream Schedulers and User Message Interleaving extension.
+Association is established between tester and IUT, where in the INIT-Chunk sent by the tester the forward-tsn-supported parameter is set
+and the FORWARD-TSN but NOT the I-FORWARD-TSN and the I-DATA are listed at the supported extensions parameter.
+Make sure that the IUT has enabled the User Message Interleaving extension.
+Let the IUT send one ordered unreliable DATA-Chunk to the tester.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT has enabled PR-SCTP and has not enabled the User Message Interleaving extension for this association and
+therefore uses FORWARD-TSN- and DATA-Chunks.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/rfc3758#section-3.3.2">RFC 3758 [section 3.3.2]</a>, <a href="https://tools.ietf.org/html/rfc4960#section-3.3.3.1">RFC 4960 [section 3.3.3.1]</a>,
+<a href="https://tools.ietf.org/html/draft-ietf-tsvwg-sctp-ndata-09#page-9">Stream Schedulers and User Message Interleaving for SCTP [section 2.3.1]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="handshake-with-i-forward-tsn-11"><tbody><tr><td>ID</td><td>handshake-with-i-forward-tsn-11</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP and the Stream Schedulers and User Message Interleaving extension.
+Association is established between tester and IUT.
+Configure the IUT to send an INIT-Chunk to the tester.
+The tester responds with an INIT-ACK, where in the INIT-Chunk sent by the tester the forward-tsn-supported parameter is set
+and the FORWARD-TSN, the I-FORWARD-TSN and the I-DATA are listed at the supported extensions parameter.
+Make sure that the IUT has enabled the User Message Interleaving extension.
+Let the IUT send one ordered unreliable DATA-Chunk to the tester.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT has enabled PR-SCTP and uses correct I-DATA and I-FORWARD-TSN-Chunks for this association.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/rfc3758#section-3.3.2">RFC 3758 [section 3.3.2]</a>, <a href="https://tools.ietf.org/html/rfc4960#section-3.3.3.1">RFC 4960 [section 3.3.3.1]</a>,
+<a href="https://tools.ietf.org/html/draft-ietf-tsvwg-sctp-ndata-09#page-9">Stream Schedulers and User Message Interleaving for SCTP [section 2.3.1]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="handshake-with-i-forward-tsn-12"><tbody><tr><td>ID</td><td>handshake-with-i-forward-tsn-12</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP and the Stream Schedulers and User Message Interleaving extension.
+Association is established between tester and IUT.
+Configure the IUT to send an INIT-Chunk to the tester.
+The tester responds with an INIT-ACK, where in the INIT-Chunk sent by the tester the forward-tsn-supported parameter is set
+and the FORWARD-TSN, the I-FORWARD-TSN and the I-DATA are listed at the supported extensions parameter.
+Make sure that the IUT has enabled the User Message Interleaving extension.
+Let the IUT send one unordered unreliable DATA-Chunk to the tester.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT has enabled PR-SCTP and uses correct I-DATA and I-FORWARD-TSN-Chunks for this association.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/rfc3758#section-3.3.2">RFC 3758 [section 3.3.2]</a>, <a href="https://tools.ietf.org/html/rfc4960#section-3.3.3.1">RFC 4960 [section 3.3.3.1]</a>,
+<a href="https://tools.ietf.org/html/draft-ietf-tsvwg-sctp-ndata-09#page-9">Stream Schedulers and User Message Interleaving for SCTP [section 2.3.1]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="handshake-with-i-forward-tsn-13"><tbody><tr><td>ID</td><td>handshake-with-i-forward-tsn-13</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP and the Stream Schedulers and User Message Interleaving extension.
+Association is established between tester and IUT.
+Configure the IUT to send an INIT-Chunk to the tester.
+The tester responds with an INIT-ACK, where in the INIT-Chunk sent by the tester the forward-tsn-supported parameter is set
+and the FORWARD-TSN, the I-FORWARD-TSN but NOT the I-DATA are listed at the supported extensions parameter.
+Make sure that the IUT has enabled the User Message Interleaving extension.
+Let the IUT send one ordered unreliable DATA-Chunk to the tester.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT has enabled PR-SCTP and has not enabled the User Message Interleaving extension for this association and
+therefore uses FORWARD-TSN- and DATA-Chunks.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/rfc3758#section-3.3.2">RFC 3758 [section 3.3.2]</a>, <a href="https://tools.ietf.org/html/rfc4960#section-3.3.3.1">RFC 4960 [section 3.3.3.1]</a>,
+<a href="https://tools.ietf.org/html/draft-ietf-tsvwg-sctp-ndata-09#page-9">Stream Schedulers and User Message Interleaving for SCTP [section 2.3.1]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="handshake-with-i-forward-tsn-14"><tbody><tr><td>ID</td><td>handshake-with-i-forward-tsn-14</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP and the Stream Schedulers and User Message Interleaving extension.
+Association is established between tester and IUT.
+Configure the IUT to send an INIT-Chunk to the tester.
+The tester responds with an INIT-ACK, where in the INIT-Chunk sent by the tester the forward-tsn-supported parameter is set
+and the FORWARD-TSN, the I-DATA but NOT the I-FORWARD-TSN are listed at the supported extensions parameter.
+Make sure that the IUT has enabled the User Message Interleaving extension.
+Let the IUT send one ordered unreliable DATA-Chunk to the tester.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT has enabled PR-SCTP and has not enabled the User Message Interleaving extension for this association and
+therefore uses FORWARD-TSN- and DATA-Chunks.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/rfc3758#section-3.3.2">RFC 3758 [section 3.3.2]</a>, <a href="https://tools.ietf.org/html/rfc4960#section-3.3.3.1">RFC 4960 [section 3.3.3.1]</a>,
+<a href="https://tools.ietf.org/html/draft-ietf-tsvwg-sctp-ndata-09#page-9">Stream Schedulers and User Message Interleaving for SCTP [section 2.3.1]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="handshake-with-i-forward-tsn-15"><tbody><tr><td>ID</td><td>handshake-with-i-forward-tsn-15</td></tr><tr><td>Precondition</td><td>IUT supports PR-SCTP and the Stream Schedulers and User Message Interleaving extension.
+Association is established between tester and IUT.
+Configure the IUT to send an INIT-Chunk to the tester.
+The tester responds with an INIT-ACK, where in the INIT-Chunk sent by the tester the forward-tsn-supported parameter is set
+and the FORWARD-TSN but NOT the I-FORWARD-TSN and the I-DATA are listed at the supported extensions parameter.
+Make sure that the IUT has enabled the User Message Interleaving extension.
+Let the IUT send one ordered unreliable DATA-Chunk to the tester.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT has enabled PR-SCTP and has not enabled the User Message Interleaving extension for this association and
+therefore uses FORWARD-TSN- and DATA-Chunks.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/rfc3758#section-3.3.2">RFC 3758 [section 3.3.2]</a>, <a href="https://tools.ietf.org/html/rfc4960#section-3.3.3.1">RFC 4960 [section 3.3.3.1]</a>,
+<a href="https://tools.ietf.org/html/draft-ietf-tsvwg-sctp-ndata-09#page-9">Stream Schedulers and User Message Interleaving for SCTP [section 2.3.1]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><h2>Handshake with NR-SACK</h2><table class="table table-bordered test_case_table" id="handshake-with-nr-sack-1"><tbody><tr><td>ID</td><td>handshake-with-nr-sack-1</td></tr><tr><td>Precondition</td><td>IUT does not support the NR-SACK extension. 
+Association is not established between tester and IUT.
+Arrange the data at the tester such that in the INIT-Chunk the NR-SACK-Chunk is listed
+at the supported extensions parameter.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT does not list the NR-SACK-Chunk at the supported extensions parameter in the INIT-ACK-Chunk.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/draft-tuexen-tsvwg-sctp-multipath-13#page-6">Load Sharing for SCTP [section 4.1]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="handshake-with-nr-sack-2"><tbody><tr><td>ID</td><td>handshake-with-nr-sack-2</td></tr><tr><td>Precondition</td><td>IUT does not support the NR-SACK extension. 
+Association is not established between tester and IUT. 
+Configure the IUT to send an INIT-Chunk to the tester.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT does not list the NR-SACK-Chunk at the supported extensions parameter in the INIT-Chunk.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/draft-tuexen-tsvwg-sctp-multipath-13#page-6">Load Sharing for SCTP [section 4.1]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="handshake-with-nr-sack-3"><tbody><tr><td>ID</td><td>handshake-with-nr-sack-3</td></tr><tr><td>Precondition</td><td>IUT does not support the NR-SACK extension.
+Association is not established between tester and IUT.
+Configure the IUT to send an INIT-Chunk to the tester.
+The tester responds with an INIT-ACK where the NR-SACK-Chunk is listed
+at the supported extensions parameter.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT has disabled the NR-SACK extension for this association.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/draft-tuexen-tsvwg-sctp-multipath-13#page-6">Load Sharing for SCTP [section 4.1]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="handshake-with-nr-sack-4"><tbody><tr><td>ID</td><td>handshake-with-nr-sack-4</td></tr><tr><td>Precondition</td><td>IUT does support the NR-SACK extension. 
+Association is not established between tester and IUT.
+Arrange the data at the tester such that in the INIT-Chunk the NR-SACK-Chunk is NOT listed
+at the supported extensions parameter. Then complete the handshake to establish
+the association.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT has disabled the NR-SACK extension for this association.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/draft-tuexen-tsvwg-sctp-multipath-13#page-6">Load Sharing for SCTP [section 4.1]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="handshake-with-nr-sack-5"><tbody><tr><td>ID</td><td>handshake-with-nr-sack-5</td></tr><tr><td>Precondition</td><td>IUT does support the NR-SACK extension.
+Association is not established between tester and IUT.
+Configure the IUT to send an INIT-Chunk to the tester.
+The tester responds with an INIT-ACK where the NR-SACK-Chunk is NOT listed
+at the supported extensions parameter.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT has disabled the NR-SACK extension for this association.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/draft-tuexen-tsvwg-sctp-multipath-13#page-6">Load Sharing for SCTP [section 4.1]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="handshake-with-nr-sack-6"><tbody><tr><td>ID</td><td>handshake-with-nr-sack-6</td></tr><tr><td>Precondition</td><td>IUT does support the NR-SACK extension.
+Association is not established between tester and IUT.
+Configure the IUT to send an INIT-Chunk to the tester.
+The tester responds with an INIT-ACK where the NR-SACK-Chunk is listed
+at the supported extensions parameter.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT has enabled the NR-SACK extension for this association.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/draft-tuexen-tsvwg-sctp-multipath-13#page-6">Load Sharing for SCTP [section 4.1]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="handshake-with-nr-sack-7"><tbody><tr><td>ID</td><td>handshake-with-nr-sack-7</td></tr><tr><td>Precondition</td><td>IUT does support the NR-SACK extension.
+Association is established between tester and IUT, where the NR-SACK extension has been enabled.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT uses NR-SACK-Chunk for acknowledgements. Also ensure that when the tester
+sends SACK-Chunks the IUT always sends NR-SACK-Chunks and never a mixture of both.
+</td></tr><tr><td>References</td><td><span class="todo">Needs clarification in the internet draft</span>
+<a href="https://tools.ietf.org/html/draft-tuexen-tsvwg-sctp-multipath-13#page-6">Load Sharing for SCTP [section 4.1]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="handshake-with-nr-sack-8"><tbody><tr><td>ID</td><td>handshake-with-nr-sack-8</td></tr><tr><td>Precondition</td><td>IUT does support the NR-SACK extension.
+Association is established between tester and IUT, where the NR-SACK extension has been enabled.
+Arrange the data at the tester such that DATA-Chunks from the IUT are ackowledged with SACK- and
+NR-SACK-Chunks.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT either accepts this misbehaviour by accepting both types or sends
+an ABORT-Chunk to terminate the association.
+</td></tr><tr><td>References</td><td><span class="todo">Needs clarification in the internet draft</span>
+<a href="https://tools.ietf.org/html/draft-tuexen-tsvwg-sctp-multipath-13#page-6">Load Sharing for SCTP [section 4.1]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><h2>Data Sender with NR-SACK</h2><table class="table table-bordered test_case_table" id="data-sender-1"><tbody><tr><td>ID</td><td>data-sender-1</td></tr><tr><td>Precondition</td><td>IUT does support the NR-SACK extension. 
+Association is established between tester and IUT where both sides have announced support for NR-SACK-Chunks at the handshake.
+Arrange the data at the IUT such that it sends one not fragmented user message to the tester.
+Then send at the tester an NR-SACK-Chunk which acknowledges the outstanding DATA-Chunk by adjusting the cum_tsn-value.
+Then send another not fragmented user message from the IUT to the tester.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT transmits the second user message.
+Then also acknowledge the second user message.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/draft-tuexen-tsvwg-sctp-multipath-13#section-4.4.2">Load Sharing for SCTP [section 4.4.2]</a>,
+<a href="https://tools.ietf.org/html/rfc4960#section-6.2.1">RFC 4960 [section 6.2.1]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="data-sender-2"><tbody><tr><td>ID</td><td>data-sender-2</td></tr><tr><td>Precondition</td><td>IUT does support the NR-SACK extension. 
+Association is established between tester and IUT where both sides have announced support for NR-SACK-Chunks at the handshake.
+Arrange the data at the IUT such that it sends two not fragmented user message to the tester.
+Then send at the tester an NR-SACK-Chunk which acknowledges the second user messsage in the gap-acknowledgements.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT retransmits the first user message.
+Then also acknowledge the first user message.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/draft-tuexen-tsvwg-sctp-multipath-13#section-4.4.2">Load Sharing for SCTP [section 4.4.2]</a>,
+<a href="https://tools.ietf.org/html/rfc4960#section-6.2.1">RFC 4960 [section 6.2.1]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="data-sender-3"><tbody><tr><td>ID</td><td>data-sender-3</td></tr><tr><td>Precondition</td><td>IUT does support the NR-SACK extension. 
+Association is established between tester and IUT where both sides have announced support for NR-SACK-Chunks at the handshake.
+Arrange the data at the IUT such that it sends two not fragmented user message to the tester.
+Then first send at the tester an NR-SACK-Chunk which acknowledges the second user messsage in the gap-acknowledgements.
+After a short time (for example 100 ms) then send another NR-SACK-Chunk at the tester that acknowledges both user messages.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT does not retransmit any DATA-Chunk. 
+After a short time then also let the IUT send another third not fragmented user message.
+Ensure that it does transmit this message to the tester and then also acknowledge this user message.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/draft-tuexen-tsvwg-sctp-multipath-13#section-4.4.2">Load Sharing for SCTP [section 4.4.2]</a>,
+<a href="https://tools.ietf.org/html/rfc4960#section-6.2.1">RFC 4960 [section 6.2.1]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="data-sender-4"><tbody><tr><td>ID</td><td>data-sender-4</td></tr><tr><td>Precondition</td><td>IUT does support the NR-SACK extension. 
+Association is established between tester and IUT where both sides have announced support for NR-SACK-Chunks at the handshake.
+Arrange the data at the IUT such that it sends two not fragmented user message to the tester.
+Then send at the tester an NR-SACK-Chunk which acknowledges the second user messsage in the gap-acknowledgements.
+Let the IUT retransmit the first user message and then send an NR-SACK-Chunk that only acknowledges the first user message.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT retransmits the second user message.
+Then also acknowledge the second user message.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/draft-tuexen-tsvwg-sctp-multipath-13#section-4.4.2">Load Sharing for SCTP [section 4.4.2]</a>,
+<a href="https://tools.ietf.org/html/rfc4960#section-6.2.1">RFC 4960 [section 6.2.1]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="data-sender-5"><tbody><tr><td>ID</td><td>data-sender-5</td></tr><tr><td>Precondition</td><td>IUT does support the NR-SACK extension. 
+Association is established between tester and IUT where both sides have announced support for NR-SACK-Chunks at the handshake.
+Arrange the data at the IUT such that it sends two not fragmented user message to the tester.
+Then send at the tester an NR-SACK-Chunk which acknowledges the second user messsage in the nr-gap-acknowledgements.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT retransmits the first user message.
+Then also acknowledge the first user message.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/draft-tuexen-tsvwg-sctp-multipath-13#section-4.4.2">Load Sharing for SCTP [section 4.4.2]</a>,
+<a href="https://tools.ietf.org/html/rfc4960#section-6.2.1">RFC 4960 [section 6.2.1]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="data-sender-6"><tbody><tr><td>ID</td><td>data-sender-6</td></tr><tr><td>Precondition</td><td>IUT does support the NR-SACK extension. 
+Association is established between tester and IUT where both sides have announced support for NR-SACK-Chunks at the handshake.
+Arrange the data at the IUT such that it sends three not fragmented user message to the tester.
+Then send at the tester an NR-SACK-Chunk which acknowledges the first user message in the gap-acknowledgements and
+the second user messsage in the nr-gap-acknowledgements.
+Expect the IUT to retransmit the third user message. Then send an NR-SACK-Chunk which acknowledges the second and third
+user message in the nr-gap-acknowledgements.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT retransmits the first user message this time.
+Then also acknowledge the first user message.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/draft-tuexen-tsvwg-sctp-multipath-13#section-4.4.2">Load Sharing for SCTP [section 4.4.2]</a>,
+<a href="https://tools.ietf.org/html/rfc4960#section-6.2.1">RFC 4960 [section 6.2.1]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="data-sender-7"><tbody><tr><td>ID</td><td>data-sender-7</td></tr><tr><td>Precondition</td><td>IUT does support the NR-SACK extension. 
+Association is established between tester and IUT where both sides have announced support for NR-SACK-Chunks at the handshake.
+Arrange the data at the IUT such that it sends three not fragmented user message to the tester.
+Then send at the tester an NR-SACK-Chunk which acknowledges the first user message in the gap-acknowledgements and
+the second user messsage in the nr-gap-acknowledgements.
+Expect the IUT to retransmit the third user message. Then send an NR-SACK-Chunk which acknowledges the second and third
+user message in the nr-gap-acknowledgements.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT retransmits the first user message this time.
+Then send an NR-SACK-Chunk at the tester where the first user message is acknowledged in the gap-blocks, the
+second and third user messages are acknowledged in the nr-gap-blocks. Ensure that this packet is ignored by the IUT.
+Then send an NR-SACK-Chunk where all user messages are acknowledged by the cum_tsn-value.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/draft-tuexen-tsvwg-sctp-multipath-13#section-4.4.2">Load Sharing for SCTP [section 4.4.2]</a>,
+<a href="https://tools.ietf.org/html/rfc4960#section-6.2.1">RFC 4960 [section 6.2.1]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="data-sender-8"><tbody><tr><td>ID</td><td>data-sender-8</td></tr><tr><td>Precondition</td><td>IUT does support the NR-SACK extension. 
+Association is established between tester and IUT where both sides have announced support for NR-SACK-Chunks at the handshake.
+Arrange the data at the IUT such that it sends three not fragmented user message to the tester.
+Then send at the tester an NR-SACK-Chunk which acknowledges the first user message in the gap-acknowledgements,
+the second user messsage in the nr-gap-acknowledgements and second user message is listed at the dups.
+Expect the IUT to retransmit the third user message. Then send an NR-SACK-Chunk which acknowledges the second and third
+user message in the gap AND nr-gap-acknowledgements.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT retransmits the first user message.
+Then send an NR-SACK-Chunk where all user messages are acknowledged by the cum_tsn-value.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/draft-tuexen-tsvwg-sctp-multipath-13#section-4.4.2">Load Sharing for SCTP [section 4.4.2]</a>,
+<a href="https://tools.ietf.org/html/rfc4960#section-6.2.1">RFC 4960 [section 6.2.1]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="data-sender-9"><tbody><tr><td>ID</td><td>data-sender-9</td></tr><tr><td>Precondition</td><td>IUT does support the NR-SACK extension. 
+Association is established between tester and IUT where both sides have announced support for NR-SACK-Chunks at the handshake.
+Arrange the data at the IUT such that it sends one not fragmented user message to the tester.
+Then send at the tester an NR-SACK-Chunk which has a huge cum_tsn-value (e.g. +99999 relative to the last tsn)
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT sends an ABORT-Chunk, because it has not sent any user messages with such a high tsn value.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/draft-tuexen-tsvwg-sctp-multipath-13#section-4.4.2">Load Sharing for SCTP [section 4.4.2]</a>,
+<a href="https://tools.ietf.org/html/rfc4960#section-6.2.1">RFC 4960 [section 6.2.1]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="data-sender-10"><tbody><tr><td>ID</td><td>data-sender-10</td></tr><tr><td>Precondition</td><td>IUT does support the NR-SACK extension. 
+Association is established between tester and IUT where both sides have announced support for NR-SACK-Chunks at the handshake.
+Arrange the data at the IUT such that it sends one not fragmented user message to the tester.
+Then send at the tester an NR-SACK-Chunk which acknowledges the user message with the cum_tsn-value.
+Arrange the data at the IUT such that it sends one more not fragmented user message to the tester.
+Then send at the tester the same NR-SACK-Chunk as before.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT retransmits the second user message. Then also acknowledge the second user message.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/draft-tuexen-tsvwg-sctp-multipath-13#section-4.4.2">Load Sharing for SCTP [section 4.4.2]</a>,
+<a href="https://tools.ietf.org/html/rfc4960#section-6.2.1">RFC 4960 [section 6.2.1]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="data-sender-11"><tbody><tr><td>ID</td><td>data-sender-11</td></tr><tr><td>Precondition</td><td>IUT does support the NR-SACK extension. 
+Association is established between tester and IUT where both sides have announced support for NR-SACK-Chunks at the handshake.
+Arrange the data at the IUT such that it sends three not fragmented user message to the tester.
+Let the first and third user message be ordered and the second message be unordered.
+Then send at the tester an NR-SACK-Chunk which acknowledges the second user message at the nr-gap-blocks.
+Expect the IUT to retransmit the first user message.
+Then send at the tester an NR-SACK-Chunk which acknowledges first user message at the gap-blocks and the second user message at the nr-gap-blocks.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT retransmits the third user message now. Then acknowledge all user messages with an appropriate NR-SACK-Chunk.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/draft-tuexen-tsvwg-sctp-multipath-13#section-4.4.2">Load Sharing for SCTP [section 4.4.2]</a>,
+<a href="https://tools.ietf.org/html/rfc4960#section-6.2.1">RFC 4960 [section 6.2.1]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="data-sender-12"><tbody><tr><td>ID</td><td>data-sender-12</td></tr><tr><td>Precondition</td><td>IUT does support the NR-SACK extension. 
+Association is established between tester and IUT where both sides have announced support for NR-SACK-Chunks at the handshake.
+Arrange the data at the IUT such that it sends three not fragmented user message to the tester.
+Then send at the tester an NR-SACK-Chunk which acknowledges the first and second user message in the nr-gap-acknowledgements.
+Expect the IUT to retransmit the third user message.
+Then send again an NR-SACK-Chunk which acknowledges the first and second user message in the nr-gap-acknowledgements.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT ignores this duplicated out-of-date NR-SACK-Chunk and
+retransmits the third user message again. Then also acknowledge the third user message.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/draft-tuexen-tsvwg-sctp-multipath-13#section-4.4.2">Load Sharing for SCTP [section 4.4.2]</a>,
+<a href="https://tools.ietf.org/html/rfc4960#section-6.2.1">RFC 4960 [section 6.2.1]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="data-sender-13"><tbody><tr><td>ID</td><td>data-sender-13</td></tr><tr><td>Precondition</td><td>IUT does support the NR-SACK extension. 
+Association is established between tester and IUT where both sides have announced support for NR-SACK-Chunks at the handshake.
+Arrange the data at the IUT such that it sends three not fragmented user message to the tester.
+Then send at the tester an NR-SACK-Chunk which acknowledges the first and second user message in the nr-gap-acknowledgements.
+Expect the IUT to retransmit the third user message.
+Then send an NR-SACK-Chunk which only acknowledges the first user message with the cum_tsn-value.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT ignores the second out-of-date NR-SACK-Chunk and
+retransmits the third user message again. Then also acknowledge the third user message.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/draft-tuexen-tsvwg-sctp-multipath-13#section-4.4.2">Load Sharing for SCTP [section 4.4.2]</a>,
+<a href="https://tools.ietf.org/html/rfc4960#section-6.2.1">RFC 4960 [section 6.2.1]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="data-sender-14"><tbody><tr><td>ID</td><td>data-sender-14</td></tr><tr><td>Precondition</td><td>IUT does support the NR-SACK extension. 
+Association is established between tester and IUT where both sides have announced support for NR-SACK-Chunks at the handshake.
+Arrange the data at the IUT such that it sends three not fragmented user message to the tester.
+Then send at the tester an NR-SACK-Chunk which acknowledges the first and second user message in the gap-acknowledgements.
+Expect the IUT to retransmit the third user message.
+Then send an NR-SACK-Chunk which only acknowledges the first user message with the cum_tsn-value.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT retransmits the second user message now. Then also acknowledge the second user message.
+Then also ensure that the IUT retransmits the third user message. Also acknowledge the third user message.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/draft-tuexen-tsvwg-sctp-multipath-13#section-4.4.2">Load Sharing for SCTP [section 4.4.2]</a>,
+<a href="https://tools.ietf.org/html/rfc4960#section-6.2.1">RFC 4960 [section 6.2.1]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="data-sender-15"><tbody><tr><td>ID</td><td>data-sender-15</td></tr><tr><td>Precondition</td><td>IUT does support the NR-SACK extension. 
+Association is established between tester and IUT where both sides have announced support for NR-SACK-Chunks at the handshake.
+Arrange the data at the IUT such that it sends three not fragmented user message to the tester.
+Then send at the tester an NR-SACK-Chunk which acknowledges the first and second user message in the gap-acknowledgements.
+Expect the IUT to retransmit the third user message.
+Then send at the tester an NR-SACK-Chunk which acknowledges the first and second user message in the nr-gap-acknowledgements.
+Now send at the tester again an NR-SACK-Chunk which acknowledges only the first user message with the cum_tsn-value.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT ignores this duplicated out-of-date NR-SACK-Chunk and
+retransmits the third user message again. Then also acknowledge the third user message.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/draft-tuexen-tsvwg-sctp-multipath-13#section-4.4.2">Load Sharing for SCTP [section 4.4.2]</a>,
+<a href="https://tools.ietf.org/html/rfc4960#section-6.2.1">RFC 4960 [section 6.2.1]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="data-sender-16"><tbody><tr><td>ID</td><td>data-sender-16</td></tr><tr><td>Precondition</td><td>IUT does support the NR-SACK extension. 
+Association is established between tester and IUT where both sides have announced support for NR-SACK-Chunks at the handshake.
+Arrange the data at the IUT such that it sends five not fragmented user message to the tester.
+Then send at the tester an NR-SACK-Chunk which acknowledges the second to fifth user messages in the gap-acknowledgements.
+Expect the IUT to retransmit the first user message.
+Now send at the tester again an NR-SACK-Chunk which acknowledges only the first user message with the cum_tsn-value.
+Expect the IUT to retransmit the second user message.
+Then send at the tester an NR-SACK-Chunk which acknowledges second user message with the cum_tsn-value and the 
+fourth and fifth user messages in the gap-acknowledgements.
+Expect the IUT to retransmit the third user message.
+Then send at the tester an NR-SACK-Chunk which acknowledges third user message with the cum_tsn-value and the 
+fifth user messages in the gap-acknowledgements.
+Expect the IUT to retransmit the fourth user message.
+Then send at the tester an NR-SACK-Chunk which acknowledges fourth user message with the cum_tsn-value.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT now finally retransmits the fifth user message again. Then acknowledge all user messages with an appropriate NR-SACK-Chunk.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/draft-tuexen-tsvwg-sctp-multipath-13#section-4.4.2">Load Sharing for SCTP [section 4.4.2]</a>,
+<a href="https://tools.ietf.org/html/rfc4960#section-6.2.1">RFC 4960 [section 6.2.1]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><h2>Data Receiver with NR-SACK</h2><table class="table table-bordered test_case_table" id="data-receiver-1"><tbody><tr><td>ID</td><td>data-receiver-1</td></tr><tr><td>Precondition</td><td>IUT does support the NR-SACK extension. 
+Association is established between tester and IUT where both sides have announced support for NR-SACK-Chunks at the handshake.
+Arrange the data at the tester such that it sends one unordered not fragmented user message to the IUT.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT transmits an NR-SACK-Chunk which acknowledges the incoming user message by adjusting the cum_tsn-value.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/draft-tuexen-tsvwg-sctp-multipath-13#section-4.4.1">Load Sharing for SCTP [section 4.4.1]</a>,
+<a href="https://tools.ietf.org/html/rfc4960#section-6.2">RFC 4960 [section 6.2]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="data-receiver-2"><tbody><tr><td>ID</td><td>data-receiver-2</td></tr><tr><td>Precondition</td><td>IUT does support the NR-SACK extension. 
+Association is established between tester and IUT where both sides have announced support for NR-SACK-Chunks at the handshake.
+Arrange the data at the tester such that it sends three unordered not fragmented user messages to the IUT, where
+the third message arrives at the IUT before the second message.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT at first ackowledges the second out-of-order user message either in the gaps or nr-gaps.
+When the third user message arrives at the IUT ensure also the the cum_tsn-value is updated such that all
+user messages are acknowledged.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/draft-tuexen-tsvwg-sctp-multipath-13#section-4.4.1">Load Sharing for SCTP [section 4.4.1]</a>,
+<a href="https://tools.ietf.org/html/rfc4960#section-6.2">RFC 4960 [section 6.2]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="data-receiver-3"><tbody><tr><td>ID</td><td>data-receiver-3</td></tr><tr><td>Precondition</td><td>IUT does support the NR-SACK extension. 
+Association is established between tester and IUT where both sides have announced support for NR-SACK-Chunks at the handshake.
+Arrange the data at the tester such that it sends three ordered not fragmented user messages to the IUT, where
+the third message arrives at the IUT before the second message.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT at first ackowledges the second out-of-order user message either in the gaps or nr-gaps.
+When the third user message arrives at the IUT ensure also the the cum_tsn-value is updated such that all
+user messages are acknowledged.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/draft-tuexen-tsvwg-sctp-multipath-13#section-4.4.1">Load Sharing for SCTP [section 4.4.1]</a>,
+<a href="https://tools.ietf.org/html/rfc4960#section-6.2">RFC 4960 [section 6.2]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="data-receiver-4"><tbody><tr><td>ID</td><td>data-receiver-4</td></tr><tr><td>Precondition</td><td>IUT does support the NR-SACK extension. 
+Association is established between tester and IUT where both sides have announced support for NR-SACK-Chunks at the handshake.
+Arrange the data at the tester such that it sends five unordered not fragmented user messages to the IUT
+with the following order (relative tsn numbers):  2, 3, 4, 5, 1.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT at first ackowledges the all out-of-order user messages either in the gaps or nr-gaps.
+When the last user message arrives at the IUT ensure also the the cum_tsn-value is updated such that all
+user messages are acknowledged.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/draft-tuexen-tsvwg-sctp-multipath-13#section-4.4.1">Load Sharing for SCTP [section 4.4.1]</a>,
+<a href="https://tools.ietf.org/html/rfc4960#section-6.2">RFC 4960 [section 6.2]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="data-receiver-5"><tbody><tr><td>ID</td><td>data-receiver-5</td></tr><tr><td>Precondition</td><td>IUT does support the NR-SACK extension. 
+Association is established between tester and IUT where both sides have announced support for NR-SACK-Chunks at the handshake.
+Arrange the data at the tester such that it sends five ordered not fragmented user messages to the IUT
+with the following order (relative tsn numbers): 2, 3, 4, 5, 1.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT at first ackowledges the all out-of-order user messages either in the gaps or nr-gaps.
+When the last user message arrives at the IUT ensure also the the cum_tsn-value is updated such that all
+user messages are acknowledged.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/draft-tuexen-tsvwg-sctp-multipath-13#section-4.4.1">Load Sharing for SCTP [section 4.4.1]</a>,
+<a href="https://tools.ietf.org/html/rfc4960#section-6.2">RFC 4960 [section 6.2]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="data-receiver-6"><tbody><tr><td>ID</td><td>data-receiver-6</td></tr><tr><td>Precondition</td><td>IUT does support the NR-SACK extension. 
+Association is established between tester and IUT where both sides have announced support for NR-SACK-Chunks at the handshake.
+Arrange the data at the tester such that it sends one ordered not fragmented out-of-order user message to the IUT.
+Expect it to be NR-SACKed in either the gaps or nr-gaps. Then resend the same user message to the IUT.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT sends an NR-SACK-Chunk where it announces the out-of-order user message in either the gaps or nr-gaps and the dups.
+Then also send the missing first user message and ensure that it acknowledges all user messages with an NR-SACK-Chunk.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/draft-tuexen-tsvwg-sctp-multipath-13#section-4.4.1">Load Sharing for SCTP [section 4.4.1]</a>,
+<a href="https://tools.ietf.org/html/rfc4960#section-6.2">RFC 4960 [section 6.2]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="data-receiver-7"><tbody><tr><td>ID</td><td>data-receiver-7</td></tr><tr><td>Precondition</td><td>IUT does support the NR-SACK extension. 
+Association is established between tester and IUT where both sides have announced support for NR-SACK-Chunks at the handshake.
+Arrange the data at the tester such that it sends one ordered not fragmented out-of-order user message to the IUT.
+Expect it to be NR-SACKed in either the gaps or nr-gaps. Then resend the same user message bundled with
+the next ordered out-of-order user message to the IUT.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT sends an NR-SACK-Chunk where it announces both out-of-order user messages in 
+either the gaps or nr-gaps and the duplicate second user message in the dups.
+Then also send the missing first user message and ensure that it acknowledges all user messages with an NR-SACK-Chunk.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/draft-tuexen-tsvwg-sctp-multipath-13#section-4.4.1">Load Sharing for SCTP [section 4.4.1]</a>,
+<a href="https://tools.ietf.org/html/rfc4960#section-6.2">RFC 4960 [section 6.2]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="data-receiver-8"><tbody><tr><td>ID</td><td>data-receiver-8</td></tr><tr><td>Precondition</td><td>IUT does support the NR-SACK extension. 
+Association is established between tester and IUT where both sides have announced support for NR-SACK-Chunks at the handshake.
+Arrange the data at the tester such that it sends one unordered not fragmented out-of-order user message to the IUT.
+Expect it to be NR-SACKed in either the gaps or nr-gaps. Then resend the same user message bundled with
+the next unordered out-of-order user message to the IUT.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT sends an NR-SACK-Chunk where it announces both out-of-order user messages in 
+either the gaps or nr-gaps and the duplicate second user message in the dups.
+Then also send the missing first ordered user message and ensure that it acknowledges all user messages with an NR-SACK-Chunk.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/draft-tuexen-tsvwg-sctp-multipath-13#section-4.4.1">Load Sharing for SCTP [section 4.4.1]</a>,
+<a href="https://tools.ietf.org/html/rfc4960#section-6.2">RFC 4960 [section 6.2]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="data-receiver-9"><tbody><tr><td>ID</td><td>data-receiver-9</td></tr><tr><td>Precondition</td><td>IUT does support the NR-SACK extension. 
+Association is established between tester and IUT where both sides have announced support for NR-SACK-Chunks at the handshake.
+Arrange the data at the tester such that it sends one unordered not fragmented out-of-order user message to the IUT.
+Expect it to be NR-SACKed in either the gaps or nr-gaps. Then resend the same user message bundled with
+the next ordered out-of-order user message to the IUT.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT sends an NR-SACK-Chunk where it announces both out-of-order user messages in 
+either the gaps or nr-gaps and the duplicate second user message in the dups.
+Then also send the missing first ordered user message and ensure that it acknowledges all user messages with an NR-SACK-Chunk.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/draft-tuexen-tsvwg-sctp-multipath-13#section-4.4.1">Load Sharing for SCTP [section 4.4.1]</a>,
+<a href="https://tools.ietf.org/html/rfc4960#section-6.2">RFC 4960 [section 6.2]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="data-receiver-10"><tbody><tr><td>ID</td><td>data-receiver-10</td></tr><tr><td>Precondition</td><td>IUT does support the NR-SACK extension. 
+Association is established between tester and IUT where both sides have announced support for NR-SACK-Chunks at the handshake.
+Arrange the data at the tester such that it sends one unordered fragmented user message consisting of three DATA-Chunks to the IUT.
+Send the DATA-Chunks in the following order to the IUT (relative tsn numbers): 2, 3, 1.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT sends an NR-SACK-Chunk where it announces the out-of-order DATA-Chunks 2 and 3 in the gaps.
+Ensure also the IUT sends after receiving all fragmentes of the user messages an NR-SACK-Chunk where the cum_tsn-value is adjusted.
+Then also verify that the fragmented user message is delivered to the userland.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/draft-tuexen-tsvwg-sctp-multipath-13#section-4.4.1">Load Sharing for SCTP [section 4.4.1]</a>,
+<a href="https://tools.ietf.org/html/rfc4960#section-6.2">RFC 4960 [section 6.2]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="data-receiver-11"><tbody><tr><td>ID</td><td>data-receiver-11</td></tr><tr><td>Precondition</td><td>IUT does support the NR-SACK extension. 
+Association is established between tester and IUT where both sides have announced support for NR-SACK-Chunks at the handshake.
+Arrange the data at the tester such that it sends one ordered fragmented user message consisting of three DATA-Chunks to the IUT.
+Send the DATA-Chunks in the following order to the IUT (relative tsn numbers): 2, 3, 1.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT sends an NR-SACK-Chunk where it announces the out-of-order DATA-Chunks 2 and 3 in the gaps.
+Ensure also the IUT sends after receiving all fragmentes of the user messages an NR-SACK-Chunk where the cum_tsn-value is adjusted.
+Then also verify that the fragmented user message is delivered to the userland.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/draft-tuexen-tsvwg-sctp-multipath-13#section-4.4.1">Load Sharing for SCTP [section 4.4.1]</a>,
+<a href="https://tools.ietf.org/html/rfc4960#section-6.2">RFC 4960 [section 6.2]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="data-receiver-12"><tbody><tr><td>ID</td><td>data-receiver-12</td></tr><tr><td>Precondition</td><td>IUT does support the NR-SACK extension. 
+Association is established between tester and IUT where both sides have announced support for NR-SACK-Chunks at the handshake.
+Arrange the data at the tester such that it sends one unordered fragmented user message consisting of three DATA-Chunks (with relative
+tsn numbers 1, 2, 3) and one unordered not fragmented user message (with tsn 4) to the IUT.
+Send the DATA-Chunks in the following order to the IUT (relative tsn numbers): 2, 3, 4, 1.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT sends an NR-SACK-Chunk where it announces the out-of-order DATA-Chunks 2 and 3 in the gaps and the DATA-Chunk 4 
+at best in the nr-gaps.
+Ensure also the IUT sends after receiving all fragmentes of the user messages an NR-SACK-Chunk where the cum_tsn-value is adjusted.
+Then also verify that the fragmented user message is delivered and that the not fragmented unordered user message can be delivered
+before the fragmented unordered user message to the userland.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/draft-tuexen-tsvwg-sctp-multipath-13#section-4.4.1">Load Sharing for SCTP [section 4.4.1]</a>,
+<a href="https://tools.ietf.org/html/rfc4960#section-6.2">RFC 4960 [section 6.2]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="data-receiver-13"><tbody><tr><td>ID</td><td>data-receiver-13</td></tr><tr><td>Precondition</td><td>IUT does support the NR-SACK extension. 
+Association is established between tester and IUT where both sides have announced support for NR-SACK-Chunks at the handshake.
+Arrange the data at the tester such that it sends one ordered fragmented user message consisting of three DATA-Chunks (with relative
+tsn numbers 1, 2, 3) and one unordered not fragmented user message (with tsn 4) to the IUT.
+Send the DATA-Chunks in the following order to the IUT (relative tsn numbers): 2, 3, 4, 1.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT sends an NR-SACK-Chunk where it announces the out-of-order DATA-Chunks 2 and 3 in the gaps and the DATA-Chunk 4 
+at best in the nr-gaps.
+Ensure also the IUT sends after receiving all fragmentes of the user messages an NR-SACK-Chunk where the cum_tsn-value is adjusted.
+Then also verify that the fragmented user message is delivered and that the not fragmented unordered user message can be delivered
+before the fragmented ordered user message to the userland.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/draft-tuexen-tsvwg-sctp-multipath-13#section-4.4.1">Load Sharing for SCTP [section 4.4.1]</a>,
+<a href="https://tools.ietf.org/html/rfc4960#section-6.2">RFC 4960 [section 6.2]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="data-receiver-14"><tbody><tr><td>ID</td><td>data-receiver-14</td></tr><tr><td>Precondition</td><td>IUT does support the NR-SACK extension. 
+Association is established between tester and IUT where both sides have announced support for NR-SACK-Chunks at the handshake.
+Arrange the data at the tester such that it sends one ordered fragmented user message consisting of three DATA-Chunks (with relative
+tsn numbers 1, 2, 3) and one unordered not fragmented user message (with tsn 4) to the IUT.
+Send the DATA-Chunks in the following order to the IUT (relative tsn numbers): 2, 3, 4.
+Expect that all DATA-Chunks are NR-SACKed either in the gaps or the nr-gaps.
+Then arrange the data at the IUT such that it sends an ordered fragmented user message to the IUT.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT sends the user messsage to the tester. After the receiving of the first DATA-Chunk of the outgoing message
+arrange the data at the tester such that it sends the still outstanding fragment with tsn=1 from the first user message at the tester.
+Then also expect that the IUT sends an NR-SACK-Chunk that acknowledges all user messages and bundles it with the second fragment of
+the outgoing user message.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/draft-tuexen-tsvwg-sctp-multipath-13#section-4.4.1">Load Sharing for SCTP [section 4.4.1]</a>,
+<a href="https://tools.ietf.org/html/rfc4960#section-6.2">RFC 4960 [section 6.2]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="data-receiver-15"><tbody><tr><td>ID</td><td>data-receiver-15</td></tr><tr><td>Precondition</td><td>IUT does support the NR-SACK extension. 
+Association is established between tester and IUT where both sides have announced support for NR-SACK-Chunks at the handshake.
+Arrange the data at the tester such that it sends one ordered fragmented user message consisting of two DATA-Chunks (with relative
+tsn numbers 1, 2) and one unordered not fragmented user message (with tsn 3) to the IUT.
+Send the DATA-Chunks in the following order to the IUT (relative tsn numbers): 2, 3, 3, 1.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT delivers the unordered user message with tsn=3 to the IUT and then retransmit the same user message with tsn=3
+to the IUT. Expect it to be listed at the dups at the NR-SACK-Chunk. After the IUT has received the DATA-Chunk with tsn=1 ensure that it
+delivers the fragmented ordered user message to the userland. Also make sure that all ordered user messages are listed at the gap-blocks.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/draft-tuexen-tsvwg-sctp-multipath-13#section-4.4.1">Load Sharing for SCTP [section 4.4.1]</a>,
+<a href="https://tools.ietf.org/html/rfc4960#section-6.2">RFC 4960 [section 6.2]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="data-receiver-16"><tbody><tr><td>ID</td><td>data-receiver-16</td></tr><tr><td>Precondition</td><td>IUT does support the NR-SACK extension and make sure that the IUT does never drain any queues of partial received DATA-Chunks.
+Association is established between tester and IUT where both sides have announced support for NR-SACK-Chunks at the handshake.
+Arrange the data at the tester such that it sends one ordered fragmented user message consisting of two DATA-Chunks (with relative
+tsn numbers 1, 2) and one unordered not fragmented user message (with tsn 3) to the IUT.
+Send the DATA-Chunks in the following order to the IUT (relative tsn numbers): 2, 3, 3, 1.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT delivers the unordered user message with tsn=3 to the IUT and then retransmit the same user message with tsn=3
+to the IUT. Expect it to be listed at the dups at the NR-SACK-Chunk. After the IUT has received the DATA-Chunk with tsn=1 ensure that it
+delivers the fragmented ordered user message to the userland. Also make sure that all ordered user messages are listed at the nr-gap-blocks.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/draft-tuexen-tsvwg-sctp-multipath-13#section-4.4.1">Load Sharing for SCTP [section 4.4.1]</a>,
+<a href="https://tools.ietf.org/html/rfc4960#section-6.2">RFC 4960 [section 6.2]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="data-receiver-17"><tbody><tr><td>ID</td><td>data-receiver-17</td></tr><tr><td>Precondition</td><td>IUT does support the NR-SACK extension and make sure that the IUT does never drain any queues of partial received DATA-Chunks. 
+Association is established between tester and IUT where both sides have announced support for NR-SACK-Chunks at the handshake.
+Arrange the data at the tester such that it sends five ordered not fragmented user messages to the IUT
+with the following order (relative tsn numbers): 2, 3, 4, 5, 1.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT at first ackowledges the all out-of-order user messages in the nr-gaps.
+When the last user message arrives at the IUT ensure also the the cum_tsn-value is updated such that all
+user messages are acknowledged.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/draft-tuexen-tsvwg-sctp-multipath-13#section-4.4.1">Load Sharing for SCTP [section 4.4.1]</a>,
+<a href="https://tools.ietf.org/html/rfc4960#section-6.2">RFC 4960 [section 6.2]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="data-receiver-18"><tbody><tr><td>ID</td><td>data-receiver-18</td></tr><tr><td>Precondition</td><td>IUT does support the NR-SACK extension and make sure that the IUT does never drain any queues of partial received DATA-Chunks. 
+Association is established between tester and IUT where both sides have announced support for NR-SACK-Chunks at the handshake.
+Arrange the data at the tester such that it sends one ordered not fragmented out-of-order user message to the IUT.
+Expect it to be NR-SACKed in either the gaps or nr-gaps. Then resend the same user message to the IUT.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT sends an NR-SACK-Chunk where it announces the out-of-order user message in the nr-gaps and the dups.
+Then also send the missing first user message and ensure that it acknowledges all user messages with an NR-SACK-Chunk.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/draft-tuexen-tsvwg-sctp-multipath-13#section-4.4.1">Load Sharing for SCTP [section 4.4.1]</a>,
+<a href="https://tools.ietf.org/html/rfc4960#section-6.2">RFC 4960 [section 6.2]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="data-receiver-19"><tbody><tr><td>ID</td><td>data-receiver-19</td></tr><tr><td>Precondition</td><td>IUT does support the NR-SACK extension and make sure that the IUT does never drain any queues of partial received DATA-Chunks. 
+Association is established between tester and IUT where both sides have announced support for NR-SACK-Chunks at the handshake.
+Arrange the data at the tester such that it sends one unordered not fragmented out-of-order user message to the IUT.
+Expect it to be NR-SACKed in either the gaps or nr-gaps. Then resend the same user message bundled with
+the next unordered out-of-order user message to the IUT.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT sends an NR-SACK-Chunk where it announces both out-of-order user messages in the nr-gaps and 
+the duplicate second user message in the dups.
+Then also send the missing first ordered user message and ensure that it acknowledges all user messages with an NR-SACK-Chunk.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/draft-tuexen-tsvwg-sctp-multipath-13#section-4.4.1">Load Sharing for SCTP [section 4.4.1]</a>,
+<a href="https://tools.ietf.org/html/rfc4960#section-6.2">RFC 4960 [section 6.2]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="data-receiver-20"><tbody><tr><td>ID</td><td>data-receiver-20</td></tr><tr><td>Precondition</td><td>IUT does support the NR-SACK extension and make sure that the IUT does never drain any queues of partial received DATA-Chunks. 
+Association is established between tester and IUT where both sides have announced support for NR-SACK-Chunks at the handshake.
+Arrange the data at the tester such that it sends one unordered not fragmented out-of-order user message to the IUT.
+Expect it to be NR-SACKed in either the gaps or nr-gaps. Then resend the same user message bundled with
+the next ordered out-of-order user message to the IUT.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT sends an NR-SACK-Chunk where it announces both out-of-order user messages in the 
+nr-gaps and the duplicate second user message in the dups.
+Then also send the missing first ordered user message and ensure that it acknowledges all user messages with an NR-SACK-Chunk.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/draft-tuexen-tsvwg-sctp-multipath-13#section-4.4.1">Load Sharing for SCTP [section 4.4.1]</a>,
+<a href="https://tools.ietf.org/html/rfc4960#section-6.2">RFC 4960 [section 6.2]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="data-receiver-21"><tbody><tr><td>ID</td><td>data-receiver-21</td></tr><tr><td>Precondition</td><td>IUT does support the NR-SACK extension and make sure that the IUT does never drain any queues of partial received DATA-Chunks. 
+Association is established between tester and IUT where both sides have announced support for NR-SACK-Chunks at the handshake.
+Arrange the data at the tester such that it sends one ordered fragmented user message consisting of three DATA-Chunks to the IUT.
+Send the DATA-Chunks in the following order to the IUT (relative tsn numbers): 2, 3, 1.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT sends an NR-SACK-Chunk where it announces the out-of-order DATA-Chunks 2 and 3 in the nr-gaps.
+Ensure also the IUT sends after receiving all fragmentes of the user messages an NR-SACK-Chunk where the cum_tsn-value is adjusted.
+Then also verify that the fragmented user message is delivered to the userland.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/draft-tuexen-tsvwg-sctp-multipath-13#section-4.4.1">Load Sharing for SCTP [section 4.4.1]</a>,
+<a href="https://tools.ietf.org/html/rfc4960#section-6.2">RFC 4960 [section 6.2]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a><table class="table table-bordered test_case_table" id="data-receiver-22"><tbody><tr><td>ID</td><td>data-receiver-22</td></tr><tr><td>Precondition</td><td>IUT does support the NR-SACK extension and make sure that the IUT does never drain any queues of partial received DATA-Chunks. 
+Association is established between tester and IUT where both sides have announced support for NR-SACK-Chunks at the handshake.
+Arrange the data at the tester such that it sends one ordered fragmented user message consisting of three DATA-Chunks (with relative
+tsn numbers 1, 2, 3) and one unordered not fragmented user message (with tsn 4) to the IUT.
+Send the DATA-Chunks in the following order to the IUT (relative tsn numbers): 2, 3, 4, 1.
+</td></tr><tr><td>Purpose</td><td>Ensure that the IUT sends an NR-SACK-Chunk where it announces the out-of-order DATA-Chunks 2, 3 and 4 in the nr-gaps.
+Ensure also the IUT sends after receiving all fragmentes of the user messages an NR-SACK-Chunk where the cum_tsn-value is adjusted.
+Then also verify that the fragmented user message is delivered and that the not fragmented unordered user message can be delivered
+before the fragmented ordered user message to the userland.
+</td></tr><tr><td>References</td><td><a href="https://tools.ietf.org/html/draft-tuexen-tsvwg-sctp-multipath-13#section-4.4.1">Load Sharing for SCTP [section 4.4.1]</a>,
+<a href="https://tools.ietf.org/html/rfc4960#section-6.2">RFC 4960 [section 6.2]</a>
+</td></tr></tbody></table><a href="#overview">Back to Testsuite-Overview</a>    </div>
+    </div>
+
+    <footer class="footer">
+      <div class="container">
+          <p class="text-muted">&copy; 2017 by Julian Cordes</p>
+      </div>
+    </footer>
+  </body>
+</html>
+

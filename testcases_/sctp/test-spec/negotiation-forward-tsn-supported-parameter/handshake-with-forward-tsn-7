@@ -1,0 +1,16 @@
+Precondition:
+IUT does support PR-SCTP. 
+Association is not established between tester and IUT.
+Arrange the data at the tester such that an INIT-Chunk with a forward-tsn-supported parameter is sent to the IUT. 
+Dont send an COOKIE-ECHO-Chunk after receival of the INIT-ACK-Chunk from the IUT. 
+Instead retransmit the INIT-Chunk - but this time without the forward tsn parameter set.
+After that complete the handshake for this association. 
+
+Purpose:
+Ensure that the IUT has disabled PR-SCTP for this association.
+
+References:
+<a href="https://tools.ietf.org/html/rfc3758#section-3.3.2">RFC 3758 [section 3.3.2]</a>
+
+
+

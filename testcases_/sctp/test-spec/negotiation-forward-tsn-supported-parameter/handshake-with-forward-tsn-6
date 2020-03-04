@@ -1,0 +1,11 @@
+Precondition:
+IUT supports PR-SCTP. 
+Association is established between tester and IUT, where the forward-tsn-supported parameter is set in the INIT-Chunk and the INIT-ACK-Chunk.
+
+Purpose:
+Ensure that the IUT has enabled PR-SCTP for this association.
+
+References:
+<a href="https://tools.ietf.org/html/rfc3758#section-3.3.2">RFC 3758 [section 3.3.2]</a>
+
+

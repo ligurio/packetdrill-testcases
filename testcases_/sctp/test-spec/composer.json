@@ -1,0 +1,7 @@
+{
+    "name": "aomx/test-spec",
+    "description": "Website for Test-Specification of the partial reliability extension of SCTP",
+    "require": {
+        "theaomx/htmlnode": "^1.0"
+    }
+}

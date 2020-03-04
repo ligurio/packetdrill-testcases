@@ -1,0 +1,14 @@
+Precondition:
+IUT supports PR-SCTP. 
+Association where PR-SCTP is enabled is established between tester and IUT.
+Let the IUT send a fragmented user message as three not bundled unordered and fragmented data chunks to the tester. Send an SACK at the tester for the first two data chunks.
+Then wait so long until the T3-rtx timer of the sender expires and flags the outstanding DATA-Chunk as abandoned.
+
+Purpose:
+Ensure that the IUT sends a valid FORWARD TSN-Chunk and abandons all fragmented chunks at the the same time.
+
+References:
+<a href="https://tools.ietf.org/html/rfc3758#section-3.5">RFC 3758 [section 3.5 - A3]</a>
+
+
+
