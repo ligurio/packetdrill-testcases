@@ -39,6 +39,7 @@ python3 scripts/run-tests.py --testplan testplans/testplan-freebsd.json
 - [mTCP](https://github.com/mtcp-stack/mtcp)
 - [uIP](https://github.com/adamdunkels/uip)
 - [Luna Stack](https://www.dpdk.org/wp-content/uploads/sites/35/2019/07/04-DPDK-based-userspace-TCPIP-stack-testing.pdf)
+- [smoltcp](https://github.com/smoltcp-rs/smoltcp)
 
 ## How to contribute
 
