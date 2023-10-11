@@ -1,11 +1,5 @@
 # packetdrill testcases
 
-| Platform      |  Status       |
-| ------------- |:-------------:|
-| Ubuntu 18.04.3 LTS (Bionic Beaver) | [![Build Status](https://travis-ci.org/ligurio/packetdrill-testcases.svg?branch=master)](https://travis-ci.org/ligurio/packetdrill-testcases) |
-| FreeBSD 12.1  | [![Build Status](https://api.cirrus-ci.com/github/ligurio/packetdrill-testcases.svg?task=freebsd_12)](https://cirrus-ci.com/github/ligurio/packetdrill-testcases) |
-| macOS Mojave  | [![Build Status](https://api.cirrus-ci.com/github/ligurio/packetdrill-testcases.svg?task=macos)](https://cirrus-ci.com/github/ligurio/packetdrill-testcases) |
-
 The [packetdrill](https://opensource.google/projects/packetdrill) scripting
 tool enables quick, precise tests for entire TCP/UDP/IPv4/IPv6 network stacks,
 from the system call layer down to the NIC hardware. This repository contains
@@ -23,12 +17,14 @@ about 1.5k testcases for packetdrill.
 ## How-To
 
 ```
+sudo scripts/install-packetdrill.sh
 python3 -m venv venv
 source venv/bin/activate
 pip install -r scripts/requirements.txt
 python3 scripts/run-tests.py --discovery
 python3 scripts/run-tests.py --report_file junit.xml
 python3 scripts/run-tests.py --testplan testplans/testplan-freebsd.json
+python3 scripts/run-tests.py --testplan testplans/testplan-linux.json --report_file junit.xml
 ```
 
 ## TODO
